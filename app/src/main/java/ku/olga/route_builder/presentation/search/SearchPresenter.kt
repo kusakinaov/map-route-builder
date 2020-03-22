@@ -9,6 +9,25 @@ class SearchPresenter : BasePresenter<SearchView>() {
             startSearch()
         }
 
+    override fun attachView(view: SearchView) {
+        super.attachView(view)
+        view.apply {
+            bindQuery(query)
+            if (!hasLocationPermission()) {
+                requestLocationPermission()
+            }
+        }
+    }
+
+    fun checkLocationPermission() {
+        if (view?.hasLocationPermission() == true) {
+            startListenToLocation()
+        }
+    }
+
+    private fun startListenToLocation() {
+    }
+
     private fun startSearch() {
         if (query?.length ?: 0 > 3) {
             showProgress()

@@ -3,11 +3,11 @@ package ku.olga.route_builder.presentation.base
 open class BasePresenter<T : BaseView> {
     var view: T? = null
 
-    fun attachView(view: T) {
+    open fun attachView(view: T) {
         this.view = view
     }
 
-    fun detachView() {
+    open fun detachView() {
         view = null
     }
 
