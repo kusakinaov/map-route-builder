@@ -5,34 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/layoutEmpty"
+    <TextView
+        android:id="@+id/textViewEmpty"
+        style="@style/TextAppearance.Empty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="16dp"
+        android:layout_gravity="center"
         android:paddingTop="16dp"
-        android:paddingRight="16dp"
         android:paddingBottom="16dp"
-        android:visibility="visible"
+        android:text="@string/hint_empty_points"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/hint_empty_points" />
-    </LinearLayout>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         android:clipToPadding="false"
         android:overScrollMode="never"
-        android:background="@color/white"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:visibility="gone"

@@ -1,14 +1,17 @@
 package ku.olga.route_builder.presentation.list
 
+import android.app.Activity
+import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_points.*
 import ku.olga.route_builder.R
-import ku.olga.route_builder.presentation.MainActivity
+import ku.olga.route_builder.REQ_CODE_SEARCH_POINT
 import ku.olga.route_builder.presentation.base.BaseFragment
 import ku.olga.route_builder.presentation.map.MapFragment
+import ku.olga.route_builder.presentation.search.SearchPointsFragment
 
 class PointsFragment : BaseFragment() {
     private val pointsAdapter = PointsAdapter().apply {
@@ -32,7 +35,9 @@ class PointsFragment : BaseFragment() {
             layoutManager = LinearLayoutManager(view.context)
             adapter = pointsAdapter
         }
-        buttonAdd.setOnClickListener { showSnackbar("add point") }
+        buttonAdd.setOnClickListener {
+            replaceFragment(SearchPointsFragment.newInstance(this, REQ_CODE_SEARCH_POINT))
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
@@ -43,9 +48,16 @@ class PointsFragment : BaseFragment() {
         else -> super.onOptionsItemSelected(item)
     }
 
-    private fun openMap() {
-        if (activity is MainActivity) {
-            (activity as MainActivity).replaceFragment(MapFragment(), true)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQ_CODE_SEARCH_POINT) {
+                TODO()
+            }
         }
+    }
+
+    private fun openMap() {
+        replaceFragment(MapFragment())
     }
 }

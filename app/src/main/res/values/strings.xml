@@ -5,4 +5,10 @@
     <string name="desc_add_point">Добавить точку</string>
     <string name="action_map">Открыть карту</string>
     <string name="ttl_map">Карта</string>
+    <string name="error_search_points">Не удалось выполнить запрос</string>
+    <string name="button_retry">Повторить</string>
+    <string name="hint_empty_search">Ничего не найдено</string>
+    <string name="ttl_search">Поиск</string>
+    <string name="action_search">Поиск</string>
+    <string name="hint_search_points">Введите запрос</string>
 </resources>

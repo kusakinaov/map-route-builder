@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
+import ku.olga.route_builder.presentation.MainActivity
 
 open class BaseFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +32,16 @@ open class BaseFragment : Fragment() {
             view?.let {
                 Snackbar.make(it, m, Snackbar.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    fun replaceFragment(fragment: Fragment) {
+        replaceFragment(fragment, true)
+    }
+
+    fun replaceFragment(fragment: Fragment, addToBackStack: Boolean) {
+        if (activity is MainActivity) {
+            (activity as MainActivity).replaceFragment(fragment, addToBackStack)
         }
     }
 }
