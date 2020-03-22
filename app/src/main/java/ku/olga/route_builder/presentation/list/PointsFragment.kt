@@ -11,6 +11,10 @@ import ku.olga.route_builder.R
 import ku.olga.route_builder.presentation.base.BaseFragment
 
 class PointsFragment : BaseFragment() {
+    private val pointsAdapter = PointsAdapter().apply {
+        onPointClickListener = { showSnackbar(it.title) }
+    }
+
     override fun getTitle(resources: Resources) = resources.getString(R.string.ttl_point_list)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
@@ -20,6 +24,7 @@ class PointsFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         recyclerView.apply {
             layoutManager = LinearLayoutManager(view.context)
+            adapter = pointsAdapter
         }
         buttonAdd.setOnClickListener { showSnackbar("add point") }
     }
