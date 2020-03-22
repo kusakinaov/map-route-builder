@@ -3,4 +3,6 @@
     <string name="hint_empty_points">Список пуст</string>
     <string name="ttl_point_list">Список точек</string>
     <string name="desc_add_point">Добавить точку</string>
+    <string name="action_map">Открыть карту</string>
+    <string name="ttl_map">Карта</string>
 </resources>
