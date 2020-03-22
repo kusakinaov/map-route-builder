@@ -2,8 +2,12 @@ package ku.olga.route_builder.presentation.base
 
 import androidx.recyclerview.widget.RecyclerView
 
-abstract class BaseAdapter<T, VH : RecyclerView.ViewHolder>() : RecyclerView.Adapter<VH>() {
+abstract class BaseAdapter<T, VH : RecyclerView.ViewHolder> : RecyclerView.Adapter<VH>() {
     private val items = mutableListOf<T>()
+
+    fun clear() {
+        items.clear()
+    }
 
     fun setItems(items: List<T>?) {
         this.items.clear()

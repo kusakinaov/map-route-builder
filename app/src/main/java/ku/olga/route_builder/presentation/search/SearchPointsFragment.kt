@@ -11,6 +11,8 @@ import ku.olga.route_builder.R
 import ku.olga.route_builder.presentation.base.BaseFragment
 
 class SearchPointsFragment : BaseFragment() {
+    private val searchPresenter = SearchPresenter()
+
     override fun getTitle(resources: Resources) = resources.getString(R.string.ttl_search)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
@@ -21,6 +23,13 @@ class SearchPointsFragment : BaseFragment() {
         recyclerView.apply {
             layoutManager = LinearLayoutManager(view.context)
         }
+
+        searchPresenter.attachView(SearchViewImpl(view))
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        searchPresenter.detachView()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -49,7 +58,7 @@ class SearchPointsFragment : BaseFragment() {
     }
 
     fun onQueryChanged(query: String?) {
-        showSnackbar(query)
+        searchPresenter.query = query
     }
 
     companion object {
