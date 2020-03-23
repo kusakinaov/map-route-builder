@@ -2,13 +2,24 @@ package ku.olga.route_builder.presentation.search
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.location.Address
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_search.view.*
 import ku.olga.route_builder.REQ_CODE_LOCATION_PERMISSION
 
 class SearchViewImpl(private val fragment: Fragment, private val view: View) : SearchView {
+    val searchAdapter = SearchPointsAdapter()
+
+    init {
+        view.recyclerView.apply {
+            layoutManager = LinearLayoutManager(view.context)
+            adapter = searchAdapter
+        }
+    }
+
     override fun showEmpty() {
         view.layoutError.visibility = View.GONE
         view.recyclerView.visibility = View.GONE
@@ -28,6 +39,14 @@ class SearchViewImpl(private val fragment: Fragment, private val view: View) : S
     }
 
     override fun bindQuery(query: String?) {
+    }
+
+    override fun showAddresses(addresses: List<Address>?) {
+        searchAdapter.setItems(addresses)
+        view.layoutError.visibility = View.GONE
+        view.recyclerView.visibility = View.VISIBLE
+        view.textViewEmpty.visibility = View.GONE
+        view.progressBar.visibility = View.GONE
     }
 
     override fun showProgress() {
