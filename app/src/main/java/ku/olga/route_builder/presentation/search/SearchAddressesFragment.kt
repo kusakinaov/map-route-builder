@@ -2,7 +2,6 @@ package ku.olga.route_builder.presentation.search
 
 import android.content.Context
 import android.content.res.Resources
-import android.location.Geocoder
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
@@ -11,10 +10,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.LocationServices
 import kotlinx.android.synthetic.main.fragment_search.*
 import ku.olga.route_builder.R
+import ku.olga.route_builder.presentation.App
 import ku.olga.route_builder.presentation.base.BaseFragment
 
-class SearchPointsFragment : BaseFragment() {
-    private val searchPresenter = SearchPresenter()
+class SearchAddressesFragment : BaseFragment() {
+    private val searchPresenter = SearchAddressesPresenter(App.pointsRepository)
 
     override fun getTitle(resources: Resources) = resources.getString(R.string.ttl_search)
 
@@ -22,7 +22,6 @@ class SearchPointsFragment : BaseFragment() {
         super.onAttach(context)
         searchPresenter.apply {
             locationClient = LocationServices.getFusedLocationProviderClient(context)
-            geocoder = Geocoder(context)
         }
     }
 
@@ -79,6 +78,6 @@ class SearchPointsFragment : BaseFragment() {
 
     companion object {
         fun newInstance(target: Fragment, requestCode: Int) =
-                SearchPointsFragment().apply { setTargetFragment(target, requestCode) }
+                SearchAddressesFragment().apply { setTargetFragment(target, requestCode) }
     }
 }

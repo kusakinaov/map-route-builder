@@ -1,6 +1,5 @@
 package ku.olga.route_builder.presentation.search
 
-import android.location.Geocoder
 import android.location.Location
 import android.os.Looper
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -8,11 +7,11 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import kotlinx.coroutines.*
+import ku.olga.route_builder.domain.repository.PointsRepository
 import ku.olga.route_builder.presentation.base.BasePresenter
 
-class SearchPresenter : BasePresenter<SearchView>() {
+class SearchAddressesPresenter(private val pointsRepository: PointsRepository) : BasePresenter<SearchView>() {
     var locationClient: FusedLocationProviderClient? = null
-    var geocoder: Geocoder? = null
 
     var query: String? = null
         set(value) {
@@ -71,9 +70,9 @@ class SearchPresenter : BasePresenter<SearchView>() {
     }
 
     private fun runSearch() = CoroutineScope(Dispatchers.IO).launch {
-        val addresses = geocoder?.getFromLocationName(query, 25)
+        val addresses = pointsRepository.searchAddress(query)
         withContext(Dispatchers.Main) {
-            if (addresses?.isNullOrEmpty() == true) {
+            if (addresses.isNullOrEmpty()) {
                 view?.showEmpty()
             } else {
                 view?.showAddresses(addresses)

@@ -2,16 +2,21 @@ package ku.olga.route_builder.presentation.search
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.location.Address
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_search.view.*
 import ku.olga.route_builder.REQ_CODE_LOCATION_PERMISSION
+import ku.olga.route_builder.domain.model.SearchAddress
+import ku.olga.route_builder.presentation.KeyboardUtils.hideKeyboard
 
 class SearchViewImpl(private val fragment: Fragment, private val view: View) : SearchView {
-    val searchAdapter = SearchPointsAdapter()
+    private val searchAdapter = SearchAddressAdapter().apply {
+        onClickAddressListener = {
+            fragment.hideKeyboard()
+        }
+    }
 
     init {
         view.recyclerView.apply {
@@ -29,19 +34,25 @@ class SearchViewImpl(private val fragment: Fragment, private val view: View) : S
 
     override fun hasLocationPermission(): Boolean {
         fragment.context?.let {
-            return ContextCompat.checkSelfPermission(it, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            return ContextCompat.checkSelfPermission(
+                it,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
         }
         return false
     }
 
     override fun requestLocationPermission() {
-        fragment.requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQ_CODE_LOCATION_PERMISSION)
+        fragment.requestPermissions(
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            REQ_CODE_LOCATION_PERMISSION
+        )
     }
 
     override fun bindQuery(query: String?) {
     }
 
-    override fun showAddresses(addresses: List<Address>?) {
+    override fun showAddresses(addresses: List<SearchAddress>) {
         searchAdapter.setItems(addresses)
         view.layoutError.visibility = View.GONE
         view.recyclerView.visibility = View.VISIBLE
