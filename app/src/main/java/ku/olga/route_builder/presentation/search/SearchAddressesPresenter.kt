@@ -7,6 +7,7 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import kotlinx.coroutines.*
+import ku.olga.route_builder.domain.model.SearchAddress
 import ku.olga.route_builder.domain.repository.PointsRepository
 import ku.olga.route_builder.presentation.base.BasePresenter
 
@@ -35,16 +36,19 @@ class SearchAddressesPresenter(private val pointsRepository: PointsRepository) :
     }
     var job: Job? = null
 
+    private val addresses = mutableListOf<SearchAddress>()
+
     override fun attachView(view: SearchAddressesView) {
         super.attachView(view)
         view.apply {
-            bindQuery(query)
             if (!hasLocationPermission()) {
                 requestLocationPermission()
             } else {
                 startLocationUpdates()
             }
         }
+        bindQuery()
+        bindAddresses()
     }
 
     override fun detachView() {
@@ -71,13 +75,29 @@ class SearchAddressesPresenter(private val pointsRepository: PointsRepository) :
 
     private fun runSearch() = CoroutineScope(Dispatchers.IO).launch {
         val addresses = pointsRepository.searchAddress(query)
-        withContext(Dispatchers.Main) {
-            if (addresses.isNullOrEmpty()) {
-                view?.showEmpty()
+        withContext(Dispatchers.Main) { setAddresses(addresses) }
+    }
+
+    private fun setAddresses(addresses: List<SearchAddress>?) {
+        this.addresses.clear()
+        if (addresses?.isNotEmpty() == true) {
+            this.addresses.addAll(addresses)
+        }
+        bindAddresses()
+    }
+
+    private fun bindAddresses() {
+        view?.apply {
+            if (addresses.isEmpty()) {
+                showEmpty()
             } else {
-                view?.showAddresses(addresses)
+                showAddresses(addresses)
             }
         }
+    }
+
+    fun bindQuery() {
+        view?.bindQuery(query)
     }
 
     private fun buildLocationRequest() = LocationRequest.create()?.apply {

@@ -3,6 +3,7 @@ package ku.olga.route_builder.presentation.search
 import android.Manifest
 import android.content.pm.PackageManager
 import android.view.View
+import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,7 +11,13 @@ import kotlinx.android.synthetic.main.fragment_search.view.*
 import ku.olga.route_builder.REQ_CODE_LOCATION_PERMISSION
 import ku.olga.route_builder.domain.model.SearchAddress
 
-class SearchAddressesViewImpl(private val fragment: Fragment, private val searchAdapter: SearchAddressAdapter, private val view: View) : SearchAddressesView {
+class SearchAddressesViewImpl(
+        private val fragment: Fragment,
+        private val searchAdapter: SearchAddressAdapter,
+        private val view: View
+) : SearchAddressesView {
+    var searchView: SearchView? = null
+
     init {
         view.recyclerView.apply {
             layoutManager = LinearLayoutManager(view.context)
@@ -37,6 +44,7 @@ class SearchAddressesViewImpl(private val fragment: Fragment, private val search
     }
 
     override fun bindQuery(query: String?) {
+        searchView?.setQuery(query, false)
     }
 
     override fun showAddresses(addresses: List<SearchAddress>) {
