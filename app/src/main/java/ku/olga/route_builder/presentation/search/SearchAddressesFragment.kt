@@ -6,11 +6,12 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.LocationServices
-import kotlinx.android.synthetic.main.fragment_search.*
 import ku.olga.route_builder.R
+import ku.olga.route_builder.REQ_CODE_VIEW_SEARCH_ADDRESS
+import ku.olga.route_builder.domain.model.SearchAddress
 import ku.olga.route_builder.presentation.App
+import ku.olga.route_builder.presentation.KeyboardUtils.hideKeyboard
 import ku.olga.route_builder.presentation.base.BaseFragment
 
 class SearchAddressesFragment : BaseFragment() {
@@ -30,11 +31,14 @@ class SearchAddressesFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView.apply {
-            layoutManager = LinearLayoutManager(view.context)
-        }
+        searchPresenter.attachView(SearchAddressesViewImpl(this, SearchAddressAdapter()
+                .apply { onClickAddressListener = { openSearchAddress(it) } }, view))
+    }
 
-        searchPresenter.attachView(SearchViewImpl(this, view))
+    private fun openSearchAddress(searchAddress: SearchAddress) {
+        hideKeyboard()
+        replaceFragment(SearchAddressFragment.newInstance(this@SearchAddressesFragment,
+                REQ_CODE_VIEW_SEARCH_ADDRESS, searchAddress), true)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -60,15 +64,17 @@ class SearchAddressesFragment : BaseFragment() {
             view.apply {
                 isIconified = false
                 queryHint = getString(R.string.hint_search_points)
-                setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                    override fun onQueryTextSubmit(query: String?) = true
-
-                    override fun onQueryTextChange(newText: String?): Boolean {
-                        onQueryChanged(newText)
-                        return true
-                    }
-                })
+                setOnQueryTextListener(buildOnQueryTextListener())
             }
+        }
+    }
+
+    private fun buildOnQueryTextListener() = object : SearchView.OnQueryTextListener {
+        override fun onQueryTextSubmit(query: String?) = true
+
+        override fun onQueryTextChange(newText: String?): Boolean {
+            onQueryChanged(newText)
+            return true
         }
     }
 

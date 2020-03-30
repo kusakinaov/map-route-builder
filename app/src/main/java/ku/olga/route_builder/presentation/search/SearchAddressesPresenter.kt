@@ -10,7 +10,7 @@ import kotlinx.coroutines.*
 import ku.olga.route_builder.domain.repository.PointsRepository
 import ku.olga.route_builder.presentation.base.BasePresenter
 
-class SearchAddressesPresenter(private val pointsRepository: PointsRepository) : BasePresenter<SearchView>() {
+class SearchAddressesPresenter(private val pointsRepository: PointsRepository) : BasePresenter<SearchAddressesView>() {
     var locationClient: FusedLocationProviderClient? = null
 
     var query: String? = null
@@ -35,7 +35,7 @@ class SearchAddressesPresenter(private val pointsRepository: PointsRepository) :
     }
     var job: Job? = null
 
-    override fun attachView(view: SearchView) {
+    override fun attachView(view: SearchAddressesView) {
         super.attachView(view)
         view.apply {
             bindQuery(query)

@@ -9,15 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_search.view.*
 import ku.olga.route_builder.REQ_CODE_LOCATION_PERMISSION
 import ku.olga.route_builder.domain.model.SearchAddress
-import ku.olga.route_builder.presentation.KeyboardUtils.hideKeyboard
 
-class SearchViewImpl(private val fragment: Fragment, private val view: View) : SearchView {
-    private val searchAdapter = SearchAddressAdapter().apply {
-        onClickAddressListener = {
-            fragment.hideKeyboard()
-        }
-    }
-
+class SearchAddressesViewImpl(private val fragment: Fragment, private val searchAdapter: SearchAddressAdapter, private val view: View) : SearchAddressesView {
     init {
         view.recyclerView.apply {
             layoutManager = LinearLayoutManager(view.context)
@@ -34,19 +27,13 @@ class SearchViewImpl(private val fragment: Fragment, private val view: View) : S
 
     override fun hasLocationPermission(): Boolean {
         fragment.context?.let {
-            return ContextCompat.checkSelfPermission(
-                it,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
+            return ContextCompat.checkSelfPermission(it, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
         }
         return false
     }
 
     override fun requestLocationPermission() {
-        fragment.requestPermissions(
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-            REQ_CODE_LOCATION_PERMISSION
-        )
+        fragment.requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQ_CODE_LOCATION_PERMISSION)
     }
 
     override fun bindQuery(query: String?) {

@@ -9,7 +9,7 @@ import java.lang.StringBuilder
 class PointsRepositoryImpl(private val geocoder: Geocoder) : PointsRepository {
 
     override suspend fun searchAddress(query: String?) =
-        geocoder.getFromLocationName(query, 25).map { it.toSearchAddress() }.toList()
+            geocoder.getFromLocationName(query, 25).map { it.toSearchAddress() }.toList()
 
     private fun Address.toSearchAddress() = SearchAddress(buildPostalAddress(), latitude, longitude)
 
