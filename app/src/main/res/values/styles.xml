@@ -3,6 +3,7 @@
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryVariant">@color/primaryLightColor</item>
         <item name="colorOnPrimary">@color/primaryTextColor</item>
 
         <item name="colorSecondary">@color/secondaryColor</item>
@@ -14,7 +15,7 @@
         <item name="android:paddingRight">16dp</item>
         <item name="android:paddingTop">16dp</item>
         <item name="android:paddingBottom">16dp</item>
-        <item name="background">?selectableItemBackground</item>
+        <item name="android:background">?selectableItemBackground</item>
     </style>
 
     <style name="TextAppearance.Primary" parent="TextAppearance.MaterialComponents.Subtitle1" />

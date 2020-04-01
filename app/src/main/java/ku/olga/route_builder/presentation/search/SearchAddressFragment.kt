@@ -1,5 +1,6 @@
 package ku.olga.route_builder.presentation.search
 
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,11 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import ku.olga.route_builder.R
 import ku.olga.route_builder.domain.model.SearchAddress
+import ku.olga.route_builder.presentation.App
 import ku.olga.route_builder.presentation.base.BaseFragment
 
 class SearchAddressFragment : BaseFragment() {
     private var searchAddressView: SearchAddressView? = null
-    private val searchAddressPresenter = SearchAddressPresenter()
+    private val searchAddressPresenter = SearchAddressPresenter(App.pointsRepository)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +27,7 @@ class SearchAddressFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        searchAddressView = SearchAddressViewImpl(this, view).apply {
+        searchAddressView = SearchAddressViewImpl(view).apply {
             presenter = searchAddressPresenter
             onCreate(savedInstanceState)
         }
@@ -55,6 +57,8 @@ class SearchAddressFragment : BaseFragment() {
         searchAddressView?.onDestroy()
         super.onDestroyView()
     }
+
+    override fun getTitle(resources: Resources) = getString(R.string.title_add_address)
 
     companion object {
         private const val SEARCH_ADDRESS = "search_address"

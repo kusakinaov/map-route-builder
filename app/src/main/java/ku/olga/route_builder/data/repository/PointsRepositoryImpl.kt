@@ -11,6 +11,9 @@ class PointsRepositoryImpl(private val geocoder: Geocoder) : PointsRepository {
     override suspend fun searchAddress(query: String?) =
             geocoder.getFromLocationName(query, 25).map { it.toSearchAddress() }.toList()
 
+    override suspend fun searchAddress(lat: Double, lon: Double) =
+            geocoder.getFromLocation(lat, lon, 25).map { it.toSearchAddress() }.toList()
+
     private fun Address.toSearchAddress() = SearchAddress(buildPostalAddress(), latitude, longitude)
 
     private fun Address.buildPostalAddress(): String {

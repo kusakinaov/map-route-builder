@@ -8,9 +8,10 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.fragment_search_address.view.*
 
-class SearchAddressViewImpl(private val fragment: SearchAddressFragment, private val view: View) : SearchAddressView, OnMapReadyCallback {
+class SearchAddressViewImpl(private val view: View) : SearchAddressView, OnMapReadyCallback {
     private val zoomLevel = 15f
 
     private var googleMap: GoogleMap? = null
@@ -26,15 +27,17 @@ class SearchAddressViewImpl(private val fragment: SearchAddressFragment, private
         googleMap = p0
         googleMap?.apply {
             uiSettings.apply {
-                isScrollGesturesEnabled = false
+                isScrollGesturesEnabled = true
                 isZoomGesturesEnabled = true
                 isTiltGesturesEnabled = false
                 isRotateGesturesEnabled = false
             }
-            setOnMarkerClickListener {
-                it?.apply { if (isInfoWindowShown) hideInfoWindow() else showInfoWindow() }
-                true
-            }
+            setOnMarkerDragListener(object : SimpleMarkerDragListener {
+                override fun onMarkerDragEnd(marker: Marker?) {
+                    onCoordinatesChanged(marker?.position)
+                }
+            })
+            setOnMapClickListener { onCoordinatesChanged(it) }
         }
         presenter?.bindSearchAddress()
     }
@@ -44,6 +47,7 @@ class SearchAddressViewImpl(private val fragment: SearchAddressFragment, private
         view.apply {
             mapView.onCreate(state)
             buttonAdd.setOnClickListener { presenter?.onClickAdd() }
+            BottomSheetBehavior.from(layoutContent).setState(BottomSheetBehavior.STATE_EXPANDED)
         }
     }
 
@@ -70,14 +74,27 @@ class SearchAddressViewImpl(private val fragment: SearchAddressFragment, private
 
     override fun bindLatLng(lat: Double, lon: Double) {
         val position = LatLng(lat, lon)
-        googleMap?.apply {
-            marker = addMarker(MarkerOptions().position(position))
-            moveCamera(CameraUpdateFactory.newLatLngZoom(position, zoomLevel))
+        if (marker == null) {
+            marker = googleMap?.addMarker(MarkerOptions().position(position).draggable(true))
+        } else {
+            marker?.position = position
         }
+        googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(position, zoomLevel))
     }
 
     override fun bindAddress(postalAddress: String) {
-        fragment.activity?.title = postalAddress
-        marker?.title = postalAddress
+        view.textViewAddress.text = postalAddress
+    }
+
+    private fun onCoordinatesChanged(latLng: LatLng?) {
+        latLng?.let { presenter?.onCoordinatesChanged(it.latitude, it.longitude) }
+    }
+
+    interface SimpleMarkerDragListener : GoogleMap.OnMarkerDragListener {
+        override fun onMarkerDragStart(p0: Marker?) {
+        }
+
+        override fun onMarkerDrag(p0: Marker?) {
+        }
     }
 }
