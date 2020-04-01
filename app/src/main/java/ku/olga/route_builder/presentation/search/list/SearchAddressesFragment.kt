@@ -33,8 +33,8 @@ class SearchAddressesFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        searchAddressesView = SearchAddressesViewImpl(this, SearchAddressAdapter()
-                .apply { onClickAddressListener = { openSearchAddress(it) } }, view)
+        searchAddressesView = SearchAddressesViewImpl(this, searchPresenter,
+                SearchAddressAdapter().apply { onClickAddressListener = { openSearchAddress(it) } }, view)
         searchPresenter.attachView(searchAddressesView!!)
     }
 

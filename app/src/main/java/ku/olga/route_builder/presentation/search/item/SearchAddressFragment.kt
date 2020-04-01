@@ -58,7 +58,7 @@ class SearchAddressFragment : BaseFragment() {
         super.onDestroyView()
     }
 
-    override fun getTitle(resources: Resources) = getString(R.string.title_add_address)
+    override fun getTitle(resources: Resources) = resources.getString(R.string.title_search)
 
     companion object {
         private const val SEARCH_ADDRESS = "search_address"

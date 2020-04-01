@@ -13,10 +13,15 @@ import ku.olga.route_builder.domain.model.SearchAddress
 
 class SearchAddressesViewImpl(
         private val fragment: Fragment,
+        private val presenter: SearchAddressesPresenter,
         private val searchAdapter: SearchAddressAdapter,
         private val view: View
 ) : SearchAddressesView {
     var searchView: SearchView? = null
+    set(value) {
+        field = value
+        presenter.bindQuery()
+    }
 
     init {
         view.recyclerView.apply {
