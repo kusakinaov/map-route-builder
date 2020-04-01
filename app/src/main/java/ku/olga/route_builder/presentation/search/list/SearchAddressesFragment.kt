@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.search
+package ku.olga.route_builder.presentation.search.list
 
 import android.content.Context
 import android.content.res.Resources
@@ -13,6 +13,7 @@ import ku.olga.route_builder.domain.model.SearchAddress
 import ku.olga.route_builder.presentation.App
 import ku.olga.route_builder.presentation.KeyboardUtils.hideKeyboard
 import ku.olga.route_builder.presentation.base.BaseFragment
+import ku.olga.route_builder.presentation.search.item.SearchAddressFragment
 
 class SearchAddressesFragment : BaseFragment() {
     private val searchPresenter = SearchAddressesPresenter(App.pointsRepository)

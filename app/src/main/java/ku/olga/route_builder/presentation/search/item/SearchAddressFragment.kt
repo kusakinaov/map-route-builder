@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.search
+package ku.olga.route_builder.presentation.search.item
 
 import android.content.res.Resources
 import android.os.Bundle

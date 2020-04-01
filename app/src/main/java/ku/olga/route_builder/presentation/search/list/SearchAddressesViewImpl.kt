@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.search
+package ku.olga.route_builder.presentation.search.list
 
 import android.Manifest
 import android.content.pm.PackageManager

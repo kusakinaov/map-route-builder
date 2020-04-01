@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.search
+package ku.olga.route_builder.presentation.search.list
 
 import ku.olga.route_builder.domain.model.SearchAddress
 import ku.olga.route_builder.presentation.base.BaseView

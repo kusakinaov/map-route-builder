@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.search
+package ku.olga.route_builder.presentation.search.item
 
 import kotlinx.coroutines.*
 import ku.olga.route_builder.domain.model.SearchAddress

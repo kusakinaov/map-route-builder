@@ -11,7 +11,7 @@ import ku.olga.route_builder.R
 import ku.olga.route_builder.REQ_CODE_SEARCH_POINT
 import ku.olga.route_builder.presentation.base.BaseFragment
 import ku.olga.route_builder.presentation.map.MapFragment
-import ku.olga.route_builder.presentation.search.SearchAddressesFragment
+import ku.olga.route_builder.presentation.search.list.SearchAddressesFragment
 
 class PointsFragment : BaseFragment() {
     private val pointsAdapter = PointsAdapter().apply {
