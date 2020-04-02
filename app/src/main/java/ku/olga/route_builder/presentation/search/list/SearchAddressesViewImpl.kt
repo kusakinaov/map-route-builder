@@ -60,6 +60,14 @@ class SearchAddressesViewImpl(
         view.progressBar.visibility = View.GONE
     }
 
+    override fun onAttach() {
+        presenter.attachView(this)
+    }
+
+    override fun onDetach() {
+        presenter.detachView()
+    }
+
     override fun showProgress() {
         view.layoutError.visibility = View.GONE
         view.recyclerView.visibility = View.GONE

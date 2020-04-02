@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
+import ku.olga.route_builder.R
 import ku.olga.route_builder.presentation.MainActivity
 
 open class BaseFragment : Fragment() {
@@ -44,4 +45,6 @@ open class BaseFragment : Fragment() {
             (activity as MainActivity).replaceFragment(fragment, addToBackStack)
         }
     }
+
+    open fun getBackButtonRes() = R.drawable.ic_back
 }

@@ -13,4 +13,5 @@ interface SearchAddressView : BaseView {
     fun onDestroy()
     fun bindLatLng(lat: Double, lon: Double)
     fun bindAddress(postalAddress: String)
+    fun editPoint(postalAddress: String, lat: Double, lon: Double)
 }

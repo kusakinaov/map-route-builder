@@ -35,7 +35,7 @@ class SearchAddressesFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         searchAddressesView = SearchAddressesViewImpl(this, searchPresenter,
                 SearchAddressAdapter().apply { onClickAddressListener = { openSearchAddress(it) } }, view)
-        searchPresenter.attachView(searchAddressesView!!)
+        searchAddressesView?.onAttach()
     }
 
     private fun openSearchAddress(searchAddress: SearchAddress) {
@@ -51,7 +51,7 @@ class SearchAddressesFragment : BaseFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        searchPresenter.detachView()
+        searchAddressesView?.onDetach()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -27,10 +27,11 @@ class SearchAddressFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        searchAddressView = SearchAddressViewImpl(view).apply {
+        searchAddressView = SearchAddressViewImpl(this, view).apply {
             presenter = searchAddressPresenter
             onCreate(savedInstanceState)
         }
+        searchAddressView?.onAttach()
     }
 
     override fun onStart() {
@@ -55,6 +56,7 @@ class SearchAddressFragment : BaseFragment() {
 
     override fun onDestroyView() {
         searchAddressView?.onDestroy()
+        searchAddressView?.onDetach()
         super.onDestroyView()
     }
 

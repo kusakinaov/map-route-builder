@@ -33,7 +33,9 @@ class SearchAddressPresenter(val pointsRepository: PointsRepository) : BasePrese
     }
 
     fun onClickAdd() {
-
+        searchAddress?.let {
+            view?.editPoint(it.postalAddress, it.lat, it.lon)
+        }
     }
 
     fun onCoordinatesChanged(latitude: Double, longitude: Double) {

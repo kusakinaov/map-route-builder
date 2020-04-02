@@ -13,4 +13,8 @@
     <string name="hint_search_points">Введите запрос</string>
     <string name="title_add_address">Добавить адрес</string>
     <string name="title_search">Поиск</string>
+    <string name="hint_input_title">Введите название</string>
+    <string name="hint_input_description">Введите описание</string>
+    <string name="ttl_edit">Редактирование</string>
+    <string name="button_save">СОХРАНИТЬ</string>
 </resources>

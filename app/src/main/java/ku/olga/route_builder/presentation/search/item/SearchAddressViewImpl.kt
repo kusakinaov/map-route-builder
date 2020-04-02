@@ -10,8 +10,11 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.fragment_search_address.view.*
+import ku.olga.route_builder.REQ_CODE_EDIT_POINT
+import ku.olga.route_builder.presentation.base.BaseFragment
+import ku.olga.route_builder.presentation.point.EditPointFragment
 
-class SearchAddressViewImpl(private val view: View) : SearchAddressView, OnMapReadyCallback {
+class SearchAddressViewImpl(private val fragment: BaseFragment, private val view: View) : SearchAddressView, OnMapReadyCallback {
     private val zoomLevel = 15f
 
     private var googleMap: GoogleMap? = null
@@ -43,7 +46,6 @@ class SearchAddressViewImpl(private val view: View) : SearchAddressView, OnMapRe
     }
 
     override fun onCreate(state: Bundle?) {
-        presenter?.attachView(this)
         view.apply {
             mapView.onCreate(state)
             buttonAdd.setOnClickListener { presenter?.onClickAdd() }
@@ -68,7 +70,6 @@ class SearchAddressViewImpl(private val view: View) : SearchAddressView, OnMapRe
     }
 
     override fun onDestroy() {
-        presenter?.detachView()
         view.mapView.onDestroy()
     }
 
@@ -84,6 +85,18 @@ class SearchAddressViewImpl(private val view: View) : SearchAddressView, OnMapRe
 
     override fun bindAddress(postalAddress: String) {
         view.textViewAddress.text = postalAddress
+    }
+
+    override fun editPoint(postalAddress: String, lat: Double, lon: Double) {
+        fragment.replaceFragment(EditPointFragment.newInstance(fragment, REQ_CODE_EDIT_POINT, postalAddress, lat, lon))
+    }
+
+    override fun onAttach() {
+        presenter?.attachView(this)
+    }
+
+    override fun onDetach() {
+        presenter?.detachView()
     }
 
     private fun onCoordinatesChanged(latLng: LatLng?) {
