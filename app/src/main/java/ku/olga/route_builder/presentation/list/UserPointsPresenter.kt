@@ -19,7 +19,14 @@ class UserPointsPresenter(private val pointsRepository: PointsRepository) :
         userPoints.clear()
         userPoints.addAll(pointsRepository.getUserPoints())
         withContext(Dispatchers.Main) {
-            view?.setUserPoints(userPoints)
+            view?.apply {
+                setUserPoints(userPoints)
+                if (userPoints.isEmpty()) {
+                    showEmpty()
+                } else {
+                    showUserPoints()
+                }
+            }
         }
     }
 

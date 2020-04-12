@@ -9,8 +9,9 @@
     <TextView
         android:id="@+id/textViewTitle"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_no_title"
         android:textAppearance="@style/TextAppearance.Primary"
-        android:layout_height="match_parent"
         tools:text="Title" />
 
     <TextView
@@ -18,7 +19,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ellipsize="end"
-        android:textAppearance="@style/TextAppearance.Secondary"
+        android:hint="@string/hint_no_description"
         android:maxLines="3"
+        android:textAppearance="@style/TextAppearance.Secondary"
         tools:text="Description" />
 </LinearLayout>

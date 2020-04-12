@@ -7,4 +7,5 @@ interface EditPointView : BaseView {
     fun bindDescription(description: String)
     fun bindAddress(postalAddress: String)
     fun bindSaveButton(enabled: Boolean)
+    fun notifySaveSuccessful()
 }

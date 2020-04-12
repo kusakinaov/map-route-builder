@@ -7,11 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import ku.olga.route_builder.R
+import ku.olga.route_builder.presentation.App
 import ku.olga.route_builder.presentation.base.BaseFragment
 
 class EditPointFragment : BaseFragment() {
     private var editPointView: EditPointView? = null
-    private val presenter = EditPointPresenter()
+    private val presenter = EditPointPresenter(App.pointsRepository)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +28,7 @@ class EditPointFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        editPointView = EditPointViewImpl(presenter, view)
+        editPointView = EditPointViewImpl(this, presenter, view)
         editPointView?.onAttach()
     }
 
