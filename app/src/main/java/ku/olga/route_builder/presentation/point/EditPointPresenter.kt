@@ -32,4 +32,8 @@ class EditPointPresenter : BasePresenter<EditPointView>() {
             }
         }
     }
+
+    fun onClickSave() {
+        TODO("Not yet implemented")
+    }
 }

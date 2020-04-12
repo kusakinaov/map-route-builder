@@ -6,7 +6,7 @@ import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import ku.olga.route_builder.R
 import ku.olga.route_builder.presentation.base.BaseFragment
-import ku.olga.route_builder.presentation.list.PointsFragment
+import ku.olga.route_builder.presentation.list.UserPointsFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
 
         supportFragmentManager.addOnBackStackChangedListener { bindBackStack() }
         if (savedInstanceState == null) {
-            replaceFragment(PointsFragment(), false)
+            replaceFragment(UserPointsFragment(), false)
         }
     }
 

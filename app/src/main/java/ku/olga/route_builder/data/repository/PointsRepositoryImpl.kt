@@ -1,27 +1,32 @@
 package ku.olga.route_builder.data.repository
 
-import android.location.Address
 import android.location.Geocoder
-import ku.olga.route_builder.domain.model.SearchAddress
+import ku.olga.route_builder.data.room.AppDatabase
+import ku.olga.route_builder.domain.model.UserPoint
 import ku.olga.route_builder.domain.repository.PointsRepository
-import java.lang.StringBuilder
+import ku.olga.route_builder.domain.repository.toRoomUserPoint
+import ku.olga.route_builder.domain.repository.toSearchAddress
+import ku.olga.route_builder.domain.repository.toUserPoint
 
-class PointsRepositoryImpl(private val geocoder: Geocoder) : PointsRepository {
+class PointsRepositoryImpl(val appDatabase: AppDatabase, private val geocoder: Geocoder) :
+    PointsRepository {
 
     override suspend fun searchAddress(query: String?) =
-            geocoder.getFromLocationName(query, 25).map { it.toSearchAddress() }.toList()
+        geocoder.getFromLocationName(query, 25).map { it.toSearchAddress() }.toList()
 
     override suspend fun searchAddress(lat: Double, lon: Double) =
-            geocoder.getFromLocation(lat, lon, 25).map { it.toSearchAddress() }.toList()
+        geocoder.getFromLocation(lat, lon, 25).map { it.toSearchAddress() }.toList()
 
-    private fun Address.toSearchAddress() = SearchAddress(buildPostalAddress(), latitude, longitude)
-
-    private fun Address.buildPostalAddress(): String {
-        val builder = StringBuilder()
-        for (i in 0..maxAddressLineIndex) {
-            if (builder.isNotEmpty()) builder.append(", ")
-            builder.append(getAddressLine(i))
+    override suspend fun saveUserPoint(userPoint: UserPoint): Long {
+        if (userPoint.id == 0L) {
+            userPoint.id = appDatabase.userPointDao().getMaxIdx() + 1
         }
-        return builder.toString()
+        return appDatabase.userPointDao().insertOrUpdate(userPoint.toRoomUserPoint())
     }
+
+    override suspend fun getUserPoints() =
+        appDatabase.userPointDao().getAll().map { it.toUserPoint() }.toList()
+
+    override suspend fun deleteUserPoint(userPoint: UserPoint) =
+        appDatabase.userPointDao().delete(userPoint.toRoomUserPoint())
 }

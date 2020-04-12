@@ -18,12 +18,17 @@ class SearchAddressFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            searchAddressPresenter.searchAddress = it.getSerializable(SEARCH_ADDRESS) as SearchAddress?
+            searchAddressPresenter.searchAddress =
+                it.getSerializable(SEARCH_ADDRESS) as SearchAddress?
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-            inflater.inflate(R.layout.fragment_search_address, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View =
+        inflater.inflate(R.layout.fragment_search_address, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -66,11 +71,11 @@ class SearchAddressFragment : BaseFragment() {
         private const val SEARCH_ADDRESS = "search_address"
 
         fun newInstance(target: Fragment, requestCode: Int, searchAddress: SearchAddress) =
-                SearchAddressFragment().apply {
-                    setTargetFragment(target, requestCode)
-                    arguments = Bundle().apply {
-                        putSerializable(SEARCH_ADDRESS, searchAddress)
-                    }
+            SearchAddressFragment().apply {
+                setTargetFragment(target, requestCode)
+                arguments = Bundle().apply {
+                    putSerializable(SEARCH_ADDRESS, searchAddress)
                 }
+            }
     }
 }

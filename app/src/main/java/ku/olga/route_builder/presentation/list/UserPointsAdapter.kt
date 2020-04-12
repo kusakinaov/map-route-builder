@@ -9,7 +9,7 @@ import ku.olga.route_builder.R
 import ku.olga.route_builder.domain.model.UserPoint
 import ku.olga.route_builder.presentation.base.BaseAdapter
 
-class PointsAdapter : BaseAdapter<UserPoint, PointsAdapter.PointHolder>() {
+class UserPointsAdapter : BaseAdapter<UserPoint, UserPointsAdapter.PointHolder>() {
     var onPointClickListener: ((UserPoint) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =

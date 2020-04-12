@@ -5,18 +5,14 @@ import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.*
-import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.fragment_points.*
 import ku.olga.route_builder.R
 import ku.olga.route_builder.REQ_CODE_SEARCH_POINT
+import ku.olga.route_builder.presentation.App
 import ku.olga.route_builder.presentation.base.BaseFragment
-import ku.olga.route_builder.presentation.map.MapFragment
-import ku.olga.route_builder.presentation.search.list.SearchAddressesFragment
 
-class PointsFragment : BaseFragment() {
-    private val pointsAdapter = PointsAdapter().apply {
-        onPointClickListener = { showSnackbar(it.title) }
-    }
+class UserPointsFragment : BaseFragment() {
+    private val userPointsPresenter = UserPointsPresenter(App.pointsRepository)
+    private var userPointsView: UserPointsView? = null
 
     override fun getTitle(resources: Resources) = resources.getString(R.string.ttl_point_list)
 
@@ -26,23 +22,28 @@ class PointsFragment : BaseFragment() {
         inflater.inflate(R.menu.points, menu)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-            inflater.inflate(R.layout.fragment_points, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View =
+        inflater.inflate(R.layout.fragment_points, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView.apply {
-            layoutManager = LinearLayoutManager(view.context)
-            adapter = pointsAdapter
+        userPointsView = UserPointsViewImpl(this, view, userPointsPresenter).apply {
+            onAttach()
         }
-        buttonAdd.setOnClickListener {
-            replaceFragment(SearchAddressesFragment.newInstance(this, REQ_CODE_SEARCH_POINT))
-        }
+    }
+
+    override fun onDestroyView() {
+        userPointsView?.onDetach()
+        super.onDestroyView()
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.actionMap -> {
-            openMap()
+            userPointsView?.onClickOpenMap()
             true
         }
         else -> super.onOptionsItemSelected(item)
@@ -52,12 +53,8 @@ class PointsFragment : BaseFragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQ_CODE_SEARCH_POINT) {
-                TODO()
+
             }
         }
-    }
-
-    private fun openMap() {
-        replaceFragment(MapFragment())
     }
 }

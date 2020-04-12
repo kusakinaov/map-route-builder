@@ -28,23 +28,38 @@ class SearchAddressesFragment : BaseFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-            inflater.inflate(R.layout.fragment_search, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View =
+        inflater.inflate(R.layout.fragment_search, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        searchAddressesView = SearchAddressesViewImpl(this, searchPresenter,
-                SearchAddressAdapter().apply { onClickAddressListener = { openSearchAddress(it) } }, view)
+        searchAddressesView = SearchAddressesViewImpl(this,
+            searchPresenter,
+            SearchAddressAdapter().apply { onClickAddressListener = { openSearchAddress(it) } },
+            view
+        )
         searchAddressesView?.onAttach()
     }
 
     private fun openSearchAddress(searchAddress: SearchAddress) {
         hideKeyboard()
-        replaceFragment(SearchAddressFragment.newInstance(this@SearchAddressesFragment,
-                REQ_CODE_VIEW_SEARCH_ADDRESS, searchAddress), true)
+        replaceFragment(
+            SearchAddressFragment.newInstance(
+                this@SearchAddressesFragment,
+                REQ_CODE_VIEW_SEARCH_ADDRESS, searchAddress
+            ), true
+        )
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         searchPresenter.checkLocationPermission()
     }
@@ -90,6 +105,6 @@ class SearchAddressesFragment : BaseFragment() {
 
     companion object {
         fun newInstance(target: Fragment, requestCode: Int) =
-                SearchAddressesFragment().apply { setTargetFragment(target, requestCode) }
+            SearchAddressesFragment().apply { setTargetFragment(target, requestCode) }
     }
 }
