@@ -2,11 +2,12 @@ package ku.olga.route_builder.presentation.search.item
 
 import kotlinx.coroutines.*
 import ku.olga.route_builder.domain.model.SearchAddress
-import ku.olga.route_builder.domain.repository.PointsRepository
 import ku.olga.route_builder.domain.services.PointsService
 import ku.olga.route_builder.presentation.base.BasePresenter
+import java.io.IOException
 
-class SearchAddressPresenter(val pointsService: PointsService) : BasePresenter<SearchAddressView>() {
+class SearchAddressPresenter(private val pointsService: PointsService) :
+    BasePresenter<SearchAddressView>() {
     var searchAddress: SearchAddress? = null
         set(value) {
             field = value
@@ -39,15 +40,33 @@ class SearchAddressPresenter(val pointsService: PointsService) : BasePresenter<S
         }
     }
 
-    fun onCoordinatesChanged(latitude: Double, longitude: Double) {
-        job?.apply { if (isActive) cancel() }
-        job = CoroutineScope(Dispatchers.IO).launch {
-            val addresses = pointsService.searchAddress(latitude, longitude)
-            withContext(Dispatchers.Main) {
-                if (addresses.isNotEmpty()) {
-                    searchAddress = addresses[0]
+    fun onCoordinatesChanged(latitude: Double?, longitude: Double?) {
+        trySearchAddress(latitude, longitude)
+    }
+
+    private fun searchAddress(latitude: Double, longitude: Double) =
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val addresses = pointsService.searchAddress(latitude, longitude)
+                withContext(Dispatchers.Main) {
+                    if (addresses.isNotEmpty()) {
+                        searchAddress = addresses[0]
+                    }
                 }
+            } catch (e: IOException) {
+                withContext(Dispatchers.Main) { view?.showDefaultError() }
             }
         }
+
+
+    private fun trySearchAddress(latitude: Double?, longitude: Double?) {
+        job?.apply { if (isActive) cancel() }
+        if (latitude != null && longitude != null) {
+            job = searchAddress(latitude, longitude)
+        }
+    }
+
+    fun onClickRetry(latitude: Double?, longitude: Double?) {
+        trySearchAddress(latitude, longitude)
     }
 }

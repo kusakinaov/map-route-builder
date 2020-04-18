@@ -9,7 +9,9 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_search_address.view.*
+import ku.olga.route_builder.R
 import ku.olga.route_builder.REQ_CODE_EDIT_POINT
 import ku.olga.route_builder.presentation.base.BaseFragment
 import ku.olga.route_builder.presentation.point.EditPointFragment
@@ -100,7 +102,19 @@ class SearchAddressViewImpl(private val fragment: BaseFragment, private val view
     }
 
     private fun onCoordinatesChanged(latLng: LatLng?) {
-        latLng?.let { presenter?.onCoordinatesChanged(it.latitude, it.longitude) }
+        presenter?.onCoordinatesChanged(latLng?.latitude, latLng?.longitude)
+    }
+
+    override fun showDefaultError() {
+        fragment.context?.let {
+            Snackbar.make(view, it.getString(R.string.error_search_points), Snackbar.LENGTH_LONG)
+                .setAction(R.string.button_retry) {
+                    googleMap?.cameraPosition?.target.let {
+                        presenter?.onClickRetry(it?.latitude, it?.longitude)
+                    }
+                }
+                .show()
+        }
     }
 
     interface SimpleMarkerDragListener : GoogleMap.OnMarkerDragListener {
