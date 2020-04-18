@@ -11,7 +11,7 @@ import ku.olga.route_builder.presentation.App
 import ku.olga.route_builder.presentation.base.BaseFragment
 
 class UserPointsFragment : BaseFragment() {
-    private val userPointsPresenter = UserPointsPresenter(App.pointsRepository)
+    private val userPointsPresenter = UserPointsPresenter(App.pointsService)
     private var userPointsView: UserPointsView? = null
 
     override fun getTitle(resources: Resources) = resources.getString(R.string.ttl_point_list)

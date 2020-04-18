@@ -16,7 +16,7 @@ import ku.olga.route_builder.presentation.base.BaseFragment
 import ku.olga.route_builder.presentation.search.item.SearchAddressFragment
 
 class SearchAddressesFragment : BaseFragment() {
-    private val searchPresenter = SearchAddressesPresenter(App.pointsRepository)
+    private val searchPresenter = SearchAddressesPresenter(App.pointsService)
     private var searchAddressesView: SearchAddressesView? = null
 
     override fun getTitle(resources: Resources) = resources.getString(R.string.ttl_search)
@@ -37,7 +37,8 @@ class SearchAddressesFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        searchAddressesView = SearchAddressesViewImpl(this,
+        searchAddressesView = SearchAddressesViewImpl(
+            this,
             searchPresenter,
             SearchAddressAdapter().apply { onClickAddressListener = { openSearchAddress(it) } },
             view

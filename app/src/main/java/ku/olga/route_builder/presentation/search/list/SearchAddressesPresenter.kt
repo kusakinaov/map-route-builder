@@ -8,10 +8,10 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import kotlinx.coroutines.*
 import ku.olga.route_builder.domain.model.SearchAddress
-import ku.olga.route_builder.domain.repository.PointsRepository
+import ku.olga.route_builder.domain.services.PointsService
 import ku.olga.route_builder.presentation.base.BasePresenter
 
-class SearchAddressesPresenter(private val pointsRepository: PointsRepository) : BasePresenter<SearchAddressesView>() {
+class SearchAddressesPresenter(private val pointsService: PointsService) : BasePresenter<SearchAddressesView>() {
     var locationClient: FusedLocationProviderClient? = null
 
     var query: String? = null
@@ -74,7 +74,7 @@ class SearchAddressesPresenter(private val pointsRepository: PointsRepository) :
     }
 
     private fun runSearch() = CoroutineScope(Dispatchers.IO).launch {
-        val addresses = pointsRepository.searchAddress(query)
+        val addresses = pointsService.searchAddress(query)
         withContext(Dispatchers.Main) { setAddresses(addresses) }
     }
 

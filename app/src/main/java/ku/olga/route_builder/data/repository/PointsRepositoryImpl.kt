@@ -4,11 +4,11 @@ import android.location.Geocoder
 import ku.olga.route_builder.data.room.AppDatabase
 import ku.olga.route_builder.domain.model.UserPoint
 import ku.olga.route_builder.domain.repository.PointsRepository
-import ku.olga.route_builder.domain.repository.toRoomUserPoint
-import ku.olga.route_builder.domain.repository.toSearchAddress
-import ku.olga.route_builder.domain.repository.toUserPoint
+import ku.olga.route_builder.data.toRoomUserPoint
+import ku.olga.route_builder.data.toSearchAddress
+import ku.olga.route_builder.data.toUserPoint
 
-class PointsRepositoryImpl(val appDatabase: AppDatabase, private val geocoder: Geocoder) :
+class PointsRepositoryImpl(private val appDatabase: AppDatabase, private val geocoder: Geocoder) :
     PointsRepository {
 
     override suspend fun searchAddress(query: String?) =

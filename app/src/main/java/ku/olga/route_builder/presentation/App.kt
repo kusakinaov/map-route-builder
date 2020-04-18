@@ -6,6 +6,8 @@ import androidx.room.Room
 import ku.olga.route_builder.data.repository.PointsRepositoryImpl
 import ku.olga.route_builder.data.room.AppDatabase
 import ku.olga.route_builder.domain.repository.PointsRepository
+import ku.olga.route_builder.domain.services.PointsService
+import ku.olga.route_builder.domain.services.PointsServiceImpl
 import java.util.Locale
 
 class App : Application() {
@@ -17,10 +19,12 @@ class App : Application() {
                 .fallbackToDestructiveMigration()
                 .build()
         }
-        val pointsRepository: PointsRepository by lazy {
-            PointsRepositoryImpl(
-                appDatabase,
-                Geocoder(application, Locale.getDefault())
+        val pointsService by lazy {
+            PointsServiceImpl(
+                PointsRepositoryImpl(
+                    appDatabase,
+                    Geocoder(application, Locale.getDefault())
+                )
             )
         }
     }

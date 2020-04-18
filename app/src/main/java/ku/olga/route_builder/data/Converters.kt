@@ -1,4 +1,4 @@
-package ku.olga.route_builder.domain.repository
+package ku.olga.route_builder.data
 
 import android.location.Address
 import ku.olga.route_builder.domain.model.SearchAddress
