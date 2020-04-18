@@ -12,22 +12,23 @@ import ku.olga.route_builder.REQ_CODE_LOCATION_PERMISSION
 import ku.olga.route_builder.domain.model.SearchAddress
 
 class SearchAddressesViewImpl(
-        private val fragment: Fragment,
-        private val presenter: SearchAddressesPresenter,
-        private val searchAdapter: SearchAddressAdapter,
-        private val view: View
+    private val fragment: Fragment,
+    private val presenter: SearchAddressesPresenter,
+    private val searchAdapter: SearchAddressAdapter,
+    private val view: View
 ) : SearchAddressesView {
     var searchView: SearchView? = null
-    set(value) {
-        field = value
-        presenter.bindQuery()
-    }
+        set(value) {
+            field = value
+            presenter.bindQuery()
+        }
 
     init {
         view.recyclerView.apply {
             layoutManager = LinearLayoutManager(view.context)
             adapter = searchAdapter
         }
+        view.buttonRetry.setOnClickListener { presenter.onClickRetry() }
     }
 
     override fun showEmpty() {
@@ -39,13 +40,19 @@ class SearchAddressesViewImpl(
 
     override fun hasLocationPermission(): Boolean {
         fragment.context?.let {
-            return ContextCompat.checkSelfPermission(it, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            return ContextCompat.checkSelfPermission(
+                it,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
         }
         return false
     }
 
     override fun requestLocationPermission() {
-        fragment.requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQ_CODE_LOCATION_PERMISSION)
+        fragment.requestPermissions(
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            REQ_CODE_LOCATION_PERMISSION
+        )
     }
 
     override fun bindQuery(query: String?) {
@@ -80,6 +87,10 @@ class SearchAddressesViewImpl(
     }
 
     override fun showError(error: CharSequence) {
+        showDefaultError()
+    }
+
+    override fun showDefaultError() {
         view.recyclerView.visibility = View.GONE
         view.textViewEmpty.visibility = View.GONE
         view.progressBar.visibility = View.GONE

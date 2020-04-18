@@ -6,4 +6,5 @@ interface BaseView {
     fun showProgress() {}
     fun hideProgress() {}
     fun showError(error: CharSequence) {}
+    fun showDefaultError() {}
 }

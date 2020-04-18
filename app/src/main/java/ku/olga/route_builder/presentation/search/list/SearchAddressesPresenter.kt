@@ -10,17 +10,16 @@ import kotlinx.coroutines.*
 import ku.olga.route_builder.domain.model.SearchAddress
 import ku.olga.route_builder.domain.services.PointsService
 import ku.olga.route_builder.presentation.base.BasePresenter
+import java.io.IOException
 
-class SearchAddressesPresenter(private val pointsService: PointsService) : BasePresenter<SearchAddressesView>() {
+class SearchAddressesPresenter(private val pointsService: PointsService) :
+    BasePresenter<SearchAddressesView>() {
     var locationClient: FusedLocationProviderClient? = null
 
     var query: String? = null
         set(value) {
             field = value
-            if (value?.length ?: 0 >= 3) {
-                job?.let { if (it.isActive) it.cancel() }
-                job = runSearch()
-            }
+            trySearch()
         }
 
     private var location: Location? = null
@@ -64,7 +63,11 @@ class SearchAddressesPresenter(private val pointsService: PointsService) : BaseP
 
     private fun startLocationUpdates() {
         requestingLocationUpdates = true
-        locationClient?.requestLocationUpdates(buildLocationRequest(), locationCallback, Looper.getMainLooper())
+        locationClient?.requestLocationUpdates(
+            buildLocationRequest(),
+            locationCallback,
+            Looper.getMainLooper()
+        )
     }
 
     private fun stopLocationUpdates() {
@@ -74,8 +77,12 @@ class SearchAddressesPresenter(private val pointsService: PointsService) : BaseP
     }
 
     private fun runSearch() = CoroutineScope(Dispatchers.IO).launch {
-        val addresses = pointsService.searchAddress(query)
-        withContext(Dispatchers.Main) { setAddresses(addresses) }
+        try {
+            val addresses = pointsService.searchAddress(query)
+            withContext(Dispatchers.Main) { setAddresses(addresses) }
+        } catch (e: IOException) {
+            withContext(Dispatchers.Main) { view?.showDefaultError() }
+        }
     }
 
     private fun setAddresses(addresses: List<SearchAddress>?) {
@@ -104,5 +111,16 @@ class SearchAddressesPresenter(private val pointsService: PointsService) : BaseP
         interval = 1000 * 60 //1 minute
         fastestInterval = 1000 * 30 //30 seconds
         priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
+    }
+
+    fun onClickRetry() {
+        trySearch()
+    }
+
+    private fun trySearch() {
+        if (query?.length ?: 0 >= 3) {
+            job?.let { if (it.isActive) it.cancel() }
+            job = runSearch()
+        }
     }
 }
