@@ -2,9 +2,7 @@ package ku.olga.route_builder.presentation.point
 
 import android.content.res.Resources
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import ku.olga.route_builder.R
 import ku.olga.route_builder.presentation.App
@@ -36,8 +34,27 @@ class EditPointFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        editPointView = EditPointViewImpl(this, presenter, view)
+        editPointView = EditPointViewImpl(this, presenter)
         editPointView?.onAttach()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        menu.clear()
+        inflater.inflate(R.menu.edit_point, menu)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        menu.findItem(R.id.actionSave).isEnabled = presenter.isSaveEnabled()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.actionSave -> {
+            presenter.onClickSave()
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     override fun onDestroyView() {

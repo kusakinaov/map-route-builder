@@ -21,17 +21,16 @@ class EditPointPresenter(private val pointsService: PointsService) : BasePresent
 
     fun setPoint(point: UserPoint) {
         this.point = point
-        bindSaveButton()
+        view?.invalidateOptionsMenu()
     }
 
     fun setTitle(title: String) {
         this.title = title
-        bindSaveButton()
+        view?.invalidateOptionsMenu()
     }
 
     fun setDescription(description: String) {
         this.description = description
-        bindSaveButton()
     }
 
     override fun attachView(view: EditPointView) {
@@ -64,7 +63,5 @@ class EditPointPresenter(private val pointsService: PointsService) : BasePresent
         }
     }
 
-    private fun bindSaveButton() {
-        view?.bindSaveButton(title.isNotEmpty())
-    }
+    fun isSaveEnabled() = title.isNotEmpty()
 }

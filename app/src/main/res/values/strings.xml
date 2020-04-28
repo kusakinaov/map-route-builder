@@ -16,7 +16,7 @@
     <string name="hint_input_title">Введите название</string>
     <string name="hint_input_description">Введите описание</string>
     <string name="ttl_edit">Редактирование</string>
-    <string name="button_save">СОХРАНИТЬ</string>
     <string name="hint_no_title">Нет заголовка</string>
     <string name="hint_no_description">Нет описания</string>
+    <string name="action_save">Сохранить</string>
 </resources>

@@ -6,6 +6,6 @@ interface EditPointView : BaseView {
     fun bindTitle(title: String)
     fun bindDescription(description: String)
     fun bindAddress(postalAddress: String)
-    fun bindSaveButton(enabled: Boolean)
     fun notifySaveSuccessful()
+    fun invalidateOptionsMenu()
 }

@@ -55,19 +55,4 @@
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="0dp">
-
-        <TextView
-            android:id="@+id/textViewSave"
-            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="@string/button_save" />
-    </com.google.android.material.card.MaterialCardView>
 </LinearLayout>
