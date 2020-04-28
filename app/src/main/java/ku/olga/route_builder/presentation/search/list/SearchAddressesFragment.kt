@@ -11,8 +11,8 @@ import ku.olga.route_builder.R
 import ku.olga.route_builder.REQ_CODE_VIEW_SEARCH_ADDRESS
 import ku.olga.route_builder.domain.model.SearchAddress
 import ku.olga.route_builder.presentation.App
-import ku.olga.route_builder.presentation.KeyboardUtils.hideKeyboard
 import ku.olga.route_builder.presentation.base.BaseFragment
+import ku.olga.route_builder.presentation.hideKeyboard
 import ku.olga.route_builder.presentation.search.item.SearchAddressFragment
 
 class SearchAddressesFragment : BaseFragment() {
