@@ -29,8 +29,4 @@ class UserPointsPresenter(private val pointsService: PointsService) :
             }
         }
     }
-
-    override fun detachView() {
-        super.detachView()
-    }
 }
