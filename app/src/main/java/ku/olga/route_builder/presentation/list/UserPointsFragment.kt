@@ -28,7 +28,7 @@ class UserPointsFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        userPointsView = UserPointsViewImpl(this, view, userPointsPresenter).apply {
+        userPointsView = UserPointsViewImpl(this, userPointsPresenter).apply {
             onAttach()
         }
     }

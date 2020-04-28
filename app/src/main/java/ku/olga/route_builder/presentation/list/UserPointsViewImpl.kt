@@ -12,7 +12,6 @@ import ku.olga.route_builder.presentation.search.list.SearchAddressesFragment
 
 class UserPointsViewImpl(
     private val fragment: BaseFragment,
-    val view: View,
     private val presenter: UserPointsPresenter
 ) :
     UserPointsView {
@@ -23,7 +22,7 @@ class UserPointsViewImpl(
     }
 
     init {
-        view.apply {
+        fragment.view?.apply {
             recyclerView.apply {
                 layoutManager = LinearLayoutManager(context)
                 adapter = pointsAdapter
@@ -49,14 +48,14 @@ class UserPointsViewImpl(
     }
 
     override fun showEmpty() {
-        view.apply {
+        fragment.view?.apply {
             recyclerView.visibility = View.GONE
             textViewEmpty.visibility = View.VISIBLE
         }
     }
 
     override fun showUserPoints() {
-        view.apply {
+        fragment.view?.apply {
             textViewEmpty.visibility = View.GONE
             recyclerView.visibility = View.VISIBLE
         }
