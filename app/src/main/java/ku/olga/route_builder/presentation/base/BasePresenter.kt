@@ -1,6 +1,6 @@
 package ku.olga.route_builder.presentation.base
 
-open class BasePresenter<T : BaseView> {
+abstract class BasePresenter<T : BaseView> {
     var view: T? = null
 
     open fun attachView(view: T) {
