@@ -16,12 +16,7 @@ class SearchAddressesPresenter(private val pointsService: PointsService) :
     BasePresenter<SearchAddressesView>() {
     var locationClient: FusedLocationProviderClient? = null
 
-    var query: String? = null
-        set(value) {
-            field = value
-            trySearch()
-        }
-
+    private var query: String? = null
     private var location: Location? = null
     private var requestingLocationUpdates: Boolean = false
     private val locationCallback: LocationCallback = object : LocationCallback() {
@@ -33,8 +28,7 @@ class SearchAddressesPresenter(private val pointsService: PointsService) :
             }
         }
     }
-    var job: Job? = null
-
+    private var job: Job? = null
     private val addresses = mutableListOf<SearchAddress>()
 
     override fun attachView(view: SearchAddressesView) {
@@ -59,6 +53,11 @@ class SearchAddressesPresenter(private val pointsService: PointsService) :
         if (view?.hasLocationPermission() == true) {
             startLocationUpdates()
         }
+    }
+
+    fun onQueryChanged(query: String?) {
+        this.query = query
+        trySearch()
     }
 
     private fun startLocationUpdates() {

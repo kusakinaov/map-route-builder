@@ -18,8 +18,7 @@ class SearchAddressFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            searchAddressPresenter.searchAddress =
-                it.getSerializable(SEARCH_ADDRESS) as SearchAddress?
+            searchAddressPresenter.setSearchAddress(it.getSerializable(SEARCH_ADDRESS) as SearchAddress?)
         }
     }
 

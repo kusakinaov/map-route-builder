@@ -7,29 +7,31 @@ import ku.olga.route_builder.presentation.base.BasePresenter
 
 class EditPointPresenter(private val pointsService: PointsService) : BasePresenter<EditPointView>() {
     private var point: UserPoint? = null
-        set(value) {
-            field = value
-            bindUserPoint()
-        }
     private var job: Job? = null
-    var title: String = ""
-        set(value) {
-            field = value
-            bindSaveButton()
-        }
-
-    var description: String = ""
-        set(value) {
-            field = value
-            bindSaveButton()
-        }
+    private var title: String = ""
+    private var description: String = ""
 
     fun setAddress(postalAddress: String?, lat: Double, lon: Double) {
         point = UserPoint(postalAddress = postalAddress, lat = lat, lon = lon)
         point?.let {
-            title = it.title ?: ""
-            description = it.description ?: ""
+            setTitle(it.title ?: "")
+            setDescription(it.description ?: "")
         }
+    }
+
+    fun setPoint(point: UserPoint) {
+        this.point = point
+        bindSaveButton()
+    }
+
+    fun setTitle(title: String) {
+        this.title = title
+        bindSaveButton()
+    }
+
+    fun setDescription(description: String) {
+        this.description = description
+        bindSaveButton()
     }
 
     override fun attachView(view: EditPointView) {
@@ -61,7 +63,6 @@ class EditPointPresenter(private val pointsService: PointsService) : BasePresent
             }
         }
     }
-
 
     private fun bindSaveButton() {
         view?.bindSaveButton(title.isNotEmpty())

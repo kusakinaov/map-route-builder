@@ -19,12 +19,12 @@ class EditPointViewImpl(
             textViewSave.setOnClickListener { presenter.onClickSave() }
             editTextTitle.addTextChangedListener(object : SimpleTextWatcher {
                 override fun afterTextChanged(s: Editable?) {
-                    presenter.title = s?.toString() ?: ""
+                    presenter.setTitle(s?.toString() ?: "")
                 }
             })
             editTextDescription.addTextChangedListener(object : SimpleTextWatcher {
                 override fun afterTextChanged(s: Editable?) {
-                    presenter.description = s?.toString() ?: ""
+                    presenter.setDescription(s?.toString() ?: "")
                 }
             })
         }

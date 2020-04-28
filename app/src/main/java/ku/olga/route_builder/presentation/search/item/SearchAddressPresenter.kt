@@ -8,12 +8,8 @@ import java.io.IOException
 
 class SearchAddressPresenter(private val pointsService: PointsService) :
     BasePresenter<SearchAddressView>() {
-    var searchAddress: SearchAddress? = null
-        set(value) {
-            field = value
-            bindSearchAddress()
-        }
-    var job: Job? = null
+    private var searchAddress: SearchAddress? = null
+    private var job: Job? = null
 
     override fun attachView(view: SearchAddressView) {
         super.attachView(view)
@@ -23,6 +19,11 @@ class SearchAddressPresenter(private val pointsService: PointsService) :
     override fun detachView() {
         job?.cancel()
         super.detachView()
+    }
+
+    fun setSearchAddress(searchAddress: SearchAddress?) {
+        this.searchAddress = searchAddress
+        bindSearchAddress()
     }
 
     fun bindSearchAddress() {

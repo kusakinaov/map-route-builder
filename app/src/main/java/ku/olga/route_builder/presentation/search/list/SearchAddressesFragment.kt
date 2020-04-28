@@ -101,7 +101,7 @@ class SearchAddressesFragment : BaseFragment() {
     }
 
     fun onQueryChanged(query: String?) {
-        searchPresenter.query = query
+        searchPresenter.onQueryChanged(query)
     }
 
     companion object {
