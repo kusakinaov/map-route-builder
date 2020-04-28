@@ -1,7 +1,6 @@
 package ku.olga.route_builder.presentation.search.item
 
 import android.os.Bundle
-import android.view.View
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -16,7 +15,7 @@ import ku.olga.route_builder.REQ_CODE_EDIT_POINT
 import ku.olga.route_builder.presentation.base.BaseFragment
 import ku.olga.route_builder.presentation.point.EditPointFragment
 
-class SearchAddressViewImpl(private val fragment: BaseFragment, private val view: View) : SearchAddressView, OnMapReadyCallback {
+class SearchAddressViewImpl(private val fragment: BaseFragment) : SearchAddressView, OnMapReadyCallback {
     private val zoomLevel = 15f
 
     private var googleMap: GoogleMap? = null
@@ -25,7 +24,7 @@ class SearchAddressViewImpl(private val fragment: BaseFragment, private val view
     var presenter: SearchAddressPresenter? = null
 
     init {
-        view.mapView.getMapAsync(this)
+        fragment.view?.mapView?.getMapAsync(this)
     }
 
     override fun onMapReady(p0: GoogleMap?) {
@@ -48,7 +47,7 @@ class SearchAddressViewImpl(private val fragment: BaseFragment, private val view
     }
 
     override fun onCreate(state: Bundle?) {
-        view.apply {
+        fragment.view?.apply {
             mapView.onCreate(state)
             buttonAdd.setOnClickListener { presenter?.onClickAdd() }
             BottomSheetBehavior.from(layoutContent).setState(BottomSheetBehavior.STATE_EXPANDED)
@@ -56,23 +55,23 @@ class SearchAddressViewImpl(private val fragment: BaseFragment, private val view
     }
 
     override fun onStart() {
-        view.mapView.onStart()
+        fragment.view?.mapView?.onStart()
     }
 
     override fun onResume() {
-        view.mapView.onResume()
+        fragment.view?.mapView?.onResume()
     }
 
     override fun onPause() {
-        view.mapView.onPause()
+        fragment.view?.mapView?.onPause()
     }
 
     override fun onStop() {
-        view.mapView.onStop()
+        fragment.view?.mapView?.onStop()
     }
 
     override fun onDestroy() {
-        view.mapView.onDestroy()
+        fragment.view?.mapView?.onDestroy()
     }
 
     override fun bindLatLng(lat: Double, lon: Double) {
@@ -86,7 +85,7 @@ class SearchAddressViewImpl(private val fragment: BaseFragment, private val view
     }
 
     override fun bindAddress(postalAddress: String) {
-        view.textViewAddress.text = postalAddress
+        fragment.view?.textViewAddress?.text = postalAddress
     }
 
     override fun editPoint(postalAddress: String, lat: Double, lon: Double) {
@@ -106,8 +105,8 @@ class SearchAddressViewImpl(private val fragment: BaseFragment, private val view
     }
 
     override fun showDefaultError() {
-        fragment.context?.let {
-            Snackbar.make(view, it.getString(R.string.error_search_points), Snackbar.LENGTH_LONG)
+        fragment.view?.let {
+            Snackbar.make(it, it.resources.getString(R.string.error_search_points), Snackbar.LENGTH_LONG)
                 .setAction(R.string.button_retry) {
                     googleMap?.cameraPosition?.target.let {
                         presenter?.onClickRetry(it?.latitude, it?.longitude)
