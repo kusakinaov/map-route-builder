@@ -1,12 +1,9 @@
 package ku.olga.route_builder.presentation.list
 
-import android.app.Activity
-import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.*
 import ku.olga.route_builder.R
-import ku.olga.route_builder.REQ_CODE_SEARCH_POINT
 import ku.olga.route_builder.presentation.App
 import ku.olga.route_builder.presentation.base.BaseFragment
 
@@ -47,14 +44,5 @@ class UserPointsFragment : BaseFragment() {
             true
         }
         else -> super.onOptionsItemSelected(item)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == REQ_CODE_SEARCH_POINT) {
-
-            }
-        }
     }
 }
