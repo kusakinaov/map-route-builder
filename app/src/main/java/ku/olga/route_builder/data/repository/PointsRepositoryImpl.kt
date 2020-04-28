@@ -1,12 +1,13 @@
 package ku.olga.route_builder.data.repository
 
+import android.location.Address
 import android.location.Geocoder
 import ku.olga.route_builder.data.room.AppDatabase
 import ku.olga.route_builder.domain.model.UserPoint
 import ku.olga.route_builder.domain.repository.PointsRepository
-import ku.olga.route_builder.data.toRoomUserPoint
-import ku.olga.route_builder.data.toSearchAddress
-import ku.olga.route_builder.data.toUserPoint
+import ku.olga.route_builder.domain.model.SearchAddress
+import java.lang.StringBuilder
+import ku.olga.route_builder.data.room.entity.UserPoint as RoomUserPoint
 
 class PointsRepositoryImpl(private val appDatabase: AppDatabase, private val geocoder: Geocoder) :
     PointsRepository {
@@ -29,4 +30,20 @@ class PointsRepositoryImpl(private val appDatabase: AppDatabase, private val geo
 
     override suspend fun deleteUserPoint(userPoint: UserPoint) =
         appDatabase.userPointDao().delete(userPoint.toRoomUserPoint())
+
+    private fun Address.toSearchAddress() = SearchAddress(buildPostalAddress(), latitude, longitude)
+
+    private fun Address.buildPostalAddress(): String {
+        val builder = StringBuilder()
+        for (i in 0..maxAddressLineIndex) {
+            if (builder.isNotEmpty()) builder.append(", ")
+            builder.append(getAddressLine(i))
+        }
+        return builder.toString()
+    }
+
+    private fun UserPoint.toRoomUserPoint() = RoomUserPoint(id, title, postalAddress, lat, lon, description)
+
+    private fun RoomUserPoint.toUserPoint() =
+        UserPoint(id, title, postalAddress, lat, lon, description)
 }
