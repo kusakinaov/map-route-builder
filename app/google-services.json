@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "984590956815",
+    "firebase_url": "https://home-projects-83cb4.firebaseio.com",
+    "project_id": "home-projects-83cb4",
+    "storage_bucket": "home-projects-83cb4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:984590956815:android:d53d611ab08b0a8afea67a",
+        "android_client_info": {
+          "package_name": "ku.olga.route_builder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "984590956815-l5or5d6ituiadfp85k5tt6s0blpfe5ch.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUmYZzYDwwXy5JGZZ1_et0YFa_Kwt2JVA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "984590956815-l5or5d6ituiadfp85k5tt6s0blpfe5ch.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
