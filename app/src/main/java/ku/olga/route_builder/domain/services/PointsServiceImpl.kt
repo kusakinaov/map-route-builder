@@ -1,18 +1,23 @@
 package ku.olga.route_builder.domain.services
 
 import ku.olga.route_builder.domain.model.UserPoint
-import ku.olga.route_builder.domain.repository.PointsRepository
+import ku.olga.route_builder.domain.repository.AddressRepository
+import ku.olga.route_builder.domain.repository.PointsCacheRepository
 
-class PointsServiceImpl(private val repository: PointsRepository) : PointsService {
-    override suspend fun searchAddress(query: String?) = repository.searchAddress(query)
+class PointsServiceImpl(
+    private val addressRepository: AddressRepository,
+    private val pointsCacheRepository: PointsCacheRepository
+) : PointsService {
+    override suspend fun searchAddress(query: String?) = addressRepository.searchAddress(query)
 
     override suspend fun searchAddress(lat: Double, lon: Double) =
-        repository.searchAddress(lat, lon)
+        addressRepository.searchAddress(lat, lon)
 
-    override suspend fun saveUserPoint(userPoint: UserPoint) = repository.saveUserPoint(userPoint)
+    override suspend fun saveUserPoint(userPoint: UserPoint) =
+        pointsCacheRepository.saveUserPoint(userPoint)
 
-    override suspend fun getUserPoints() = repository.getUserPoints()
+    override suspend fun getUserPoints() = pointsCacheRepository.getUserPoints()
 
     override suspend fun deleteUserPoint(userPoint: UserPoint) =
-        repository.deleteUserPoint(userPoint)
+        pointsCacheRepository.deleteUserPoint(userPoint)
 }

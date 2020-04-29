@@ -40,8 +40,7 @@ class SearchAddressesFragment : BaseFragment() {
         searchAddressesView = SearchAddressesViewImpl(
             this,
             searchPresenter,
-            SearchAddressAdapter().apply { onClickAddressListener = { openSearchAddress(it) } },
-            view
+            SearchAddressAdapter().apply { onClickAddressListener = { openSearchAddress(it) } }
         )
         searchAddressesView?.onAttach()
     }
