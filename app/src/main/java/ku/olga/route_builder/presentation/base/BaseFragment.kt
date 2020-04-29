@@ -8,10 +8,9 @@ import com.google.android.material.snackbar.Snackbar
 import ku.olga.route_builder.R
 import ku.olga.route_builder.presentation.MainActivity
 
-open class BaseFragment : Fragment() {
+abstract class BaseFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        retainInstance = true
         setHasOptionsMenu(true)
     }
 

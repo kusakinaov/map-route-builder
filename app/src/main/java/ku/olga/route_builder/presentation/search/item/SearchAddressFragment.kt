@@ -13,13 +13,12 @@ import ku.olga.route_builder.presentation.base.BaseFragment
 
 class SearchAddressFragment : BaseFragment() {
     private var searchAddressView: SearchAddressView? = null
-    private val searchAddressPresenter = SearchAddressPresenter(App.pointsService)
+    private val searchAddressPresenter = SearchAddressPresenter(App.addressRepository)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            searchAddressPresenter.searchAddress =
-                it.getSerializable(SEARCH_ADDRESS) as SearchAddress?
+            searchAddressPresenter.setSearchAddress(it.getSerializable(SEARCH_ADDRESS) as SearchAddress?)
         }
     }
 
@@ -32,7 +31,7 @@ class SearchAddressFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        searchAddressView = SearchAddressViewImpl(this, view).apply {
+        searchAddressView = SearchAddressViewImpl(this).apply {
             presenter = searchAddressPresenter
             onCreate(savedInstanceState)
         }

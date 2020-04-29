@@ -11,12 +11,12 @@ import ku.olga.route_builder.R
 import ku.olga.route_builder.REQ_CODE_VIEW_SEARCH_ADDRESS
 import ku.olga.route_builder.domain.model.SearchAddress
 import ku.olga.route_builder.presentation.App
-import ku.olga.route_builder.presentation.KeyboardUtils.hideKeyboard
 import ku.olga.route_builder.presentation.base.BaseFragment
+import ku.olga.route_builder.presentation.hideKeyboard
 import ku.olga.route_builder.presentation.search.item.SearchAddressFragment
 
 class SearchAddressesFragment : BaseFragment() {
-    private val searchPresenter = SearchAddressesPresenter(App.pointsService)
+    private val searchPresenter = SearchAddressesPresenter(App.addressRepository)
     private var searchAddressesView: SearchAddressesView? = null
 
     override fun getTitle(resources: Resources) = resources.getString(R.string.ttl_search)
@@ -40,8 +40,7 @@ class SearchAddressesFragment : BaseFragment() {
         searchAddressesView = SearchAddressesViewImpl(
             this,
             searchPresenter,
-            SearchAddressAdapter().apply { onClickAddressListener = { openSearchAddress(it) } },
-            view
+            SearchAddressAdapter().apply { onClickAddressListener = { openSearchAddress(it) } }
         )
         searchAddressesView?.onAttach()
     }
@@ -101,7 +100,7 @@ class SearchAddressesFragment : BaseFragment() {
     }
 
     fun onQueryChanged(query: String?) {
-        searchPresenter.query = query
+        searchPresenter.onQueryChanged(query)
     }
 
     companion object {

@@ -14,8 +14,7 @@ import ku.olga.route_builder.domain.model.SearchAddress
 class SearchAddressesViewImpl(
     private val fragment: Fragment,
     private val presenter: SearchAddressesPresenter,
-    private val searchAdapter: SearchAddressAdapter,
-    private val view: View
+    private val searchAdapter: SearchAddressAdapter
 ) : SearchAddressesView {
     var searchView: SearchView? = null
         set(value) {
@@ -24,18 +23,22 @@ class SearchAddressesViewImpl(
         }
 
     init {
-        view.recyclerView.apply {
-            layoutManager = LinearLayoutManager(view.context)
-            adapter = searchAdapter
+        fragment.view?.apply {
+            recyclerView.apply {
+                layoutManager = LinearLayoutManager(context)
+                adapter = searchAdapter
+            }
+            buttonRetry.setOnClickListener { presenter.onClickRetry() }
         }
-        view.buttonRetry.setOnClickListener { presenter.onClickRetry() }
     }
 
     override fun showEmpty() {
-        view.layoutError.visibility = View.GONE
-        view.recyclerView.visibility = View.GONE
-        view.textViewEmpty.visibility = View.VISIBLE
-        view.progressBar.visibility = View.GONE
+        fragment.view?.apply {
+            groupError.visibility = View.GONE
+            recyclerView.visibility = View.GONE
+            textViewEmpty.visibility = View.VISIBLE
+            progressBar.visibility = View.GONE
+        }
     }
 
     override fun hasLocationPermission(): Boolean {
@@ -61,10 +64,12 @@ class SearchAddressesViewImpl(
 
     override fun showAddresses(addresses: List<SearchAddress>) {
         searchAdapter.setItems(addresses)
-        view.layoutError.visibility = View.GONE
-        view.recyclerView.visibility = View.VISIBLE
-        view.textViewEmpty.visibility = View.GONE
-        view.progressBar.visibility = View.GONE
+        fragment.view?.apply {
+            groupError.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+            textViewEmpty.visibility = View.GONE
+            progressBar.visibility = View.GONE
+        }
     }
 
     override fun onAttach() {
@@ -76,14 +81,16 @@ class SearchAddressesViewImpl(
     }
 
     override fun showProgress() {
-        view.layoutError.visibility = View.GONE
-        view.recyclerView.visibility = View.GONE
-        view.textViewEmpty.visibility = View.GONE
-        view.progressBar.visibility = View.VISIBLE
+        fragment.view?.apply {
+            groupError.visibility = View.GONE
+            recyclerView.visibility = View.GONE
+            textViewEmpty.visibility = View.GONE
+            progressBar.visibility = View.VISIBLE
+        }
     }
 
     override fun hideProgress() {
-        view.progressBar.visibility = View.GONE
+        fragment.view?.progressBar?.visibility = View.GONE
     }
 
     override fun showError(error: CharSequence) {
@@ -91,9 +98,11 @@ class SearchAddressesViewImpl(
     }
 
     override fun showDefaultError() {
-        view.recyclerView.visibility = View.GONE
-        view.textViewEmpty.visibility = View.GONE
-        view.progressBar.visibility = View.GONE
-        view.layoutError.visibility = View.VISIBLE
+        fragment.view?.apply {
+            recyclerView.visibility = View.GONE
+            textViewEmpty.visibility = View.GONE
+            progressBar.visibility = View.GONE
+            groupError.visibility = View.VISIBLE
+        }
     }
 }
