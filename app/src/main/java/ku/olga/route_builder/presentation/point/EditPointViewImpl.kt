@@ -1,14 +1,19 @@
 package ku.olga.route_builder.presentation.point
 
+import android.os.Bundle
 import android.text.Editable
+import android.view.View
 import androidx.fragment.app.FragmentManager
 import kotlinx.android.synthetic.main.fragment_edit_point.view.*
+import ku.olga.route_builder.R
+import ku.olga.route_builder.REQ_CODE_CONFIRM_DELETE_POINT
+import ku.olga.route_builder.presentation.ConfirmationDialog
 import ku.olga.route_builder.presentation.base.BaseFragment
 import ku.olga.route_builder.presentation.view.SimpleTextWatcher
 
 class EditPointViewImpl(
-    val fragment: BaseFragment,
-    private val presenter: EditPointPresenter
+        val fragment: BaseFragment,
+        private val presenter: EditPointPresenter
 ) : EditPointView {
     init {
         fragment.view?.apply {
@@ -22,6 +27,7 @@ class EditPointViewImpl(
                     presenter.setDescription(s?.toString() ?: "")
                 }
             })
+            buttonDelete.setOnClickListener { presenter.onClickDelete() }
         }
     }
 
@@ -37,12 +43,29 @@ class EditPointViewImpl(
         fragment.view?.textViewAddress?.text = postalAddress
     }
 
+    override fun setDeleteButtonVisibility(visible: Boolean) {
+        fragment.view?.buttonDelete?.visibility = if (visible) View.VISIBLE else View.GONE
+    }
+
     override fun notifySaveSuccessful() {
         fragment.fragmentManager?.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 
     override fun invalidateOptionsMenu() {
         fragment.activity?.invalidateOptionsMenu()
+    }
+
+    override fun showConfirmationDeleteDialog(title: String) {
+        ConfirmationDialog.show(fragment, REQ_CODE_CONFIRM_DELETE_POINT,
+                fragment.getString(R.string.question_confirm_delete_point, title), Bundle())
+    }
+
+    override fun notifyDeleteSuccessful() {
+        fragment.fragmentManager?.let {
+            if (it.isStateSaved) return
+
+            it.popBackStack()
+        }
     }
 
     override fun onAttach() {

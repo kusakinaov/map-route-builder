@@ -1,10 +1,13 @@
 package ku.olga.route_builder.presentation.point
 
+import android.app.Activity
+import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import ku.olga.route_builder.R
+import ku.olga.route_builder.REQ_CODE_CONFIRM_DELETE_POINT
 import ku.olga.route_builder.domain.model.UserPoint
 import ku.olga.route_builder.presentation.App
 import ku.olga.route_builder.presentation.base.BaseFragment
@@ -60,6 +63,15 @@ class EditPointFragment : BaseFragment() {
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQ_CODE_CONFIRM_DELETE_POINT) {
+                presenter.onDeleteConfirmed()
+            }
+        }
     }
 
     override fun onDestroyView() {

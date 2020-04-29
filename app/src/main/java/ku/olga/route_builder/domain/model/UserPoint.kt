@@ -9,4 +9,7 @@ data class UserPoint(
         val lat: Double,
         val lon: Double,
         var description: String? = null
-) : Serializable
+) : Serializable {
+    val isNew: Boolean
+        get() = id == null
+}

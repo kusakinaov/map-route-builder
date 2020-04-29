@@ -23,7 +23,6 @@ class EditPointPresenter(private val pointsRepository: PointsCacheRepository) : 
         this.point = point
         this.title = point.title ?: ""
         this.description = point.description ?: ""
-        view?.invalidateOptionsMenu()
     }
 
     fun setTitle(title: String) {
@@ -33,6 +32,7 @@ class EditPointPresenter(private val pointsRepository: PointsCacheRepository) : 
 
     fun setDescription(description: String) {
         this.description = description
+        view?.invalidateOptionsMenu()
     }
 
     override fun attachView(view: EditPointView) {
@@ -46,6 +46,8 @@ class EditPointPresenter(private val pointsRepository: PointsCacheRepository) : 
                 bindTitle(it.title ?: "")
                 bindDescription(it.description ?: "")
                 bindAddress(it.postalAddress ?: "")
+
+                setDeleteButtonVisibility(!it.isNew)
             }
         }
     }
@@ -66,4 +68,22 @@ class EditPointPresenter(private val pointsRepository: PointsCacheRepository) : 
     }
 
     fun isSaveEnabled() = title.isNotEmpty()
+            && (title != point?.title || description != point?.description)
+
+    fun onClickDelete() {
+        view?.showConfirmationDeleteDialog(title)
+    }
+
+    fun onDeleteConfirmed() {
+        job = deleteUserPoint()
+    }
+
+    private fun deleteUserPoint() = CoroutineScope(Dispatchers.IO).launch {
+        point?.let {
+            val id = pointsRepository.deleteUserPoint(it)
+            withContext(Dispatchers.Main) {
+                view?.notifyDeleteSuccessful()
+            }
+        }
+    }
 }

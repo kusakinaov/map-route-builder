@@ -19,4 +19,6 @@
     <string name="hint_no_title">Нет заголовка</string>
     <string name="hint_no_description">Нет описания</string>
     <string name="action_save">Сохранить</string>
+    <string name="button_delete">УДАЛИТЬ</string>
+    <string name="question_confirm_delete_point">Удалить точку %s?</string>
 </resources>
