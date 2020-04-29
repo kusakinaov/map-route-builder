@@ -2,11 +2,11 @@ package ku.olga.route_builder.presentation.search.item
 
 import kotlinx.coroutines.*
 import ku.olga.route_builder.domain.model.SearchAddress
-import ku.olga.route_builder.domain.services.PointsService
+import ku.olga.route_builder.domain.repository.AddressRepository
 import ku.olga.route_builder.presentation.base.BasePresenter
 import java.io.IOException
 
-class SearchAddressPresenter(private val pointsService: PointsService) :
+class SearchAddressPresenter(private val addressRepository: AddressRepository) :
     BasePresenter<SearchAddressView>() {
     private var searchAddress: SearchAddress? = null
     private var job: Job? = null
@@ -48,7 +48,7 @@ class SearchAddressPresenter(private val pointsService: PointsService) :
     private fun searchAddress(latitude: Double, longitude: Double) =
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val addresses = pointsService.searchAddress(latitude, longitude)
+                val addresses = addressRepository.searchAddress(latitude, longitude)
                 withContext(Dispatchers.Main) {
                     if (addresses.isNotEmpty()) {
                         searchAddress = addresses[0]

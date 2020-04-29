@@ -2,10 +2,10 @@ package ku.olga.route_builder.presentation.point
 
 import kotlinx.coroutines.*
 import ku.olga.route_builder.domain.model.UserPoint
-import ku.olga.route_builder.domain.services.PointsService
+import ku.olga.route_builder.domain.repository.PointsCacheRepository
 import ku.olga.route_builder.presentation.base.BasePresenter
 
-class EditPointPresenter(private val pointsService: PointsService) : BasePresenter<EditPointView>() {
+class EditPointPresenter(private val pointsRepository: PointsCacheRepository) : BasePresenter<EditPointView>() {
     private var point: UserPoint? = null
     private var job: Job? = null
     private var title: String = ""
@@ -56,7 +56,7 @@ class EditPointPresenter(private val pointsService: PointsService) : BasePresent
 
     private fun saveUserPoint() = CoroutineScope(Dispatchers.IO).launch {
         point?.let {
-            val id = pointsService.saveUserPoint(it)
+            val id = pointsRepository.saveUserPoint(it)
             withContext(Dispatchers.Main) {
                 view?.notifySaveSuccessful()
             }

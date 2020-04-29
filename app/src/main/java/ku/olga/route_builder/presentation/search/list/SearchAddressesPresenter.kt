@@ -8,11 +8,11 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import kotlinx.coroutines.*
 import ku.olga.route_builder.domain.model.SearchAddress
-import ku.olga.route_builder.domain.services.PointsService
+import ku.olga.route_builder.domain.repository.AddressRepository
 import ku.olga.route_builder.presentation.base.BasePresenter
 import java.io.IOException
 
-class SearchAddressesPresenter(private val pointsService: PointsService) :
+class SearchAddressesPresenter(private val addressRepository: AddressRepository) :
     BasePresenter<SearchAddressesView>() {
     var locationClient: FusedLocationProviderClient? = null
 
@@ -77,7 +77,7 @@ class SearchAddressesPresenter(private val pointsService: PointsService) :
 
     private fun runSearch() = CoroutineScope(Dispatchers.IO).launch {
         try {
-            val addresses = pointsService.searchAddress(query)
+            val addresses = addressRepository.searchAddress(query)
             withContext(Dispatchers.Main) { setAddresses(addresses) }
         } catch (e: IOException) {
             withContext(Dispatchers.Main) { view?.showDefaultError() }

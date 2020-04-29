@@ -2,10 +2,10 @@ package ku.olga.route_builder.presentation.list
 
 import kotlinx.coroutines.*
 import ku.olga.route_builder.domain.model.UserPoint
-import ku.olga.route_builder.domain.services.PointsService
+import ku.olga.route_builder.domain.repository.PointsCacheRepository
 import ku.olga.route_builder.presentation.base.BasePresenter
 
-class UserPointsPresenter(private val pointsService: PointsService) :
+class UserPointsPresenter(private val pointsRepository: PointsCacheRepository) :
     BasePresenter<UserPointsView>() {
     private val userPoints = mutableListOf<UserPoint>()
 
@@ -17,7 +17,7 @@ class UserPointsPresenter(private val pointsService: PointsService) :
 
     private fun getUserPoints() = CoroutineScope(Dispatchers.IO).launch {
         userPoints.clear()
-        userPoints.addAll(pointsService.getUserPoints())
+        userPoints.addAll(pointsRepository.getUserPoints())
         withContext(Dispatchers.Main) {
             view?.apply {
                 setUserPoints(userPoints)

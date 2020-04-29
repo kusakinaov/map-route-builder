@@ -6,7 +6,6 @@ import androidx.room.Room
 import ku.olga.route_builder.data.repository.AddressGeocoderRepository
 import ku.olga.route_builder.data.repository.PointsDbCacheRepository
 import ku.olga.route_builder.data.room.AppDatabase
-import ku.olga.route_builder.domain.services.PointsServiceImpl
 import java.util.Locale
 
 class App : Application() {
@@ -18,12 +17,8 @@ class App : Application() {
                 .fallbackToDestructiveMigration()
                 .build()
         }
-        val pointsService by lazy {
-            PointsServiceImpl(
-                AddressGeocoderRepository(Geocoder(application, Locale.getDefault())),
-                PointsDbCacheRepository(appDatabase)
-            )
-        }
+        val addressRepository by lazy { AddressGeocoderRepository(Geocoder(application, Locale.getDefault())) }
+        val pointsRepository by lazy { PointsDbCacheRepository(appDatabase) }
     }
 
     override fun onCreate() {

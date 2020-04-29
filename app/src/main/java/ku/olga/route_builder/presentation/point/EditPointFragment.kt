@@ -10,7 +10,7 @@ import ku.olga.route_builder.presentation.base.BaseFragment
 
 class EditPointFragment : BaseFragment() {
     private var editPointView: EditPointView? = null
-    private val presenter = EditPointPresenter(App.pointsService)
+    private val presenter = EditPointPresenter(App.pointsRepository)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

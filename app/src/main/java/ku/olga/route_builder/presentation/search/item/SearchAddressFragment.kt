@@ -13,7 +13,7 @@ import ku.olga.route_builder.presentation.base.BaseFragment
 
 class SearchAddressFragment : BaseFragment() {
     private var searchAddressView: SearchAddressView? = null
-    private val searchAddressPresenter = SearchAddressPresenter(App.pointsService)
+    private val searchAddressPresenter = SearchAddressPresenter(App.addressRepository)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
