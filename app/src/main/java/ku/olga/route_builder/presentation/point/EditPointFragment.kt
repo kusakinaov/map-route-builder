@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import ku.olga.route_builder.R
+import ku.olga.route_builder.domain.model.UserPoint
 import ku.olga.route_builder.presentation.App
 import ku.olga.route_builder.presentation.base.BaseFragment
 
@@ -15,22 +16,26 @@ class EditPointFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            presenter.setAddress(
-                it.getString(ADDRESS),
-                it.getDouble(LATITUDE),
-                it.getDouble(LONGITUDE)
-            )
+            if (it.containsKey(USER_POINT)) {
+                presenter.setPoint(it.getSerializable(USER_POINT) as UserPoint)
+            } else {
+                presenter.setAddress(
+                        it.getString(ADDRESS),
+                        it.getDouble(LATITUDE),
+                        it.getDouble(LONGITUDE)
+                )
+            }
         }
     }
 
     override fun getTitle(resources: Resources) = resources.getString(R.string.ttl_edit)
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View =
-        inflater.inflate(R.layout.fragment_edit_point, container, false)
+            inflater.inflate(R.layout.fragment_edit_point, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -68,21 +73,22 @@ class EditPointFragment : BaseFragment() {
         private const val ADDRESS = "address"
         private const val LATITUDE = "latitude"
         private const val LONGITUDE = "longitude"
+        private const val USER_POINT = "user_point"
 
-        fun newInstance(
-            target: Fragment,
-            requestCode: Int,
-            postalAddress: String,
-            lat: Double,
-            lon: Double
-        ) =
-            EditPointFragment().apply {
-                setTargetFragment(target, requestCode)
-                arguments = Bundle().apply {
-                    putString(ADDRESS, postalAddress)
-                    putDouble(LATITUDE, lat)
-                    putDouble(LONGITUDE, lon)
+        fun newInstance(target: Fragment, requestCode: Int, postalAddress: String, lat: Double, lon: Double) =
+                EditPointFragment().apply {
+                    setTargetFragment(target, requestCode)
+                    arguments = Bundle().apply {
+                        putString(ADDRESS, postalAddress)
+                        putDouble(LATITUDE, lat)
+                        putDouble(LONGITUDE, lon)
+                    }
                 }
-            }
+
+        fun newInstance(target: Fragment, requestCode: Int, userPoint: UserPoint) =
+                EditPointFragment().apply {
+                    setTargetFragment(target, requestCode)
+                    arguments = Bundle().apply { putSerializable(USER_POINT, userPoint) }
+                }
     }
 }

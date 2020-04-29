@@ -21,6 +21,8 @@ class EditPointPresenter(private val pointsRepository: PointsCacheRepository) : 
 
     fun setPoint(point: UserPoint) {
         this.point = point
+        this.title = point.title ?: ""
+        this.description = point.description ?: ""
         view?.invalidateOptionsMenu()
     }
 
