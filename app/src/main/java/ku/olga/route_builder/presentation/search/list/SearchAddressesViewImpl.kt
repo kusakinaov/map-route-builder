@@ -32,6 +32,10 @@ class SearchAddressesViewImpl(
         }
     }
 
+    override fun bindAddresses(addresses: List<SearchAddress>) {
+        searchAdapter.setItems(addresses)
+    }
+
     override fun showEmpty() {
         fragment.view?.apply {
             groupError.visibility = View.GONE
@@ -62,11 +66,19 @@ class SearchAddressesViewImpl(
         searchView?.setQuery(query, false)
     }
 
-    override fun showAddresses(addresses: List<SearchAddress>) {
-        searchAdapter.setItems(addresses)
+    override fun showAddresses() {
         fragment.view?.apply {
             groupError.visibility = View.GONE
             recyclerView.visibility = View.VISIBLE
+            textViewEmpty.visibility = View.GONE
+            progressBar.visibility = View.GONE
+        }
+    }
+
+    override fun showNoSearch() {
+        fragment.view?.apply {
+            groupError.visibility = View.GONE
+            recyclerView.visibility = View.GONE
             textViewEmpty.visibility = View.GONE
             progressBar.visibility = View.GONE
         }

@@ -94,10 +94,15 @@ class SearchAddressesPresenter(private val addressRepository: AddressRepository)
 
     private fun bindAddresses() {
         view?.apply {
+            bindAddresses(addresses)
             if (addresses.isEmpty()) {
-                showEmpty()
+                if (isValidQuery()) {
+                    showEmpty()
+                } else {
+                    showNoSearch()
+                }
             } else {
-                showAddresses(addresses)
+                showAddresses()
             }
         }
     }
@@ -116,10 +121,15 @@ class SearchAddressesPresenter(private val addressRepository: AddressRepository)
         trySearch()
     }
 
+    private fun isValidQuery() = query?.length ?: 0 >= 3
+
     private fun trySearch() {
-        if (query?.length ?: 0 >= 3) {
+        if (isValidQuery()) {
             job?.let { if (it.isActive) it.cancel() }
             job = runSearch()
+        } else {
+            addresses.clear()
+            bindAddresses()
         }
     }
 }
