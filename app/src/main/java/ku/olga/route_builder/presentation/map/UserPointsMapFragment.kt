@@ -5,56 +5,47 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapView
-import com.google.android.gms.maps.OnMapReadyCallback
 import ku.olga.route_builder.R
+import ku.olga.route_builder.presentation.App
 import ku.olga.route_builder.presentation.base.BaseFragment
 
-class MapFragment : BaseFragment(), OnMapReadyCallback {
-    private var map: MapView? = null
-    private var googleMap: GoogleMap? = null
+class UserPointsMapFragment : BaseFragment() {
+    private val presenter = UserPointsMapPresenter(App.pointsRepository)
+    private lateinit var mapView: UserPointsMapView
 
     override fun getTitle(resources: Resources) = resources.getString(R.string.ttl_map)
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        map = MapView(inflater.context)
-        return map
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
+            inflater.inflate(R.layout.fragment_user_points_map, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        map?.getMapAsync(this)
-        map?.onCreate(savedInstanceState)
+        mapView = UserPointsMapViewImpl(this, presenter)
+        mapView.onAttach(savedInstanceState)
     }
-
-    override fun onMapReady(map: GoogleMap?) {
-        googleMap = map
-    }
-
 
     override fun onStart() {
         super.onStart()
-        map?.onStart()
+        mapView.onStart()
     }
 
     override fun onResume() {
         super.onResume()
-        map?.onResume()
+        mapView.onResume()
     }
 
     override fun onPause() {
-        map?.onPause()
+        mapView.onPause()
         super.onPause()
     }
 
     override fun onStop() {
-        map?.onStop()
+        mapView.onStop()
         super.onStop()
     }
 
     override fun onDestroyView() {
-        map?.onDestroy()
+        mapView.onDetach()
         super.onDestroyView()
     }
 }

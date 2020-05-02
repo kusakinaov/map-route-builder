@@ -3,12 +3,12 @@ package ku.olga.route_builder.presentation.list
 import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.fragment_points.view.*
+import kotlinx.android.synthetic.main.fragment_user_points.view.*
 import ku.olga.route_builder.REQ_CODE_EDIT_POINT
 import ku.olga.route_builder.REQ_CODE_SEARCH_POINT
 import ku.olga.route_builder.domain.model.UserPoint
 import ku.olga.route_builder.presentation.base.BaseFragment
-import ku.olga.route_builder.presentation.map.MapFragment
+import ku.olga.route_builder.presentation.map.UserPointsMapFragment
 import ku.olga.route_builder.presentation.point.EditPointFragment
 import ku.olga.route_builder.presentation.search.list.SearchAddressesFragment
 
@@ -42,7 +42,7 @@ class UserPointsViewImpl(
     }
 
     override fun onClickOpenMap() {
-        fragment.replaceFragment(MapFragment())
+        fragment.replaceFragment(UserPointsMapFragment())
     }
 
     override fun showEmpty() {
