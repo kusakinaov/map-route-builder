@@ -1,5 +1,8 @@
 package ku.olga.route_builder.presentation.search.list
 
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +13,16 @@ import ku.olga.route_builder.domain.model.SearchAddress
 import ku.olga.route_builder.presentation.base.BaseAdapter
 
 class SearchAddressAdapter : BaseAdapter<SearchAddress, SearchAddressAdapter.AddressHolder>() {
+    private var query: String? = null
     var onClickAddressListener: ((SearchAddress) -> Unit)? = null
+    var highlightColor: Int = 0
+
+    fun setQuery(query: String?) {
+        if (this.query == query) return
+
+        this.query = query
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         AddressHolder(
@@ -18,22 +30,31 @@ class SearchAddressAdapter : BaseAdapter<SearchAddress, SearchAddressAdapter.Add
         )
 
     override fun onBindViewHolder(holder: AddressHolder, position: Int) {
-        holder.address = getItem(position)
+        holder.bind(getItem(position))
     }
 
     inner class AddressHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var address: SearchAddress? = null
-            set(value) {
-                field = value
-                bindAddress()
-            }
+        private var address: SearchAddress? = null
 
         init {
             itemView.setOnClickListener { address?.let { onClickAddressListener?.invoke(it) } }
         }
 
-        private fun bindAddress() {
-            itemView.textViewTitle.text = address?.postalAddress
+        fun bind(address: SearchAddress?) {
+            this.address = address
+            itemView.textViewTitle.text = SpannableStringBuilder(address?.postalAddress).apply {
+                query?.split("\\s+".toRegex())?.forEach {
+                    val index = indexOf(it)
+                    if (index >= 0) {
+                        setSpan(
+                            ForegroundColorSpan(highlightColor),
+                            index,
+                            index + it.length,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+                    }
+                }
+            }
         }
     }
 }

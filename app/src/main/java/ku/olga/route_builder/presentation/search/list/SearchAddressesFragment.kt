@@ -5,6 +5,7 @@ import android.content.res.Resources
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.gms.location.LocationServices
 import ku.olga.route_builder.R
@@ -25,6 +26,7 @@ class SearchAddressesFragment : BaseFragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        searchAdapter.highlightColor = ContextCompat.getColor(context, R.color.secondaryColor)
         searchPresenter.apply {
             locationClient = LocationServices.getFusedLocationProviderClient(context)
         }
