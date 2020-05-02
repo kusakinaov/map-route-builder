@@ -1,12 +1,12 @@
 package ku.olga.route_builder.presentation
 
 import android.app.Application
-import android.location.Geocoder
 import androidx.room.Room
-import ku.olga.route_builder.data.repository.AddressGeocoderRepository
+import ku.olga.route_builder.data.repository.AddressNominatimGeocoderRepository
 import ku.olga.route_builder.data.repository.PointsDbCacheRepository
 import ku.olga.route_builder.data.room.AppDatabase
-import java.util.Locale
+import org.osmdroid.bonuspack.location.GeocoderNominatim
+import java.util.*
 
 class App : Application() {
     companion object {
@@ -17,7 +17,12 @@ class App : Application() {
                 .fallbackToDestructiveMigration()
                 .build()
         }
-        val addressRepository by lazy { AddressGeocoderRepository(Geocoder(application, Locale.getDefault())) }
+        val addressRepository by lazy {
+//            AddressGeocoderRepository(Geocoder(application, Locale.getDefault()))
+            AddressNominatimGeocoderRepository(
+                GeocoderNominatim(Locale.getDefault(), "MapRouteBuilderUserAgent")
+            )
+        }
         val pointsRepository by lazy { PointsDbCacheRepository(appDatabase) }
     }
 
