@@ -20,21 +20,28 @@ class UserPointsMapPresenter(private val pointsRepository: PointsCacheRepository
     private fun getUserPoints() = CoroutineScope(Dispatchers.IO).launch {
         userPoints.clear()
         userPoints.addAll(pointsRepository.getUserPoints())
-        withContext(Dispatchers.Main) {
-            view?.setUserPoints(userPoints)
-        }
+        withContext(Dispatchers.Main) { bindUserPoints() }
     }
 
     fun bindUserPoints() {
-        view?.setUserPoints(userPoints)
+        view?.apply {
+            setUserPoints(userPoints)
+            animateTo(userPoints)
+        }
     }
-
-    fun getUserPointAt(position: Int): UserPoint = userPoints[position]
 
     fun onClickEditUserPoint(userPoint: UserPoint) {
         view?.apply {
             hideBottomSheet()
             editUserPoint(userPoint)
+        }
+    }
+
+    fun onClickMarker(position: Int) {
+        view?.apply {
+            val userPoint = userPoints[position]
+            showBottomMenu(userPoint)
+            animateTo(listOf(userPoint))
         }
     }
 }

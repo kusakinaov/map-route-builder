@@ -6,6 +6,7 @@ import ku.olga.route_builder.presentation.base.BaseView
 
 interface UserPointsMapView : BaseView {
     fun setUserPoints(userPoints: List<UserPoint>)
+    fun animateTo(userPoints: List<UserPoint>)
     fun onAttach(bundle: Bundle?)
     fun onStart()
     fun onResume()
@@ -13,4 +14,5 @@ interface UserPointsMapView : BaseView {
     fun onStop()
     fun hideBottomSheet(): Boolean
     fun editUserPoint(userPoint: UserPoint)
+    fun showBottomMenu(userPoint: UserPoint)
 }

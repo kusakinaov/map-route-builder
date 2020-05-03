@@ -17,7 +17,10 @@ import kotlinx.android.synthetic.main.fragment_user_points_map.view.*
 import ku.olga.route_builder.REQ_CODE_EDIT_POINT
 import ku.olga.route_builder.domain.model.UserPoint
 import ku.olga.route_builder.presentation.base.BaseFragment
+import ku.olga.route_builder.presentation.convertDpToPx
 import ku.olga.route_builder.presentation.point.EditPointFragment
+import kotlin.math.max
+import kotlin.math.min
 
 class UserPointsMapViewImpl(val fragment: Fragment, private val presenter: UserPointsMapPresenter) : UserPointsMapView,
         OnMapReadyCallback {
@@ -42,9 +45,8 @@ class UserPointsMapViewImpl(val fragment: Fragment, private val presenter: UserP
                     presenter.onClickEditUserPoint(it.tag as UserPoint)
                 }
             }
-            bottomSheetBehavior = BottomSheetBehavior.from(it.layoutContent).apply {
-                state = BottomSheetBehavior.STATE_HIDDEN
-            }
+            bottomSheetBehavior = BottomSheetBehavior.from(it.layoutContent)
+                    .apply { state = BottomSheetBehavior.STATE_HIDDEN }
         }
     }
 
@@ -80,6 +82,22 @@ class UserPointsMapViewImpl(val fragment: Fragment, private val presenter: UserP
         }
     }
 
+    override fun showBottomMenu(userPoint: UserPoint) {
+        fragment.view?.apply {
+            textViewTitle.text = userPoint.title
+            textViewDescription.apply {
+                text = userPoint.description
+                visibility = if (userPoint.description.isNullOrEmpty()) View.GONE else View.VISIBLE
+            }
+            textViewAddress.text = userPoint.postalAddress
+            buttonEdit.apply {
+                tag = userPoint
+                visibility = View.VISIBLE
+            }
+        }
+        bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+    }
+
     override fun onDetach() {
         markersBindSuccessful = false
         fragment.mapView?.onDestroy()
@@ -88,35 +106,46 @@ class UserPointsMapViewImpl(val fragment: Fragment, private val presenter: UserP
 
     override fun setUserPoints(userPoints: List<UserPoint>) {
         googleMap?.let { map ->
-            for (marker in markers) {
-                marker.remove()
-            }
+            for (marker in markers) marker.remove()
             markers.clear()
-
-            var latLng: LatLng? = null
-            var bounds: LatLngBounds? = null
             for (userPoint in userPoints) {
-                if (latLng == null) {
-                    latLng = LatLng(userPoint.lat, userPoint.lon)
-                } else {
-                    bounds = LatLngBounds(latLng, LatLng(userPoint.lat, userPoint.lon).also {
-                        latLng = it
-                    })
-                }
-
                 map.addMarker(MarkerOptions()
-                        .position(latLng!!)
-                        .title(userPoint.title)
-                )?.also { markers.add(it) }
+                        .position(userPoint.getLatLng())
+                        .title(userPoint.title))?.also { markers.add(it) }
             }
-            if (bounds != null) {
-                map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 16))
-            } else if (latLng != null) {
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
-            }
-
             markersBindSuccessful = true
         }
+    }
+
+    override fun animateTo(userPoints: List<UserPoint>) {
+        googleMap?.apply {
+            if (userPoints.size == 1) {
+                animateCamera(CameraUpdateFactory.newLatLngZoom(userPoints[0].getLatLng(),
+                        if (markers.size > 1) cameraPosition.zoom else 15f))
+            } else if (userPoints.size > 1) {
+                buildLatLngBounds(userPoints)?.let {
+                    animateCamera(CameraUpdateFactory
+                            .newLatLngBounds(it, convertDpToPx(fragment.resources, 24f).toInt()))
+                }
+            }
+        }
+    }
+
+    private fun buildLatLngBounds(userPoints: List<UserPoint>): LatLngBounds? {
+        var southWest: LatLng? = null
+        var northEast: LatLng? = null
+        var bounds: LatLngBounds? = null
+        for (userPoint in userPoints) {
+            if (southWest == null || northEast == null) {
+                southWest = userPoint.getLatLng()
+                northEast = userPoint.getLatLng()
+            } else {
+                southWest = LatLng(min(userPoint.lat, southWest.latitude), min(userPoint.lon, southWest.longitude))
+                northEast = LatLng(max(userPoint.lat, northEast.latitude), max(userPoint.lon, northEast.longitude))
+                bounds = LatLngBounds(southWest, northEast)
+            }
+        }
+        return bounds
     }
 
     override fun onMapReady(p0: GoogleMap?) {
@@ -129,31 +158,12 @@ class UserPointsMapViewImpl(val fragment: Fragment, private val presenter: UserP
                 isRotateGesturesEnabled = false
             }
             setOnMarkerClickListener {
-                showDetails(it)
+                presenter.onClickMarker(markers.indexOf(it))
                 true
             }
         }
         if (!markersBindSuccessful) presenter.bindUserPoints()
     }
 
-    private fun showDetails(marker: Marker) {
-        googleMap?.apply {
-            animateCamera(CameraUpdateFactory.newLatLngZoom(marker.position, cameraPosition.zoom))
-        }
-        presenter.getUserPointAt(markers.indexOf(marker)).let {
-            fragment.view?.apply {
-                textViewTitle.text = it.title
-                textViewDescription.apply {
-                    text = it.description
-                    visibility = if (it.description.isNullOrEmpty()) View.GONE else View.VISIBLE
-                }
-                textViewAddress.text = it.postalAddress
-                buttonEdit.apply {
-                    tag = it
-                    visibility = View.VISIBLE
-                }
-            }
-            bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
-        }
-    }
+    private fun UserPoint.getLatLng() = LatLng(lat, lon)
 }
