@@ -14,7 +14,10 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.fragment_user_points_map.*
 import kotlinx.android.synthetic.main.fragment_user_points_map.view.*
+import ku.olga.route_builder.REQ_CODE_EDIT_POINT
 import ku.olga.route_builder.domain.model.UserPoint
+import ku.olga.route_builder.presentation.base.BaseFragment
+import ku.olga.route_builder.presentation.point.EditPointFragment
 
 class UserPointsMapViewImpl(val fragment: Fragment, private val presenter: UserPointsMapPresenter) : UserPointsMapView,
         OnMapReadyCallback {
@@ -33,6 +36,11 @@ class UserPointsMapViewImpl(val fragment: Fragment, private val presenter: UserP
             it.mapView?.apply {
                 getMapAsync(this@UserPointsMapViewImpl)
                 onCreate(bundle)
+            }
+            it.buttonEdit.setOnClickListener {
+                if (it.tag is UserPoint) {
+                    presenter.onClickEditUserPoint(it.tag as UserPoint)
+                }
             }
             bottomSheetBehavior = BottomSheetBehavior.from(it.layoutContent).apply {
                 state = BottomSheetBehavior.STATE_HIDDEN
@@ -63,6 +71,13 @@ class UserPointsMapViewImpl(val fragment: Fragment, private val presenter: UserP
             fragment.view?.buttonEdit?.visibility = View.GONE
         }
         return expanded
+    }
+
+    override fun editUserPoint(userPoint: UserPoint) {
+        if (fragment is BaseFragment) {
+            fragment.replaceFragment(EditPointFragment
+                    .newInstance(fragment, REQ_CODE_EDIT_POINT, userPoint), true)
+        }
     }
 
     override fun onDetach() {
@@ -133,7 +148,10 @@ class UserPointsMapViewImpl(val fragment: Fragment, private val presenter: UserP
                     visibility = if (it.description.isNullOrEmpty()) View.GONE else View.VISIBLE
                 }
                 textViewAddress.text = it.postalAddress
-                buttonEdit.visibility = View.VISIBLE
+                buttonEdit.apply {
+                    tag = it
+                    visibility = View.VISIBLE
+                }
             }
             bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
         }

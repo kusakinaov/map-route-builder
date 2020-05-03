@@ -55,14 +55,27 @@ class EditPointPresenter(private val pointsRepository: PointsCacheRepository) : 
     fun onClickSave() {
         point?.title = title
         point?.description = description
-        job = saveUserPoint()
+        if (point?.isNew == true) {
+            job = createUserPoint()
+        } else {
+            job = editUserPoint()
+        }
     }
 
-    private fun saveUserPoint() = CoroutineScope(Dispatchers.IO).launch {
+    private fun createUserPoint() = CoroutineScope(Dispatchers.IO).launch {
         point?.let {
             val id = pointsRepository.saveUserPoint(it)
             withContext(Dispatchers.Main) {
-                view?.notifySaveSuccessful()
+                view?.notifyCreateSuccessful()
+            }
+        }
+    }
+
+    private fun editUserPoint() = CoroutineScope(Dispatchers.IO).launch {
+        point?.let {
+            val id = pointsRepository.saveUserPoint(it)
+            withContext(Dispatchers.Main) {
+                view?.notifyEditSuccessful()
             }
         }
     }

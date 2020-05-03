@@ -1,5 +1,7 @@
 package ku.olga.route_builder.presentation.point
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.view.View
@@ -47,8 +49,15 @@ class EditPointViewImpl(
         fragment.view?.buttonDelete?.visibility = if (visible) View.VISIBLE else View.GONE
     }
 
-    override fun notifySaveSuccessful() {
+    override fun notifyCreateSuccessful() {
         fragment.fragmentManager?.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+    }
+
+    override fun notifyEditSuccessful() {
+        fragment.apply {
+            fragmentManager?.popBackStack()
+            targetFragment?.onActivityResult(targetRequestCode, Activity.RESULT_OK, Intent())
+        }
     }
 
     override fun invalidateOptionsMenu() {

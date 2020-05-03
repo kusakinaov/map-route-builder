@@ -30,4 +30,11 @@ class UserPointsMapPresenter(private val pointsRepository: PointsCacheRepository
     }
 
     fun getUserPointAt(position: Int): UserPoint = userPoints[position]
+
+    fun onClickEditUserPoint(userPoint: UserPoint) {
+        view?.apply {
+            hideBottomSheet()
+            editUserPoint(userPoint)
+        }
+    }
 }
