@@ -48,4 +48,6 @@ class UserPointsMapFragment : BaseFragment() {
         mapView.onDetach()
         super.onDestroyView()
     }
+
+    override fun isPressBackConsumed() = mapView.hideBottomSheet()
 }

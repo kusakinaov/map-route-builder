@@ -11,4 +11,5 @@ interface UserPointsMapView : BaseView {
     fun onResume()
     fun onPause()
     fun onStop()
+    fun hideBottomSheet(): Boolean
 }

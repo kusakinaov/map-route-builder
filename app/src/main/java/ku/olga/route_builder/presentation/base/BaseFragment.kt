@@ -46,4 +46,6 @@ abstract class BaseFragment : Fragment() {
     }
 
     open fun getBackButtonRes() = R.drawable.ic_back
+
+    open fun isPressBackConsumed() = false
 }

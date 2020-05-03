@@ -1,6 +1,8 @@
 package ku.olga.route_builder.presentation.map
 
 import android.os.Bundle
+import android.view.View
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -9,12 +11,15 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.fragment_user_points_map.*
+import kotlinx.android.synthetic.main.fragment_user_points_map.view.*
 import ku.olga.route_builder.domain.model.UserPoint
 
 class UserPointsMapViewImpl(val fragment: Fragment, private val presenter: UserPointsMapPresenter) : UserPointsMapView,
         OnMapReadyCallback {
     private var googleMap: GoogleMap? = null
+    private var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>? = null
     private val markers = mutableListOf<Marker>()
     private var markersBindSuccessful = false
 
@@ -24,9 +29,14 @@ class UserPointsMapViewImpl(val fragment: Fragment, private val presenter: UserP
 
     override fun onAttach(bundle: Bundle?) {
         onAttach()
-        fragment.mapView?.apply {
-            getMapAsync(this@UserPointsMapViewImpl)
-            onCreate(bundle)
+        fragment.view?.let {
+            it.mapView?.apply {
+                getMapAsync(this@UserPointsMapViewImpl)
+                onCreate(bundle)
+            }
+            bottomSheetBehavior = BottomSheetBehavior.from(it.layoutContent).apply {
+                state = BottomSheetBehavior.STATE_HIDDEN
+            }
         }
     }
 
@@ -44,6 +54,15 @@ class UserPointsMapViewImpl(val fragment: Fragment, private val presenter: UserP
 
     override fun onStop() {
         fragment.mapView?.onStop()
+    }
+
+    override fun hideBottomSheet(): Boolean {
+        val expanded = bottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED
+        if (expanded) {
+            bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
+            fragment.view?.buttonEdit?.visibility = View.GONE
+        }
+        return expanded
     }
 
     override fun onDetach() {
@@ -94,7 +113,29 @@ class UserPointsMapViewImpl(val fragment: Fragment, private val presenter: UserP
                 isTiltGesturesEnabled = false
                 isRotateGesturesEnabled = false
             }
+            setOnMarkerClickListener {
+                showDetails(it)
+                true
+            }
         }
         if (!markersBindSuccessful) presenter.bindUserPoints()
+    }
+
+    private fun showDetails(marker: Marker) {
+        googleMap?.apply {
+            animateCamera(CameraUpdateFactory.newLatLngZoom(marker.position, cameraPosition.zoom))
+        }
+        presenter.getUserPointAt(markers.indexOf(marker)).let {
+            fragment.view?.apply {
+                textViewTitle.text = it.title
+                textViewDescription.apply {
+                    text = it.description
+                    visibility = if (it.description.isNullOrEmpty()) View.GONE else View.VISIBLE
+                }
+                textViewAddress.text = it.postalAddress
+                buttonEdit.visibility = View.VISIBLE
+            }
+            bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+        }
     }
 }

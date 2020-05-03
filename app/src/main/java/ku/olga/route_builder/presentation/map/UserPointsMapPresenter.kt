@@ -28,4 +28,6 @@ class UserPointsMapPresenter(private val pointsRepository: PointsCacheRepository
     fun bindUserPoints() {
         view?.setUserPoints(userPoints)
     }
+
+    fun getUserPointAt(position: Int): UserPoint = userPoints[position]
 }

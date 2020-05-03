@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setHomeAsUpIndicator(drawableRes)
     }
 
-    fun getFragment() = supportFragmentManager.findFragmentById(R.id.layoutFragment)
+    private fun getFragment() = supportFragmentManager.findFragmentById(R.id.layoutFragment)
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         android.R.id.home -> {
@@ -54,5 +54,13 @@ class MainActivity : AppCompatActivity() {
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        getFragment().let {
+            if (!(it is BaseFragment && it.isPressBackConsumed())) {
+                super.onBackPressed()
+            }
+        }
     }
 }
