@@ -7,8 +7,9 @@ import kotlinx.coroutines.withContext
 import ku.olga.route_builder.domain.model.UserPoint
 import ku.olga.route_builder.domain.repository.PointsCacheRepository
 import ku.olga.route_builder.presentation.base.BasePresenter
+import javax.inject.Inject
 
-class UserPointsMapPresenter(private val pointsRepository: PointsCacheRepository) : BasePresenter<UserPointsMapView>() {
+class UserPointsMapPresenter @Inject constructor(private val pointsRepository: PointsCacheRepository) : BasePresenter<UserPointsMapView>() {
     private val userPoints = mutableListOf<UserPoint>()
 
     override fun attachView(view: UserPointsMapView) {
