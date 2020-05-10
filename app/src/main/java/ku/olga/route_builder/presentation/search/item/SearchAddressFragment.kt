@@ -8,14 +8,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import ku.olga.route_builder.R
 import ku.olga.route_builder.domain.model.SearchAddress
-import ku.olga.route_builder.presentation.App
 import ku.olga.route_builder.presentation.base.BaseFragment
-import ku.olga.route_builder.presentation.dagger.component.DaggerSearchComponent
-import ku.olga.route_builder.presentation.dagger.component.SearchComponent
+import ku.olga.route_builder.presentation.dagger.component.AddressComponent
+import ku.olga.route_builder.presentation.dagger.component.DaggerAddressComponent
 import javax.inject.Inject
 
 class SearchAddressFragment : BaseFragment() {
-    private lateinit var searchComponent: SearchComponent
+    private lateinit var addressComponent: AddressComponent
 
     @Inject
     lateinit var searchAddressPresenter: SearchAddressPresenter
@@ -23,8 +22,8 @@ class SearchAddressFragment : BaseFragment() {
     private var searchAddressView: SearchAddressView? = null
 
     override fun inject() {
-        searchComponent = DaggerSearchComponent.create()
-        searchComponent.inject(this)
+        addressComponent = DaggerAddressComponent.create()
+        addressComponent.inject(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
