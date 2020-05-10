@@ -59,4 +59,7 @@ dependencies {
 
     implementation 'org.osmdroid:osmdroid-android:6.1.6'
     implementation 'com.github.MKergall:osmbonuspack:6.6.0'
+
+    implementation 'com.google.dagger:dagger:2.24'
+    kapt 'com.google.dagger:dagger-compiler:2.24'
 }
