@@ -10,10 +10,22 @@ import ku.olga.route_builder.R
 import ku.olga.route_builder.domain.model.SearchAddress
 import ku.olga.route_builder.presentation.App
 import ku.olga.route_builder.presentation.base.BaseFragment
+import ku.olga.route_builder.presentation.dagger.component.DaggerSearchComponent
+import ku.olga.route_builder.presentation.dagger.component.SearchComponent
+import javax.inject.Inject
 
 class SearchAddressFragment : BaseFragment() {
+    private lateinit var searchComponent: SearchComponent
+
+    @Inject
+    lateinit var searchAddressPresenter: SearchAddressPresenter
+
     private var searchAddressView: SearchAddressView? = null
-    private val searchAddressPresenter = SearchAddressPresenter(App.addressRepository)
+
+    override fun inject() {
+        searchComponent = DaggerSearchComponent.create()
+        searchComponent.inject(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
