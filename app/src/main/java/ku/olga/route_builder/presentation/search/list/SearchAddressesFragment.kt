@@ -13,11 +13,19 @@ import ku.olga.route_builder.REQ_CODE_VIEW_SEARCH_ADDRESS
 import ku.olga.route_builder.domain.model.SearchAddress
 import ku.olga.route_builder.presentation.App
 import ku.olga.route_builder.presentation.base.BaseFragment
+import ku.olga.route_builder.presentation.dagger.component.DaggerSearchComponent
+import ku.olga.route_builder.presentation.dagger.component.SearchComponent
 import ku.olga.route_builder.presentation.hideKeyboard
 import ku.olga.route_builder.presentation.search.item.SearchAddressFragment
+import ku.olga.route_builder.presentation.search.item.SearchAddressPresenter
+import javax.inject.Inject
 
 class SearchAddressesFragment : BaseFragment() {
-    private val searchPresenter = SearchAddressesPresenter(App.addressRepository)
+    private lateinit var searchComponent: SearchComponent
+
+    @Inject
+    lateinit var searchPresenter: SearchAddressesPresenter
+
     private var searchAddressesView: SearchAddressesView? = null
     private val searchAdapter =
         SearchAddressAdapter().apply { onClickAddressListener = { openSearchAddress(it) } }
@@ -30,6 +38,11 @@ class SearchAddressesFragment : BaseFragment() {
         searchPresenter.apply {
             locationClient = LocationServices.getFusedLocationProviderClient(context)
         }
+    }
+
+    override fun inject() {
+        searchComponent = DaggerSearchComponent.create()
+        searchComponent.inject(this)
     }
 
     override fun onCreateView(

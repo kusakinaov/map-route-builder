@@ -11,8 +11,9 @@ import ku.olga.route_builder.domain.model.SearchAddress
 import ku.olga.route_builder.domain.repository.AddressRepository
 import ku.olga.route_builder.presentation.base.BasePresenter
 import java.io.IOException
+import javax.inject.Inject
 
-class SearchAddressesPresenter(private val addressRepository: AddressRepository) :
+class SearchAddressesPresenter @Inject constructor(private val addressRepository: AddressRepository) :
     BasePresenter<SearchAddressesView>() {
     var locationClient: FusedLocationProviderClient? = null
 

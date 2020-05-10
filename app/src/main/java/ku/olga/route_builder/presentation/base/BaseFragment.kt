@@ -1,5 +1,6 @@
 package ku.olga.route_builder.presentation.base
 
+import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
@@ -9,6 +10,13 @@ import ku.olga.route_builder.R
 import ku.olga.route_builder.presentation.MainActivity
 
 abstract class BaseFragment : Fragment() {
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        inject()
+    }
+
+    open fun inject() {}
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
