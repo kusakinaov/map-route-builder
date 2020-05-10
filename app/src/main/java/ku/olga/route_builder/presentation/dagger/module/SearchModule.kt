@@ -9,7 +9,7 @@ import java.util.*
 import javax.inject.Singleton
 
 @Module
-class AddressModule {
+class SearchModule {
     @Singleton
     @Provides
     fun providesAddressRepository(geocoderNominatim: GeocoderNominatim): AddressRepository =
