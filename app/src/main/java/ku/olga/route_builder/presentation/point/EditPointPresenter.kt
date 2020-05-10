@@ -4,8 +4,9 @@ import kotlinx.coroutines.*
 import ku.olga.route_builder.domain.model.UserPoint
 import ku.olga.route_builder.domain.repository.PointsCacheRepository
 import ku.olga.route_builder.presentation.base.BasePresenter
+import javax.inject.Inject
 
-class EditPointPresenter(private val pointsRepository: PointsCacheRepository) : BasePresenter<EditPointView>() {
+class EditPointPresenter @Inject constructor(private val pointsRepository: PointsCacheRepository) : BasePresenter<EditPointView>() {
     private var point: UserPoint? = null
     private var job: Job? = null
     private var title: String = ""

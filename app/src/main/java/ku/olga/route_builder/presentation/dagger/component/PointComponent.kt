@@ -4,6 +4,7 @@ import dagger.Component
 import ku.olga.route_builder.presentation.dagger.module.PointModule
 import ku.olga.route_builder.presentation.list.UserPointsFragment
 import ku.olga.route_builder.presentation.map.UserPointsMapFragment
+import ku.olga.route_builder.presentation.point.EditPointFragment
 import javax.inject.Singleton
 
 @Singleton
@@ -11,4 +12,5 @@ import javax.inject.Singleton
 interface PointComponent {
     fun inject(fragment: UserPointsFragment)
     fun inject(fragment: UserPointsMapFragment)
+    fun inject(fragment: EditPointFragment)
 }
