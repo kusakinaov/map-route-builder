@@ -9,5 +9,5 @@ import javax.inject.Named
 class ApplicationModule(private val context: Context) {
     @Provides
     @Named("application_context")
-    fun providesApplicationContext() = context
+    fun providesApplicationContext(): Context = context
 }

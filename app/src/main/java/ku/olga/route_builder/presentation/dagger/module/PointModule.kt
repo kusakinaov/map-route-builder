@@ -10,7 +10,7 @@ import ku.olga.route_builder.domain.repository.PointsCacheRepository
 import javax.inject.Named
 import javax.inject.Singleton
 
-@Module
+@Module(includes = [ApplicationModule::class])
 class PointModule {
     @Singleton
     @Provides
