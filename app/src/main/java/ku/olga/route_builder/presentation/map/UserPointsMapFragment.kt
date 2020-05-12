@@ -5,16 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
 import ku.olga.route_builder.R
-import ku.olga.route_builder.presentation.App
+import ku.olga.route_builder.presentation.MainActivity
 import ku.olga.route_builder.presentation.base.BaseFragment
-import ku.olga.route_builder.presentation.dagger.component.DaggerPointComponent
-import ku.olga.route_builder.presentation.dagger.component.PointComponent
-import ku.olga.route_builder.presentation.dagger.module.ApplicationModule
 import javax.inject.Inject
 
 class UserPointsMapFragment : BaseFragment() {
-    private lateinit var pointComponent: PointComponent
     @Inject
     lateinit var presenter: UserPointsMapPresenter
 
@@ -22,11 +19,10 @@ class UserPointsMapFragment : BaseFragment() {
 
     override fun getTitle(resources: Resources) = resources.getString(R.string.ttl_map)
 
-    override fun inject() {
-        pointComponent =
-            DaggerPointComponent.builder().applicationModule(ApplicationModule(App.application))
-                .build()
-        pointComponent.inject(this)
+    override fun inject(activity: FragmentActivity) {
+        if (activity is MainActivity) {
+            activity.getActivityComponent()?.inject(this)
+        }
     }
 
     override fun onCreateView(

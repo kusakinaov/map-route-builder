@@ -6,12 +6,20 @@ import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import ku.olga.route_builder.R
 import ku.olga.route_builder.presentation.base.BaseFragment
+import ku.olga.route_builder.presentation.dagger.component.ActivityComponent
+import ku.olga.route_builder.presentation.dagger.component.DaggerActivityComponent
 import ku.olga.route_builder.presentation.list.UserPointsFragment
 
 class MainActivity : AppCompatActivity() {
+    private var activityComponent: ActivityComponent? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        activityComponent = DaggerActivityComponent.builder()
+            .applicationComponent(App.application.applicationComponent)
+            .build()
 
         supportFragmentManager.addOnBackStackChangedListener { bindBackStack() }
         if (savedInstanceState == null) {
@@ -21,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
     fun replaceFragment(fragment: Fragment, addToBackStack: Boolean) {
         val transaction = supportFragmentManager.beginTransaction()
-                .replace(R.id.layoutFragment, fragment)
+            .replace(R.id.layoutFragment, fragment)
         if (addToBackStack) {
             transaction.addToBackStack(fragment::class.simpleName)
         }
@@ -62,5 +70,12 @@ class MainActivity : AppCompatActivity() {
                 super.onBackPressed()
             }
         }
+    }
+
+    fun getActivityComponent() = activityComponent
+
+    override fun onDestroy() {
+        super.onDestroy()
+        activityComponent = null
     }
 }

@@ -6,24 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import ku.olga.route_builder.R
 import ku.olga.route_builder.domain.model.SearchAddress
+import ku.olga.route_builder.presentation.MainActivity
 import ku.olga.route_builder.presentation.base.BaseFragment
-import ku.olga.route_builder.presentation.dagger.component.AddressComponent
-import ku.olga.route_builder.presentation.dagger.component.DaggerAddressComponent
 import javax.inject.Inject
 
 class SearchAddressFragment : BaseFragment() {
-    private lateinit var addressComponent: AddressComponent
-
     @Inject
     lateinit var searchAddressPresenter: SearchAddressPresenter
 
     private var searchAddressView: SearchAddressView? = null
 
-    override fun inject() {
-        addressComponent = DaggerAddressComponent.create()
-        addressComponent.inject(this)
+    override fun inject(activity: FragmentActivity) {
+        if (activity is MainActivity) {
+            activity.getActivityComponent()?.inject(this)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
