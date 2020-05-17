@@ -5,8 +5,9 @@ import ku.olga.route_builder.domain.model.SearchAddress
 import ku.olga.route_builder.domain.repository.AddressRepository
 import org.osmdroid.bonuspack.location.GeocoderNominatim
 import java.lang.StringBuilder
+import javax.inject.Inject
 
-class AddressNominatimGeocoderRepository(val geocoderNominatim: GeocoderNominatim) :
+class AddressNominatimGeocoderRepository @Inject constructor(val geocoderNominatim: GeocoderNominatim) :
     AddressRepository {
     override suspend fun searchAddress(query: String?) =
         geocoderNominatim.getFromLocationName(query, MAX_ADDRESS_SEARCH_RESULTS)
