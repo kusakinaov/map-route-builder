@@ -2,7 +2,9 @@ package ku.olga.route_builder.presentation
 
 import android.app.Application
 import androidx.room.Room
+import ku.olga.route_builder.R
 import ku.olga.route_builder.data.repository.AddressNominatimGeocoderRepository
+import ku.olga.route_builder.data.repository.CategoryNominatimRepository
 import ku.olga.route_builder.data.repository.PointsDbCacheRepository
 import ku.olga.route_builder.data.room.AppDatabase
 import org.osmdroid.bonuspack.location.GeocoderNominatim
@@ -18,12 +20,14 @@ class App : Application() {
                 .build()
         }
         val addressRepository by lazy {
-//            AddressGeocoderRepository(Geocoder(application, Locale.getDefault()))
             AddressNominatimGeocoderRepository(
                 GeocoderNominatim(Locale.getDefault(), "MapRouteBuilderUserAgent")
             )
         }
         val pointsRepository by lazy { PointsDbCacheRepository(appDatabase) }
+        val categoriesRepository by lazy {
+            CategoryNominatimRepository(application.resources.getStringArray(R.array.poi_tags))
+        }
     }
 
     override fun onCreate() {
