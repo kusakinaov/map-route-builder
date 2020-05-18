@@ -10,6 +10,7 @@ import ku.olga.route_builder.domain.model.Category
 import ku.olga.route_builder.presentation.base.BaseAdapter
 
 class CategoriesAdapter : BaseAdapter<Category, CategoriesAdapter.CategoryHolder>() {
+    private var query: String = ""
     var categoryClickListener: ((Category) -> (Unit))? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -17,6 +18,10 @@ class CategoriesAdapter : BaseAdapter<Category, CategoriesAdapter.CategoryHolder
 
     override fun onBindViewHolder(holder: CategoryHolder, position: Int) {
         holder.bind(getItem(position))
+    }
+
+    fun setQuery(query: String?) {
+        this.query = query ?: ""
     }
 
     inner class CategoryHolder(view: View) : RecyclerView.ViewHolder(view) {

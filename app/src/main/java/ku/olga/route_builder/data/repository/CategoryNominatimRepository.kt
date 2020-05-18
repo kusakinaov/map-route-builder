@@ -2,12 +2,20 @@ package ku.olga.route_builder.data.repository
 
 import ku.olga.route_builder.domain.model.Category
 import ku.olga.route_builder.domain.repository.CategoryRepository
+import java.util.*
 
-class CategoryNominatimRepository(val categories: Array<String>) : CategoryRepository {
+class CategoryNominatimRepository(tags: Array<String>) : CategoryRepository {
+    private val categories = mutableListOf<Category>()
+
+    init {
+        for (tag in tags) categories.add(Category(tag, tag))
+    }
+
     override suspend fun getCategories(query: String?): List<Category> =
         if (query.isNullOrEmpty()) {
-            categories.map { Category(it) }.toList()
+            categories.toList()
         } else {
-            categories.filter { it.contains(it) }.map { Category(it) }.toList()
+            val lowerQuery = query.toLowerCase(Locale.ROOT)
+            categories.filter { it.title.toLowerCase(Locale.ROOT).contains(lowerQuery) }.toList()
         }
 }

@@ -6,7 +6,7 @@
         android:id="@+id/actionSearch"
         android:title="@string/action_search"
         android:icon="@drawable/ic_search"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:actionLayout="@layout/layout_search"
         app:showAsAction="always|collapseActionView" />
 
     <item

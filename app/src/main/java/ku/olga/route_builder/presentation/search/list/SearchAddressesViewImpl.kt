@@ -6,6 +6,7 @@ import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_search.view.*
 import kotlinx.android.synthetic.main.layout_error.view.*
@@ -28,6 +29,7 @@ class SearchAddressesViewImpl(
             recyclerView.apply {
                 layoutManager = LinearLayoutManager(context)
                 adapter = searchAdapter
+                addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             }
             buttonRetry.setOnClickListener { presenter.onClickRetry() }
         }
