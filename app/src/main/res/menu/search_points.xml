@@ -5,6 +5,13 @@
     <item
         android:id="@+id/actionSearch"
         android:title="@string/action_search"
-        app:actionLayout="@layout/layout_search"
+        android:icon="@drawable/ic_search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="always|collapseActionView" />
+
+    <item
+        android:id="@+id/actionCategories"
+        android:icon="@drawable/ic_categories"
+        android:title="@string/action_categories"
         app:showAsAction="always" />
 </menu>

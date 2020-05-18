@@ -10,7 +10,7 @@
     <string name="hint_empty_search">Ничего не найдено</string>
     <string name="ttl_search">Поиск</string>
     <string name="action_search">Поиск</string>
-    <string name="hint_search_points">Введите запрос</string>
+    <string name="hint_search_address">Введите адрес</string>
     <string name="title_add_address">Добавить адрес</string>
     <string name="title_search">Поиск</string>
     <string name="hint_input_title">Введите название</string>
@@ -21,4 +21,6 @@
     <string name="action_save">Сохранить</string>
     <string name="button_delete">УДАЛИТЬ</string>
     <string name="question_confirm_delete_point">Удалить точку %s?</string>
+    <string name="hint_search_category">Введите название категории</string>
+    <string name="action_categories">Категории</string>
 </resources>

@@ -13,6 +13,7 @@ import ku.olga.route_builder.REQ_CODE_VIEW_SEARCH_ADDRESS
 import ku.olga.route_builder.domain.model.SearchAddress
 import ku.olga.route_builder.presentation.App
 import ku.olga.route_builder.presentation.base.BaseFragment
+import ku.olga.route_builder.presentation.category.CategoriesFragment
 import ku.olga.route_builder.presentation.hideKeyboard
 import ku.olga.route_builder.presentation.search.item.SearchAddressFragment
 
@@ -81,17 +82,27 @@ class SearchAddressesFragment : BaseFragment() {
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
-        val view = menu.findItem(R.id.actionSearch)?.actionView
+        val searchItem = menu.findItem(R.id.actionSearch)
+        searchItem.expandActionView()
+        val view = searchItem?.actionView
         if (view is SearchView) {
             view.apply {
-                isIconified = false
-                queryHint = getString(R.string.hint_search_points)
+                queryHint = getString(R.string.hint_search_address)
                 setOnQueryTextListener(buildOnQueryTextListener())
             }
             if (searchAddressesView is SearchAddressesViewImpl) {
                 (searchAddressesView as SearchAddressesViewImpl).searchView = view
             }
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.actionCategories) {
+            hideKeyboard()
+            replaceFragment(CategoriesFragment.newInstance(), true)
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun buildOnQueryTextListener() = object : SearchView.OnQueryTextListener {

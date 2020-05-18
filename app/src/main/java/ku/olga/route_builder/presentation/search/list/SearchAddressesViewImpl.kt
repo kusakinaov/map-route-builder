@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_search.view.*
+import kotlinx.android.synthetic.main.layout_error.view.*
 import ku.olga.route_builder.REQ_CODE_LOCATION_PERMISSION
 import ku.olga.route_builder.domain.model.SearchAddress
 
