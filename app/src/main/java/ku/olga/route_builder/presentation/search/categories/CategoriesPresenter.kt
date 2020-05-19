@@ -15,7 +15,9 @@ class CategoriesPresenter(val repository: CategoryRepository) : BasePresenter<Ca
         super.attachView(view)
         bindQuery()
         bindCategories()
-        trySearch()
+        if (categories.isEmpty() && query.isEmpty()) {
+            trySearch()
+        }
     }
 
     fun onQueryChanged(query: String?) {
