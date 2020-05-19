@@ -8,11 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import ku.olga.route_builder.R
 import ku.olga.route_builder.domain.model.Category
+import ku.olga.route_builder.presentation.App
 import ku.olga.route_builder.presentation.base.BaseFragment
 
 class CategoryFragment : BaseFragment() {
     private var categoryView: CategoryView? = null
-    private val categoryPresenter = CategoryPresenter()
+    private val categoryPresenter = CategoryPresenter(App.poiRepository)
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
