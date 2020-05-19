@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_search.view.*
 import kotlinx.android.synthetic.main.layout_error.view.*
+import ku.olga.route_builder.R
 import ku.olga.route_builder.REQ_CODE_LOCATION_PERMISSION
 import ku.olga.route_builder.domain.model.SearchAddress
 
@@ -18,11 +19,25 @@ class SearchAddressesViewImpl(
     private val presenter: SearchAddressesPresenter,
     private val searchAdapter: SearchAddressAdapter
 ) : SearchAddressesView {
-    var searchView: SearchView? = null
+    override var searchView: SearchView? = null
         set(value) {
             field = value
             presenter.bindQuery()
+            value?.apply {
+                queryHint = context.getString(R.string.hint_search_address)
+                setOnQueryTextListener(buildOnQueryTextListener())
+            }
         }
+
+    private fun buildOnQueryTextListener() = object : SearchView.OnQueryTextListener {
+        override fun onQueryTextSubmit(query: String?) = true
+
+        override fun onQueryTextChange(newText: String?): Boolean {
+            presenter.onQueryChanged(newText)
+            searchAdapter.setQuery(newText)
+            return true
+        }
+    }
 
     init {
         fragment.view?.apply {

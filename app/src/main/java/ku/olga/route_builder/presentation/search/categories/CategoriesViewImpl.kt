@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.search.category
+package ku.olga.route_builder.presentation.search.categories
 
 import android.graphics.drawable.ColorDrawable
 import android.view.View

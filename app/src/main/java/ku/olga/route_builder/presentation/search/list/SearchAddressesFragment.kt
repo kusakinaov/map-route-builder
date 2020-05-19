@@ -13,7 +13,7 @@ import ku.olga.route_builder.REQ_CODE_VIEW_SEARCH_ADDRESS
 import ku.olga.route_builder.domain.model.SearchAddress
 import ku.olga.route_builder.presentation.App
 import ku.olga.route_builder.presentation.base.BaseFragment
-import ku.olga.route_builder.presentation.search.category.CategoriesFragment
+import ku.olga.route_builder.presentation.search.categories.CategoriesFragment
 import ku.olga.route_builder.presentation.hideKeyboard
 import ku.olga.route_builder.presentation.search.item.SearchAddressFragment
 
@@ -84,15 +84,19 @@ class SearchAddressesFragment : BaseFragment() {
         super.onPrepareOptionsMenu(menu)
         val searchItem = menu.findItem(R.id.actionSearch)
         searchItem.expandActionView()
+        searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(item: MenuItem?) = true
+
+            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+                hideKeyboard()
+                fragmentManager?.popBackStack()
+                return false
+            }
+        })
+
         val view = searchItem?.actionView
         if (view is SearchView) {
-            view.apply {
-                queryHint = getString(R.string.hint_search_address)
-                setOnQueryTextListener(buildOnQueryTextListener())
-            }
-            if (searchAddressesView is SearchAddressesViewImpl) {
-                (searchAddressesView as SearchAddressesViewImpl).searchView = view
-            }
+            searchAddressesView?.searchView = view
         }
     }
 
@@ -103,20 +107,6 @@ class SearchAddressesFragment : BaseFragment() {
             return true
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun buildOnQueryTextListener() = object : SearchView.OnQueryTextListener {
-        override fun onQueryTextSubmit(query: String?) = true
-
-        override fun onQueryTextChange(newText: String?): Boolean {
-            onQueryChanged(newText)
-            return true
-        }
-    }
-
-    fun onQueryChanged(query: String?) {
-        searchPresenter.onQueryChanged(query)
-        searchAdapter.setQuery(query)
     }
 
     companion object {
