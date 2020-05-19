@@ -7,4 +7,5 @@ interface CategoryView : BaseView {
     fun onResume()
     fun onPause()
     fun showPOIs(pois: List<POI>)
+    fun hidePOIDetails(): Boolean
 }

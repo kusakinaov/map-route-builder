@@ -17,20 +17,61 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        android:orientation="vertical"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
         app:behavior_hideable="true"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior" />
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="16dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_place"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription,RtlHardcoded" />
+
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="72dp"
+            android:textAppearance="@style/TextAppearance.Primary"
+            android:textColor="?android:textColorPrimary"
+            app:layout_constraintLeft_toRightOf="@id/imageView"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="RtlHardcoded"
+            tools:text="Title"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/textViewDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="72dp"
+            android:textAppearance="@style/TextAppearance.Secondary.14"
+            android:visibility="gone"
+            app:layout_constraintLeft_toRightOf="@id/imageView"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textViewTitle"
+            tools:ignore="RtlHardcoded"
+            tools:lines="2"
+            tools:text="@tools:sample/lorem/random"
+            tools:visibility="visible" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/buttonEdit"
+        android:id="@+id/buttonAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:src="@drawable/ic_add_location"
-        android:visibility="gone"
         app:layout_anchor="@id/layoutContent"
-        app:layout_anchorGravity="end"
-        tools:visibility="visible" />
-
+        app:layout_anchorGravity="end" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

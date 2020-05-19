@@ -33,7 +33,7 @@ class CategoryPresenter(private val poiRepository: POIRepository) : BasePresente
                 pois.addAll(poiRepository.getPOIs(boundingBox, it))
             }
         } catch (e: Exception) {
-            view?.showDefaultError()
+            withContext(Dispatchers.Main) { view?.showDefaultError() }
         }
         withContext(Dispatchers.Main) { view?.showPOIs(pois) }
     }

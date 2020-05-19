@@ -11,7 +11,7 @@ import org.osmdroid.util.BoundingBox as ApiBoundingBox
 class NominatimPOIRepository(private val poiProvider: NominatimPOIProvider) : POIRepository {
     override suspend fun getPOIs(boundingBox: BoundingBox, category: Category): List<AppPOI> =
         poiProvider.getPOIInside(boundingBox.toApiBoundingBox(), category.key, 100)
-            .map { it.toAppPOI() }.toList()
+            ?.map { it.toAppPOI() }?.toList() ?: emptyList()
 
     private fun POI.toAppPOI() = AppPOI(mId,
         mLocation.latitude,

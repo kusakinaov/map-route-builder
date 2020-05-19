@@ -49,6 +49,8 @@ class CategoryFragment : BaseFragment() {
         categoryView?.onDetach()
     }
 
+    override fun isPressBackConsumed(): Boolean = categoryView?.hidePOIDetails() ?: false
+
     companion object {
         private const val CATEGORY = "category"
         fun newInstance(target: Fragment, requestCode: Int, category: Category) =
