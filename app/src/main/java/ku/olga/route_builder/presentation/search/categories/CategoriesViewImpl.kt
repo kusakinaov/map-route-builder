@@ -7,7 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.fragment_category.view.*
+import kotlinx.android.synthetic.main.fragment_categories.view.*
 import kotlinx.android.synthetic.main.layout_error.view.*
 import ku.olga.route_builder.R
 import ku.olga.route_builder.domain.model.Category
