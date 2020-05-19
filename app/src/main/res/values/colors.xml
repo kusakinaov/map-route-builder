@@ -9,6 +9,9 @@
   <color name="primaryTextColor">#000000</color>
   <color name="secondaryTextColor">#000000</color>
 
+  <color name="map_icon">#F44336</color>
+  <color name="map_icon_text">#fff</color>
+
   <color name="white">#fff</color>
   <color name="black">#000</color>
   <color name="textColorPrimary">#000</color>

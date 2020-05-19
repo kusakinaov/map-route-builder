@@ -1,6 +1,7 @@
 package ku.olga.route_builder.presentation.search.category
 
 import android.content.Context
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,8 @@ class CategoryFragment : BaseFragment() {
         super.onAttach(context)
         categoryPresenter.category = arguments?.getSerializable(CATEGORY) as Category?
     }
+
+    override fun getTitle(resources: Resources) = categoryPresenter.getTitle()
 
     override fun onCreateView(inflater: LayoutInflater,
         container: ViewGroup?,

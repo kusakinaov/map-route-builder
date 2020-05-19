@@ -37,4 +37,6 @@ class CategoryPresenter(private val poiRepository: POIRepository) : BasePresente
         }
         withContext(Dispatchers.Main) { view?.showPOIs(pois) }
     }
+
+    fun getTitle(): String = category?.title ?: ""
 }

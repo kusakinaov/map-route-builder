@@ -6,6 +6,9 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.fragment_category.view.*
 import ku.olga.route_builder.R
 import ku.olga.route_builder.domain.model.POI
+import ku.olga.route_builder.presentation.convertSpToPx
+import ku.olga.route_builder.presentation.getBitmap
+import org.osmdroid.bonuspack.clustering.RadiusMarkerClusterer
 import org.osmdroid.events.DelayedMapListener
 import org.osmdroid.events.MapListener
 import org.osmdroid.events.ScrollEvent
@@ -14,19 +17,25 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.BoundingBox
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
-import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.Marker
 import ku.olga.route_builder.domain.model.BoundingBox as AppBoundingBox
 
 class CategoryViewImpl(private val fragment: CategoryFragment,
     private val presenter: CategoryPresenter) : CategoryView {
     private var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>? = null
-    private val folderOverlay = FolderOverlay()
+    private lateinit var markerOverlay: RadiusMarkerClusterer
 
     init {
         fragment.view?.let {
             bottomSheetBehavior = BottomSheetBehavior.from(it.layoutContent).apply {
                 state = BottomSheetBehavior.STATE_HIDDEN
+            }
+            markerOverlay = RadiusMarkerClusterer(it.context).apply {
+                setIcon(getBitmap(ContextCompat.getDrawable(it.context, R.drawable.cluster)!!))
+                textPaint.apply {
+                    color = ContextCompat.getColor(it.context, R.color.map_icon_text)
+                    textSize = convertSpToPx(it.resources, 16f)
+                }
             }
             it.mapView.apply {
                 setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
@@ -43,7 +52,7 @@ class CategoryViewImpl(private val fragment: CategoryFragment,
                         return true
                     }
                 }, DELAY_LOAD_POI))
-                overlays.add(folderOverlay)
+                overlays.add(markerOverlay)
             }
         }
     }
@@ -61,11 +70,11 @@ class CategoryViewImpl(private val fragment: CategoryFragment,
     }
 
     override fun showPOIs(pois: List<POI>) {
-        folderOverlay.items.clear()
+        markerOverlay.items.clear()
         fragment.context?.let {
             val poiIcon = ContextCompat.getDrawable(it, R.drawable.ic_place)
             for (poi in pois) {
-                folderOverlay.add(Marker(fragment.view?.mapView).apply {
+                markerOverlay.add(Marker(fragment.view?.mapView).apply {
                     title = poi.title
                     snippet = poi.description
                     position = GeoPoint(poi.latitude, poi.longitude)
