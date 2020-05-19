@@ -6,7 +6,7 @@ import com.google.gson.reflect.TypeToken
 import ku.olga.route_builder.domain.model.Category
 import ku.olga.route_builder.domain.repository.CategoryRepository
 import java.io.InputStreamReader
-import java.util.*
+import java.util.Locale
 
 class CategoryNominatimRepository(private val assetManager: AssetManager, private val gson: Gson) :
     CategoryRepository {
@@ -42,6 +42,7 @@ class CategoryNominatimRepository(private val assetManager: AssetManager, privat
         } finally {
             reader.close()
         }
+        categories.sortWith(Comparator { left, right -> left.title.compareTo(right.title) })
     }
 
     companion object {
