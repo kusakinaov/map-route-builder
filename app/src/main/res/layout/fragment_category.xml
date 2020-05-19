@@ -72,6 +72,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:src="@drawable/ic_add_location"
+        android:visibility="gone"
         app:layout_anchor="@id/layoutContent"
-        app:layout_anchorGravity="end" />
+        app:layout_anchorGravity="end"
+        tools:visibility="visible" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

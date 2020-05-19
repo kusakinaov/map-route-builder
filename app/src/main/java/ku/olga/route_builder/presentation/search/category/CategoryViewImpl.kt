@@ -31,8 +31,8 @@ class CategoryViewImpl(private val fragment: CategoryFragment,
     init {
         fragment.view?.let {
             bottomSheetBehavior = BottomSheetBehavior.from(it.layoutContent).apply {
+                addBottomSheetCallback(buildBottomSheetCallback())
                 state = BottomSheetBehavior.STATE_HIDDEN
-                it.buttonAdd.hide()
             }
             markerOverlay = RadiusMarkerClusterer(it.context).apply {
                 setIcon(getBitmap(ContextCompat.getDrawable(it.context, R.drawable.cluster)!!))
@@ -47,6 +47,19 @@ class CategoryViewImpl(private val fragment: CategoryFragment,
                 setMultiTouchControls(true)
                 addMapListener(buildMapListener())
                 overlays.add(markerOverlay)
+            }
+        }
+    }
+
+    private fun buildBottomSheetCallback() = object : BottomSheetBehavior.BottomSheetCallback() {
+        override fun onSlide(bottomSheet: View, slideOffset: Float) {
+        }
+
+        override fun onStateChanged(bottomSheet: View, newState: Int) {
+            when (newState) {
+                BottomSheetBehavior.STATE_EXPANDED -> fragment.view?.buttonAdd?.visibility = View.VISIBLE
+                BottomSheetBehavior.STATE_HIDDEN,
+                BottomSheetBehavior.STATE_COLLAPSED -> fragment.view?.buttonAdd?.visibility = View.GONE
             }
         }
     }
@@ -112,7 +125,6 @@ class CategoryViewImpl(private val fragment: CategoryFragment,
                 text = poi.description
                 visibility = if (text.isNullOrEmpty()) View.GONE else View.VISIBLE
             }
-            buttonAdd.show()
         }
         bottomSheetBehavior?.apply {
             peekHeight = fragment.view?.layoutContent?.measuredHeight ?: 0
@@ -124,7 +136,6 @@ class CategoryViewImpl(private val fragment: CategoryFragment,
     override fun hidePOIDetails(): Boolean {
         if (bottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED) {
             bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
-            fragment.view?.buttonAdd?.hide()
             return true
         }
         return false
