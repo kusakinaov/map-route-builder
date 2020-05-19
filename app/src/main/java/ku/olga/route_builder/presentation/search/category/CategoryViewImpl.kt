@@ -1,9 +1,8 @@
 package ku.olga.route_builder.presentation.search.category
 
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
-import org.osmdroid.views.CustomZoomButtonsController
 import kotlinx.android.synthetic.main.fragment_category.view.*
 import ku.olga.route_builder.R
 import ku.olga.route_builder.domain.model.POI
@@ -11,13 +10,18 @@ import org.osmdroid.events.DelayedMapListener
 import org.osmdroid.events.MapListener
 import org.osmdroid.events.ScrollEvent
 import org.osmdroid.events.ZoomEvent
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.BoundingBox
-
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.CustomZoomButtonsController
+import org.osmdroid.views.overlay.FolderOverlay
+import org.osmdroid.views.overlay.Marker
 import ku.olga.route_builder.domain.model.BoundingBox as AppBoundingBox
 
 class CategoryViewImpl(private val fragment: CategoryFragment,
     private val presenter: CategoryPresenter) : CategoryView {
     private var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>? = null
+    private val folderOverlay = FolderOverlay()
 
     init {
         fragment.view?.let {
@@ -39,6 +43,7 @@ class CategoryViewImpl(private val fragment: CategoryFragment,
                         return true
                     }
                 }, DELAY_LOAD_POI))
+                overlays.add(folderOverlay)
             }
         }
     }
@@ -56,7 +61,19 @@ class CategoryViewImpl(private val fragment: CategoryFragment,
     }
 
     override fun showPOIs(pois: List<POI>) {
-
+        folderOverlay.items.clear()
+        fragment.context?.let {
+            val poiIcon = ContextCompat.getDrawable(it, R.drawable.ic_place)
+            for (poi in pois) {
+                folderOverlay.add(Marker(fragment.view?.mapView).apply {
+                    title = poi.title
+                    snippet = poi.description
+                    position = GeoPoint(poi.latitude, poi.longitude)
+                    icon = poiIcon
+                    setOnMarkerClickListener { marker, mapView -> true }
+                })
+            }
+        }
     }
 
     override fun onDetach() {

@@ -16,11 +16,13 @@ class NominatimPOIRepository(private val poiProvider: NominatimPOIProvider) : PO
     private fun POI.toAppPOI() = AppPOI(mId,
         mLocation.latitude,
         mLocation.longitude,
-        mType,
+        "",
         mDescription,
         mThumbnailPath,
         mUrl,
-        mRank)
+        mRank,
+        mCategory,
+        mType)
 
     private fun BoundingBox.toApiBoundingBox() =
         ApiBoundingBox(latNorth, lonEast, latSouth, lonWest)

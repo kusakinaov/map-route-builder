@@ -7,4 +7,6 @@ data class POI(val id: Long,
     val description: String?,
     val thumbnailPath: String?,
     val url: String?,
-    val rank: Int)
+    val rank: Int,
+    val categoryGroup: String? = null,
+    val category: String? = null)
