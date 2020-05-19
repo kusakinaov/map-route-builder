@@ -1,13 +1,12 @@
 package ku.olga.route_builder.presentation.category
 
-import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_category.view.*
 import kotlinx.android.synthetic.main.layout_error.view.*
 import ku.olga.route_builder.R
@@ -29,14 +28,10 @@ class CategoriesViewImpl(
     init {
         fragment.view?.apply {
             recyclerView?.apply {
-                layoutManager = GridLayoutManager(context, 2)
+                layoutManager = LinearLayoutManager(context)
                 adapter = categoriesAdapter
                 addItemDecoration(
                     DividerItemDecoration(context, DividerItemDecoration.VERTICAL).apply {
-                        setDrawable(ColorDrawable(ContextCompat.getColor(context, R.color.black12)))
-                    })
-                addItemDecoration(
-                    DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL).apply {
                         setDrawable(ColorDrawable(ContextCompat.getColor(context, R.color.black12)))
                     })
             }

@@ -2,6 +2,7 @@ package ku.olga.route_builder.presentation
 
 import android.app.Application
 import androidx.room.Room
+import com.google.gson.GsonBuilder
 import ku.olga.route_builder.R
 import ku.olga.route_builder.data.repository.AddressNominatimGeocoderRepository
 import ku.olga.route_builder.data.repository.CategoryNominatimRepository
@@ -21,12 +22,12 @@ class App : Application() {
         }
         val addressRepository by lazy {
             AddressNominatimGeocoderRepository(
-                GeocoderNominatim(Locale.getDefault(), "MapRouteBuilderUserAgent")
+                GeocoderNominatim(Locale.ROOT, "MapRouteBuilderUserAgent")
             )
         }
         val pointsRepository by lazy { PointsDbCacheRepository(appDatabase) }
         val categoriesRepository by lazy {
-            CategoryNominatimRepository(application.resources.getStringArray(R.array.poi_tags))
+            CategoryNominatimRepository(application.assets, GsonBuilder().create())
         }
     }
 
