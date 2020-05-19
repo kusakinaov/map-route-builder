@@ -1,6 +1,7 @@
 package ku.olga.route_builder.presentation
 
 import android.app.Application
+import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 import androidx.room.Room
 import com.google.gson.GsonBuilder
@@ -30,11 +31,12 @@ class App : Application() {
             CategoryNominatimRepository(application.assets, GsonBuilder().create())
         }
         val poiRepository by lazy { NominatimPOIRepository(NominatimPOIProvider(USER_AGENT)) }
+        val preferences: SharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(application) }
     }
 
     override fun onCreate() {
         super.onCreate()
         application = this
-        Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
+        Configuration.getInstance().load(this, preferences);
     }
 }

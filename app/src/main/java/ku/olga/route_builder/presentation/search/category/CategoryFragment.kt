@@ -14,7 +14,7 @@ import ku.olga.route_builder.presentation.base.BaseFragment
 
 class CategoryFragment : BaseFragment() {
     private var categoryView: CategoryView? = null
-    private val categoryPresenter = CategoryPresenter(App.poiRepository)
+    private val categoryPresenter = CategoryPresenter(App.poiRepository, App.preferences)
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
