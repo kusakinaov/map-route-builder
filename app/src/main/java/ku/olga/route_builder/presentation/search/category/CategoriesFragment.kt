@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.category
+package ku.olga.route_builder.presentation.search.category
 
 import android.os.Bundle
 import android.view.*
@@ -10,11 +10,11 @@ import ku.olga.route_builder.presentation.base.BaseFragment
 class CategoriesFragment : BaseFragment() {
     private val categoriesAdapter = CategoriesAdapter().apply {
         categoryClickListener = {
-            //todo
+
         }
     }
     private var categoriesView: CategoriesView? = null
-    private val сategoriesPresenter = CategoriesPresenter(App.categoriesRepository)
+    private val categoriesPresenter = CategoriesPresenter(App.categoriesRepository)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,7 +25,7 @@ class CategoriesFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        categoriesView = CategoriesViewImpl(this, сategoriesPresenter, categoriesAdapter)
+        categoriesView = CategoriesViewImpl(this, categoriesPresenter, categoriesAdapter)
         categoriesView?.onAttach()
     }
 
@@ -45,10 +45,7 @@ class CategoriesFragment : BaseFragment() {
         val view = menu.findItem(R.id.actionSearch)?.actionView
         if (view is SearchView) {
             categoriesView?.searchView = view
-            view.apply {
-//                isIconified = false
-                queryHint = getString(R.string.hint_search_category)
-            }
+            view.queryHint = getString(R.string.hint_search_category)
         }
     }
 

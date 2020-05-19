@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.category
+package ku.olga.route_builder.presentation.search.category
 
 import kotlinx.coroutines.*
 import ku.olga.route_builder.domain.model.Category

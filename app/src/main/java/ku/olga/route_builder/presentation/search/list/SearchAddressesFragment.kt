@@ -13,7 +13,7 @@ import ku.olga.route_builder.REQ_CODE_VIEW_SEARCH_ADDRESS
 import ku.olga.route_builder.domain.model.SearchAddress
 import ku.olga.route_builder.presentation.App
 import ku.olga.route_builder.presentation.base.BaseFragment
-import ku.olga.route_builder.presentation.category.CategoriesFragment
+import ku.olga.route_builder.presentation.search.category.CategoriesFragment
 import ku.olga.route_builder.presentation.hideKeyboard
 import ku.olga.route_builder.presentation.search.item.SearchAddressFragment
 

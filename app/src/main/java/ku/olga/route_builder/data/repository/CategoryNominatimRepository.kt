@@ -10,7 +10,7 @@ import java.util.*
 
 class CategoryNominatimRepository(private val assetManager: AssetManager, private val gson: Gson) :
     CategoryRepository {
-    private val categories = mutableMapOf<String, List<Category>>()
+    private val categories = mutableListOf<Category>()
 
     override suspend fun getCategories(query: String?): List<Category> {
         if (categories.isEmpty()) initCategories()
@@ -18,35 +18,33 @@ class CategoryNominatimRepository(private val assetManager: AssetManager, privat
         val lowerQuery = query?.toLowerCase(Locale.ROOT) ?: ""
         val filtered = mutableListOf<Category>()
 
-        for (list in categories.values) {
-            if (query.isNullOrEmpty()) {
-                filtered.addAll(list)
-            } else {
-                filtered.addAll(list.filter {
-                    it.title.toLowerCase(Locale.ROOT).contains(lowerQuery)
-                }.toList())
-            }
+        if (query.isNullOrEmpty()) {
+            filtered.addAll(categories)
+        } else {
+            filtered.addAll(categories.filter {
+                it.title.toLowerCase(Locale.ROOT).contains(lowerQuery)
+            }.toList())
         }
         return filtered
     }
 
     private fun initCategories() {
         categories.clear()
-        val reader = InputStreamReader(assetManager.open("nominatin_poi_tags.txt"))
+        val reader = InputStreamReader(assetManager.open("nominatin_poi_tags.json"))
         try {
             val map: Map<String, Map<String, String>> = gson.fromJson(
                 reader,
                 object : TypeToken<Map<String, Map<String, String>>>() {}.type
             )
-            for ((key, value) in map) {
-                val list = mutableListOf<Category>()
-                for ((k, v) in value) {
-                    list.add(Category(k, v))
-                }
-                categories[key] = list
+            for ((k, v) in map[AMENITY] ?: emptyMap()) {
+                categories.add(Category(k, v))
             }
         } finally {
             reader.close()
         }
+    }
+
+    companion object {
+        private const val AMENITY = "amenity"
     }
 }
