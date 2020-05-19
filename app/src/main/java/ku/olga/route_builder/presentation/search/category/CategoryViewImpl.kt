@@ -89,6 +89,7 @@ class CategoryViewImpl(private val fragment: CategoryFragment,
                 markerOverlay.add(buildMarker(poi, poiIcon))
             }
         }
+        markerOverlay.invalidate()
     }
 
     private fun buildMarker(poi: POI, poiIcon: Drawable?): Marker =
@@ -147,7 +148,7 @@ class CategoryViewImpl(private val fragment: CategoryFragment,
             AppBoundingBox(latNorth, lonEast, latSouth, lonWest)
 
     companion object {
-        private const val DELAY_LOAD_POI = 500L
+        private const val DELAY_LOAD_POI = 1000L
         private const val NONE_MOVE_SPEED = 0L
         private const val DEFAULT_MOVE_SPEED = 500L
         private const val DEFAULT_ZOOM_LEVEL = 15.0
