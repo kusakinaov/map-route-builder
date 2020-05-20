@@ -51,4 +51,12 @@ class UserPointsViewImpl(val fragment: UserPointsFragment, private val userPoint
             setupWithViewPager(null)
         }
     }
+
+    override fun onShown() {
+        fragment.buttonAdd?.hide()
+    }
+
+    override fun onHide() {
+        fragment.buttonAdd?.show()
+    }
 }

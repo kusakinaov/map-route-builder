@@ -1,7 +1,6 @@
 package ku.olga.route_builder.presentation.user_points.map
 
 import android.graphics.drawable.Drawable
-import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
@@ -65,9 +64,17 @@ class UserPointsMapViewImpl(private val fragment: Fragment,
 
         override fun onStateChanged(bottomSheet: View, newState: Int) {
             when (newState) {
-                BottomSheetBehavior.STATE_EXPANDED -> fragment.buttonEdit?.visibility = View.VISIBLE
+                BottomSheetBehavior.STATE_EXPANDED -> {
+                    fragment.buttonEdit?.visibility = View.VISIBLE
+                }
                 BottomSheetBehavior.STATE_HIDDEN,
-                BottomSheetBehavior.STATE_COLLAPSED -> fragment.buttonEdit?.visibility = View.GONE
+                BottomSheetBehavior.STATE_COLLAPSED -> {
+                    fragment.buttonEdit?.visibility = View.GONE
+                    val parent = fragment.parentFragment
+                    if (parent is UserPointsMapFragment.BottomSheetCallback) {
+                        parent.onHide()
+                    }
+                }
             }
         }
     }
@@ -111,6 +118,10 @@ class UserPointsMapViewImpl(private val fragment: Fragment,
             }
         }
         bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+        val parent = fragment.parentFragment
+        if (parent is UserPointsMapFragment.BottomSheetCallback) {
+            parent.onShown()
+        }
     }
 
     override fun onDetach() {

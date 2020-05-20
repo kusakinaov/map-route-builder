@@ -40,6 +40,11 @@ class UserPointsMapFragment : BaseFragment() {
 
     override fun setTitle() {}
 
+    interface BottomSheetCallback {
+        fun onShown()
+        fun onHide()
+    }
+
     companion object {
         fun newInstance() = UserPointsMapFragment()
     }

@@ -8,8 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import ku.olga.route_builder.R
 import ku.olga.route_builder.presentation.base.BaseFragment
+import ku.olga.route_builder.presentation.user_points.map.UserPointsMapFragment
 
-class UserPointsFragment : BaseFragment() {
+class UserPointsFragment : BaseFragment(), UserPointsMapFragment.BottomSheetCallback {
     private lateinit var userPointsAdapter: UserPointsAdapter
     private var userPointsView: UserPointsView? = null
 
@@ -38,5 +39,13 @@ class UserPointsFragment : BaseFragment() {
 
     companion object {
         fun newInstance() = UserPointsFragment()
+    }
+
+    override fun onShown() {
+        userPointsView?.onShown()
+    }
+
+    override fun onHide() {
+        userPointsView?.onHide()
     }
 }
