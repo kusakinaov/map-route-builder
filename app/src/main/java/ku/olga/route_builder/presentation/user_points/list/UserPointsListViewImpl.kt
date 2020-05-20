@@ -15,7 +15,11 @@ class UserPointsListViewImpl(
 ) : UserPointsListView {
     private val pointsAdapter = UserPointsAdapter().apply {
         onPointClickListener = {
-            fragment.replaceFragment(EditPointFragment.newInstance(fragment, REQ_CODE_EDIT_POINT, it), true)
+            val parent = fragment.parentFragment
+            if (parent is BaseFragment) {
+                parent.replaceFragment(EditPointFragment
+                        .newInstance(parent, REQ_CODE_EDIT_POINT, it), true)
+            }
         }
     }
 

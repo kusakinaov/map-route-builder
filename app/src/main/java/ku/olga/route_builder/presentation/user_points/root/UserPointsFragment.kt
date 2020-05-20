@@ -34,6 +34,8 @@ class UserPointsFragment : BaseFragment() {
         userPointsView?.onDetach()
     }
 
+    override fun isPressBackConsumed() = userPointsView?.isPressBackConsumed() ?: false
+
     companion object {
         fun newInstance() = UserPointsFragment()
     }

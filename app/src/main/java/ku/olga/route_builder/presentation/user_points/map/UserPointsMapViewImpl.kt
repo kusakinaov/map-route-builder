@@ -90,9 +90,10 @@ class UserPointsMapViewImpl(private val fragment: Fragment,
     }
 
     override fun editUserPoint(userPoint: UserPoint) {
-        if (fragment is BaseFragment) {
-            fragment.replaceFragment(EditPointFragment
-                    .newInstance(fragment, REQ_CODE_EDIT_POINT, userPoint), true)
+        val parent = fragment.parentFragment
+        if (parent is BaseFragment) {
+            parent.replaceFragment(EditPointFragment
+                    .newInstance(parent, REQ_CODE_EDIT_POINT, userPoint), true)
         }
     }
 

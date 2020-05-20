@@ -2,9 +2,12 @@ package ku.olga.route_builder.presentation.user_points.root
 
 import android.view.View
 import com.google.android.material.tabs.TabLayout
+import kotlinx.android.synthetic.main.fragment_user_points.*
 import kotlinx.android.synthetic.main.fragment_user_points.view.*
+import kotlinx.android.synthetic.main.fragment_user_points.view.viewPager
 import ku.olga.route_builder.R
 import ku.olga.route_builder.REQ_CODE_SEARCH_POINT
+import ku.olga.route_builder.presentation.base.BaseFragment
 import ku.olga.route_builder.presentation.search.list.SearchAddressesFragment
 
 class UserPointsViewImpl(val fragment: UserPointsFragment, private val userPointsAdapter: UserPointsAdapter) : UserPointsView {
@@ -18,6 +21,18 @@ class UserPointsViewImpl(val fragment: UserPointsFragment, private val userPoint
                         .newInstance(fragment, REQ_CODE_SEARCH_POINT))
             }
         }
+    }
+
+    override fun isPressBackConsumed(): Boolean {
+        val fragments = fragment.childFragmentManager.fragments
+        val currentPosition = fragment.viewPager?.currentItem ?: 0
+        if (fragments.size > currentPosition) {
+            val fragment = fragments[currentPosition]
+            if (fragment is BaseFragment) {
+                return fragment.isPressBackConsumed()
+            }
+        }
+        return false
     }
 
     override fun onAttach() {
