@@ -1,21 +1,21 @@
-package ku.olga.route_builder.presentation.list
+package ku.olga.route_builder.presentation.user_points.list
 
 import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.fragment_user_points.view.*
+import kotlinx.android.synthetic.main.fragment_user_points_list.view.*
 import ku.olga.route_builder.REQ_CODE_EDIT_POINT
 import ku.olga.route_builder.REQ_CODE_SEARCH_POINT
 import ku.olga.route_builder.domain.model.UserPoint
 import ku.olga.route_builder.presentation.base.BaseFragment
-import ku.olga.route_builder.presentation.map.UserPointsMapFragment
+import ku.olga.route_builder.presentation.user_points.map.UserPointsMapFragment
 import ku.olga.route_builder.presentation.point.EditPointFragment
 import ku.olga.route_builder.presentation.search.list.SearchAddressesFragment
 
-class UserPointsViewImpl(
+class UserPointsListViewImpl(
         private val fragment: BaseFragment,
-        private val presenter: UserPointsPresenter
-) : UserPointsView {
+        private val presenter: UserPointsListPresenter
+) : UserPointsListView {
     private val pointsAdapter = UserPointsAdapter().apply {
         onPointClickListener = {
             fragment.replaceFragment(EditPointFragment.newInstance(fragment, REQ_CODE_EDIT_POINT, it), true)

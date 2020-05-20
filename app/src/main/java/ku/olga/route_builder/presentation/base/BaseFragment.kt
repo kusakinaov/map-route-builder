@@ -21,7 +21,7 @@ abstract class BaseFragment : Fragment() {
 
     open fun getTitle(resources: Resources) = ""
 
-    private fun setTitle() {
+    open fun setTitle() {
         activity?.let {
             it.title = getTitle(it.resources)
         }

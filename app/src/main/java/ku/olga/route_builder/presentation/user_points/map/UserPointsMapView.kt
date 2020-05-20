@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.map
+package ku.olga.route_builder.presentation.user_points.map
 
 import android.os.Bundle
 import ku.olga.route_builder.domain.model.UserPoint

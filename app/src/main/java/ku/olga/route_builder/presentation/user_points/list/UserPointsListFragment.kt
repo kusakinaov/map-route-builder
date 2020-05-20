@@ -1,17 +1,14 @@
-package ku.olga.route_builder.presentation.list
+package ku.olga.route_builder.presentation.user_points.list
 
-import android.content.res.Resources
 import android.os.Bundle
 import android.view.*
 import ku.olga.route_builder.R
 import ku.olga.route_builder.presentation.App
 import ku.olga.route_builder.presentation.base.BaseFragment
 
-class UserPointsFragment : BaseFragment() {
-    private val userPointsPresenter = UserPointsPresenter(App.pointsRepository)
-    private var userPointsView: UserPointsView? = null
-
-    override fun getTitle(resources: Resources) = resources.getString(R.string.ttl_point_list)
+class UserPointsListFragment : BaseFragment() {
+    private val userPointsPresenter = UserPointsListPresenter(App.pointsRepository)
+    private var userPointsView: UserPointsListView? = null
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -20,15 +17,15 @@ class UserPointsFragment : BaseFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View =
-        inflater.inflate(R.layout.fragment_user_points, container, false)
+            inflater.inflate(R.layout.fragment_user_points_list, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        userPointsView = UserPointsViewImpl(this, userPointsPresenter).apply {
+        userPointsView = UserPointsListViewImpl(this, userPointsPresenter).apply {
             onAttach()
         }
     }
@@ -44,5 +41,11 @@ class UserPointsFragment : BaseFragment() {
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun setTitle() {}
+
+    companion object {
+        fun newInstance() = UserPointsListFragment()
     }
 }

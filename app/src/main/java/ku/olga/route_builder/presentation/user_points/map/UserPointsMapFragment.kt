@@ -1,6 +1,5 @@
-package ku.olga.route_builder.presentation.map
+package ku.olga.route_builder.presentation.user_points.map
 
-import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,8 +11,6 @@ import ku.olga.route_builder.presentation.base.BaseFragment
 class UserPointsMapFragment : BaseFragment() {
     private val presenter = UserPointsMapPresenter(App.pointsRepository)
     private lateinit var mapView: UserPointsMapView
-
-    override fun getTitle(resources: Resources) = resources.getString(R.string.ttl_map)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_user_points_map, container, false)
@@ -50,4 +47,10 @@ class UserPointsMapFragment : BaseFragment() {
     }
 
     override fun isPressBackConsumed() = mapView.hideBottomSheet()
+
+    override fun setTitle() {}
+
+    companion object {
+        fun newInstance() = UserPointsMapFragment()
+    }
 }

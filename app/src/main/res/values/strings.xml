@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">map-route-builder</string>
     <string name="hint_empty_points">Список пуст</string>
-    <string name="ttl_point_list">Мои точки</string>
+    <string name="ttl_user_points">Мои точки</string>
     <string name="desc_add_point">Добавить точку</string>
     <string name="action_map">Открыть карту</string>
     <string name="ttl_map">Карта</string>
@@ -24,4 +24,6 @@
     <string name="hint_search_category">Введите название категории</string>
     <string name="action_categories">Категории</string>
     <string name="error_search_pois">Не удалось выполнить запрос</string>
+    <string name="tab_user_points_list">Список</string>
+    <string name="tab_user_points_map">Карта</string>
 </resources>

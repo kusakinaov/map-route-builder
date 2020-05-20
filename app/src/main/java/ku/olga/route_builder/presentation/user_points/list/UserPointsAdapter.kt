@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.list
+package ku.olga.route_builder.presentation.user_points.list
 
 import android.view.LayoutInflater
 import android.view.View
