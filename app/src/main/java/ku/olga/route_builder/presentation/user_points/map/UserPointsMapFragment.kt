@@ -18,12 +18,7 @@ class UserPointsMapFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mapView = UserPointsMapViewImpl(this, presenter)
-        mapView.onAttach(savedInstanceState)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        mapView.onStart()
+        mapView.onAttach()
     }
 
     override fun onResume() {
@@ -36,17 +31,12 @@ class UserPointsMapFragment : BaseFragment() {
         super.onPause()
     }
 
-    override fun onStop() {
-        mapView.onStop()
-        super.onStop()
-    }
-
     override fun onDestroyView() {
         mapView.onDetach()
         super.onDestroyView()
     }
 
-    override fun isPressBackConsumed() = mapView.hideBottomSheet()
+    override fun isPressBackConsumed() = mapView.hideUserPoint()
 
     override fun setTitle() {}
 

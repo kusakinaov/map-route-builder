@@ -13,7 +13,7 @@ class UserPointsMapPresenter(private val pointsRepository: PointsCacheRepository
 
     override fun attachView(view: UserPointsMapView) {
         super.attachView(view)
-        view.setUserPoints(userPoints)
+        bindUserPoints()
         getUserPoints()
     }
 
@@ -23,25 +23,28 @@ class UserPointsMapPresenter(private val pointsRepository: PointsCacheRepository
         withContext(Dispatchers.Main) { bindUserPoints() }
     }
 
-    fun bindUserPoints() {
+    private fun bindUserPoints() {
         view?.apply {
             setUserPoints(userPoints)
-            animateTo(userPoints)
+            when {
+                userPoints.size == 1 -> moveTo(userPoints[0], false)
+                userPoints.isNotEmpty() -> moveTo(userPoints, false)
+            }
         }
     }
 
     fun onClickEditUserPoint(userPoint: UserPoint) {
         view?.apply {
-            hideBottomSheet()
+            hideUserPoint()
             editUserPoint(userPoint)
         }
     }
 
-    fun onClickMarker(position: Int) {
+    fun onClickMarker(userPoint: UserPoint): Boolean {
         view?.apply {
-            val userPoint = userPoints[position]
-            showBottomMenu(userPoint)
-            animateTo(listOf(userPoint))
+            moveTo(userPoint, true)
+            showUserPoint(userPoint)
         }
+        return true
     }
 }

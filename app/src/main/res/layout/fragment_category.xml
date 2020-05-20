@@ -71,7 +71,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:src="@drawable/ic_add_location"
+        android:src="@drawable/ic_add"
         android:visibility="gone"
         app:layout_anchor="@id/layoutContent"
         app:layout_anchorGravity="end"

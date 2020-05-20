@@ -43,7 +43,7 @@ class CategoryViewImpl(private val fragment: CategoryFragment,
             }
             it.mapView.apply {
                 setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
-                zoomController.setVisibility(CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT)
+                zoomController.setVisibility(CustomZoomButtonsController.Visibility.ALWAYS)
                 setMultiTouchControls(true)
                 addMapListener(buildMapListener())
                 overlays.add(markerOverlay)

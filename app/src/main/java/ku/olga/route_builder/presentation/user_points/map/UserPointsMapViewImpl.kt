@@ -1,57 +1,75 @@
 package ku.olga.route_builder.presentation.user_points.map
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.fragment_user_points_map.*
 import kotlinx.android.synthetic.main.fragment_user_points_map.view.*
+import ku.olga.route_builder.R
 import ku.olga.route_builder.REQ_CODE_EDIT_POINT
 import ku.olga.route_builder.domain.model.UserPoint
 import ku.olga.route_builder.presentation.base.BaseFragment
-import ku.olga.route_builder.presentation.convertDpToPx
+import ku.olga.route_builder.presentation.convertSpToPx
+import ku.olga.route_builder.presentation.getBitmap
 import ku.olga.route_builder.presentation.point.EditPointFragment
-import kotlin.math.max
-import kotlin.math.min
+import org.osmdroid.bonuspack.clustering.RadiusMarkerClusterer
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.BoundingBox
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.CustomZoomButtonsController
+import org.osmdroid.views.overlay.Marker
 
-class UserPointsMapViewImpl(val fragment: Fragment, private val presenter: UserPointsMapPresenter) : UserPointsMapView,
-        OnMapReadyCallback {
-    private var googleMap: GoogleMap? = null
+class UserPointsMapViewImpl(private val fragment: Fragment,
+                            private val presenter: UserPointsMapPresenter) : UserPointsMapView {
     private var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>? = null
-    private val markers = mutableListOf<Marker>()
-    private var markersBindSuccessful = false
+    private lateinit var markerOverlay: RadiusMarkerClusterer
 
-    override fun onAttach() {
-        presenter.attachView(this)
-    }
-
-    override fun onAttach(bundle: Bundle?) {
-        onAttach()
+    init {
         fragment.view?.let {
-            it.mapView?.apply {
-                getMapAsync(this@UserPointsMapViewImpl)
-                onCreate(bundle)
+            bottomSheetBehavior = BottomSheetBehavior.from(it.layoutContent).apply {
+                addBottomSheetCallback(buildBottomSheetCallback())
+                state = BottomSheetBehavior.STATE_HIDDEN
+            }
+            markerOverlay = RadiusMarkerClusterer(it.context).apply {
+                setIcon(getBitmap(ContextCompat.getDrawable(it.context, R.drawable.cluster)!!))
+                textPaint.apply {
+                    color = ContextCompat.getColor(it.context, R.color.map_icon_text)
+                    textSize = convertSpToPx(it.resources, 16f)
+                }
+            }
+            it.mapView.apply {
+                setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
+                zoomController.setVisibility(CustomZoomButtonsController.Visibility.ALWAYS)
+                setMultiTouchControls(true)
+                overlays.add(markerOverlay)
             }
             it.buttonEdit.setOnClickListener {
                 if (it.tag is UserPoint) {
                     presenter.onClickEditUserPoint(it.tag as UserPoint)
                 }
             }
-            bottomSheetBehavior = BottomSheetBehavior.from(it.layoutContent)
-                    .apply { state = BottomSheetBehavior.STATE_HIDDEN }
         }
     }
 
-    override fun onStart() {
-        fragment.mapView?.onStart()
+    override fun onAttach() {
+        presenter.attachView(this)
+    }
+
+    private fun buildBottomSheetCallback() = object : BottomSheetBehavior.BottomSheetCallback() {
+        override fun onSlide(bottomSheet: View, slideOffset: Float) {
+        }
+
+        override fun onStateChanged(bottomSheet: View, newState: Int) {
+            when (newState) {
+                BottomSheetBehavior.STATE_EXPANDED -> fragment.buttonEdit?.visibility = View.VISIBLE
+                BottomSheetBehavior.STATE_HIDDEN,
+                BottomSheetBehavior.STATE_COLLAPSED -> fragment.buttonEdit?.visibility = View.GONE
+            }
+        }
     }
 
     override fun onResume() {
@@ -62,15 +80,11 @@ class UserPointsMapViewImpl(val fragment: Fragment, private val presenter: UserP
         fragment.mapView?.onPause()
     }
 
-    override fun onStop() {
-        fragment.mapView?.onStop()
-    }
-
-    override fun hideBottomSheet(): Boolean {
+    override fun hideUserPoint(): Boolean {
         val expanded = bottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED
         if (expanded) {
             bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
-            fragment.view?.buttonEdit?.visibility = View.GONE
+            fragment.buttonEdit?.visibility = View.GONE
         }
         return expanded
     }
@@ -82,7 +96,7 @@ class UserPointsMapViewImpl(val fragment: Fragment, private val presenter: UserP
         }
     }
 
-    override fun showBottomMenu(userPoint: UserPoint) {
+    override fun showUserPoint(userPoint: UserPoint) {
         fragment.view?.apply {
             textViewTitle.text = userPoint.title
             textViewDescription.apply {
@@ -99,71 +113,48 @@ class UserPointsMapViewImpl(val fragment: Fragment, private val presenter: UserP
     }
 
     override fun onDetach() {
-        markersBindSuccessful = false
-        fragment.mapView?.onDestroy()
         presenter.detachView()
     }
 
     override fun setUserPoints(userPoints: List<UserPoint>) {
-        googleMap?.let { map ->
-            for (marker in markers) marker.remove()
-            markers.clear()
-            for (userPoint in userPoints) {
-                map.addMarker(MarkerOptions()
-                        .position(userPoint.getLatLng())
-                        .title(userPoint.title))?.also { markers.add(it) }
+        markerOverlay.items.clear()
+        fragment.context?.let {
+            val poiIcon = ContextCompat.getDrawable(it, R.drawable.ic_place)
+            for (poi in userPoints) {
+                markerOverlay.add(buildMarker(poi, poiIcon))
             }
-            markersBindSuccessful = true
+        }
+        markerOverlay.invalidate()
+    }
+
+    private fun buildMarker(point: UserPoint, poiIcon: Drawable?): Marker =
+            Marker(fragment.view?.mapView).apply {
+                title = point.title
+                snippet = point.description
+                position = GeoPoint(point.lat, point.lon)
+                icon = poiIcon
+                setOnMarkerClickListener { _, _ -> presenter.onClickMarker(point) }
+            }
+
+    override fun moveTo(userPoints: List<UserPoint>, animated: Boolean) {
+        val boundingBox = buildBoundingBox(userPoints)
+        fragment.mapView?.apply {
+            controller?.setCenter(GeoPoint(boundingBox.centerLatitude, boundingBox.centerLongitude))
+            zoomToBoundingBox(boundingBox, false)
         }
     }
 
-    override fun animateTo(userPoints: List<UserPoint>) {
-        googleMap?.apply {
-            if (userPoints.size == 1) {
-                animateCamera(CameraUpdateFactory.newLatLngZoom(userPoints[0].getLatLng(),
-                        if (markers.size > 1) cameraPosition.zoom else 15f))
-            } else if (userPoints.size > 1) {
-                buildLatLngBounds(userPoints)?.let {
-                    animateCamera(CameraUpdateFactory
-                            .newLatLngBounds(it, convertDpToPx(fragment.resources, 24f).toInt()))
-                }
-            }
-        }
+    override fun moveTo(userPoint: UserPoint, animated: Boolean) {
+        fragment.mapView?.controller?.animateTo(GeoPoint(userPoint.lat, userPoint.lon),
+                DEFAULT_ZOOM_LEVEL, if (animated) DEFAULT_MOVE_SPEED else NONE_MOVE_SPEED)
     }
 
-    private fun buildLatLngBounds(userPoints: List<UserPoint>): LatLngBounds? {
-        var southWest: LatLng? = null
-        var northEast: LatLng? = null
-        var bounds: LatLngBounds? = null
-        for (userPoint in userPoints) {
-            if (southWest == null || northEast == null) {
-                southWest = userPoint.getLatLng()
-                northEast = userPoint.getLatLng()
-            } else {
-                southWest = LatLng(min(userPoint.lat, southWest.latitude), min(userPoint.lon, southWest.longitude))
-                northEast = LatLng(max(userPoint.lat, northEast.latitude), max(userPoint.lon, northEast.longitude))
-                bounds = LatLngBounds(southWest, northEast)
-            }
-        }
-        return bounds
-    }
+    private fun buildBoundingBox(userPoints: List<UserPoint>) =
+            BoundingBox.fromGeoPointsSafe(userPoints.map { GeoPoint(it.lat, it.lon) })
 
-    override fun onMapReady(p0: GoogleMap?) {
-        googleMap = p0
-        googleMap?.apply {
-            uiSettings.apply {
-                isScrollGesturesEnabled = true
-                isZoomGesturesEnabled = true
-                isTiltGesturesEnabled = false
-                isRotateGesturesEnabled = false
-            }
-            setOnMarkerClickListener {
-                presenter.onClickMarker(markers.indexOf(it))
-                true
-            }
-        }
-        if (!markersBindSuccessful) presenter.bindUserPoints()
+    companion object {
+        private const val NONE_MOVE_SPEED = 0L
+        private const val DEFAULT_MOVE_SPEED = 500L
+        private const val DEFAULT_ZOOM_LEVEL = 15.0
     }
-
-    private fun UserPoint.getLatLng() = LatLng(lat, lon)
 }
