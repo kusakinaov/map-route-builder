@@ -9,7 +9,9 @@ import android.view.ViewGroup
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_user_points.*
 import ku.olga.route_builder.R
+import ku.olga.route_builder.REQ_CODE_SEARCH_POINT
 import ku.olga.route_builder.presentation.base.BaseFragment
+import ku.olga.route_builder.presentation.search.list.SearchAddressesFragment
 
 class UserPointsFragment : BaseFragment() {
     private val tabSelectedListener = object : TabLayout.OnTabSelectedListener {
@@ -46,6 +48,9 @@ class UserPointsFragment : BaseFragment() {
         }
         viewPager.apply {
             adapter = userPointsAdapter
+        }
+        buttonAdd.setOnClickListener {
+            replaceFragment(SearchAddressesFragment.newInstance(this, REQ_CODE_SEARCH_POINT))
         }
     }
 

@@ -10,12 +10,6 @@ class UserPointsListFragment : BaseFragment() {
     private val userPointsPresenter = UserPointsListPresenter(App.pointsRepository)
     private var userPointsView: UserPointsListView? = null
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        menu.clear()
-        inflater.inflate(R.menu.points, menu)
-    }
-
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -33,14 +27,6 @@ class UserPointsListFragment : BaseFragment() {
     override fun onDestroyView() {
         userPointsView?.onDetach()
         super.onDestroyView()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.actionMap -> {
-            userPointsView?.onClickOpenMap()
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
     }
 
     override fun setTitle() {}

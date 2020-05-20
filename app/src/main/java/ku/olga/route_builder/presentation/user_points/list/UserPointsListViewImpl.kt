@@ -5,12 +5,9 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_user_points_list.view.*
 import ku.olga.route_builder.REQ_CODE_EDIT_POINT
-import ku.olga.route_builder.REQ_CODE_SEARCH_POINT
 import ku.olga.route_builder.domain.model.UserPoint
 import ku.olga.route_builder.presentation.base.BaseFragment
-import ku.olga.route_builder.presentation.user_points.map.UserPointsMapFragment
 import ku.olga.route_builder.presentation.point.EditPointFragment
-import ku.olga.route_builder.presentation.search.list.SearchAddressesFragment
 
 class UserPointsListViewImpl(
         private val fragment: BaseFragment,
@@ -29,20 +26,11 @@ class UserPointsListViewImpl(
                 adapter = pointsAdapter
                 addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             }
-            buttonAdd.setOnClickListener {
-                fragment.replaceFragment(
-                        SearchAddressesFragment.newInstance(fragment, REQ_CODE_SEARCH_POINT)
-                )
-            }
         }
     }
 
     override fun setUserPoints(userPoints: List<UserPoint>) {
         pointsAdapter.setItems(userPoints)
-    }
-
-    override fun onClickOpenMap() {
-        fragment.replaceFragment(UserPointsMapFragment())
     }
 
     override fun showEmpty() {
