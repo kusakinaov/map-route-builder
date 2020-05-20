@@ -6,26 +6,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.fragment_user_points.*
 import ku.olga.route_builder.R
-import ku.olga.route_builder.REQ_CODE_SEARCH_POINT
 import ku.olga.route_builder.presentation.base.BaseFragment
-import ku.olga.route_builder.presentation.search.list.SearchAddressesFragment
 
 class UserPointsFragment : BaseFragment() {
-    private val tabSelectedListener = object : TabLayout.OnTabSelectedListener {
-        override fun onTabReselected(tab: TabLayout.Tab?) {}
-
-        override fun onTabUnselected(tab: TabLayout.Tab?) {}
-
-        override fun onTabSelected(tab: TabLayout.Tab?) {
-//            tab?.let {
-//                viewPager.currentItem = it.position
-//            }
-        }
-    }
     private lateinit var userPointsAdapter: UserPointsAdapter
+    private var userPointsView: UserPointsView? = null
 
     override fun getTitle(resources: Resources) = resources.getString(R.string.ttl_user_points)
 
@@ -39,29 +25,13 @@ class UserPointsFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.findViewById<TabLayout>(R.id.tabLayout)?.apply {
-            addTab(newTab().setText(R.string.tab_user_points_list), UserPointsAdapter.LIST)
-            addTab(newTab().setText(R.string.tab_user_points_map), UserPointsAdapter.MAP)
-            addOnTabSelectedListener(tabSelectedListener)
-            visibility = View.VISIBLE
-            setupWithViewPager(viewPager)
-        }
-        viewPager.apply {
-            adapter = userPointsAdapter
-        }
-        buttonAdd.setOnClickListener {
-            replaceFragment(SearchAddressesFragment.newInstance(this, REQ_CODE_SEARCH_POINT))
-        }
+        userPointsView = UserPointsViewImpl(this, userPointsAdapter)
+        userPointsView?.onAttach()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        activity?.findViewById<TabLayout>(R.id.tabLayout)?.apply {
-            visibility = View.GONE
-            removeAllTabs()
-            removeOnTabSelectedListener(tabSelectedListener)
-            setupWithViewPager(null)
-        }
+        userPointsView?.onDetach()
     }
 
     companion object {
