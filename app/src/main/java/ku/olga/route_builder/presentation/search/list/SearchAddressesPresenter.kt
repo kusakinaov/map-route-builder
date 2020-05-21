@@ -56,16 +56,18 @@ class SearchAddressesPresenter(private val addressRepository: AddressRepository)
     }
 
     fun onQueryChanged(query: String?) {
-        this.query = query
-        trySearch()
+        view?.let {
+            this.query = query
+            trySearch()
+        }
     }
 
     private fun startLocationUpdates() {
         requestingLocationUpdates = true
         locationClient?.requestLocationUpdates(
-            buildLocationRequest(),
-            locationCallback,
-            Looper.getMainLooper()
+                buildLocationRequest(),
+                locationCallback,
+                Looper.getMainLooper()
         )
     }
 
