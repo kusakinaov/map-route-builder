@@ -7,10 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import ku.olga.route_builder.R
+import ku.olga.route_builder.presentation.App
 import ku.olga.route_builder.presentation.base.BaseFragment
 import ku.olga.route_builder.presentation.user_points.map.UserPointsMapFragment
 
 class UserPointsFragment : BaseFragment(), UserPointsMapFragment.BottomSheetCallback {
+    private val presenter = UserPointsPresenter(App.pointsRepository)
     private lateinit var userPointsAdapter: UserPointsAdapter
     private var userPointsView: UserPointsView? = null
 
@@ -26,7 +28,7 @@ class UserPointsFragment : BaseFragment(), UserPointsMapFragment.BottomSheetCall
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        userPointsView = UserPointsViewImpl(this, userPointsAdapter)
+        userPointsView = UserPointsViewImpl(this, presenter, userPointsAdapter)
         userPointsView?.onAttach()
     }
 

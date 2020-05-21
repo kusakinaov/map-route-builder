@@ -20,8 +20,8 @@ class PointsDbCacheRepository(private val appDatabase: AppDatabase) : PointsCach
         appDatabase.userPointDao().delete(userPoint.toRoomUserPoint())
 
     private fun UserPoint.toRoomUserPoint() =
-        RoomUserPoint(id, title, postalAddress, lat, lon, description)
+        RoomUserPoint(id, title, postalAddress, lat, lon, description, type)
 
     private fun RoomUserPoint.toUserPoint() =
-        UserPoint(id, title, postalAddress, lat, lon, description)
+        UserPoint(id, title, postalAddress, lat, lon, description, type)
 }

@@ -1,9 +1,5 @@
 package ku.olga.route_builder.presentation.user_points.map
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import ku.olga.route_builder.domain.model.UserPoint
 import ku.olga.route_builder.domain.repository.PointsCacheRepository
 import ku.olga.route_builder.presentation.base.BasePresenter
@@ -14,13 +10,13 @@ class UserPointsMapPresenter(private val pointsRepository: PointsCacheRepository
     override fun attachView(view: UserPointsMapView) {
         super.attachView(view)
         bindUserPoints()
-        getUserPoints()
     }
 
-    private fun getUserPoints() = CoroutineScope(Dispatchers.IO).launch {
-        userPoints.clear()
-        userPoints.addAll(pointsRepository.getUserPoints())
-        withContext(Dispatchers.Main) { bindUserPoints() }
+    fun setUserPoints(userPoints: List<UserPoint>) {
+        this.userPoints.clear()
+        this.userPoints.addAll(userPoints)
+
+        view?.setUserPoints(userPoints)
     }
 
     private fun bindUserPoints() {

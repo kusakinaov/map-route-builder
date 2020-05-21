@@ -35,6 +35,11 @@ class UserPointsListViewImpl(
 
     override fun setUserPoints(userPoints: List<UserPoint>) {
         pointsAdapter.setItems(userPoints)
+        if (pointsAdapter.itemCount > 0) {
+            showUserPoints()
+        } else {
+            showEmpty()
+        }
     }
 
     override fun showEmpty() {

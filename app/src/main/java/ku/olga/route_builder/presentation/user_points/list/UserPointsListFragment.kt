@@ -3,11 +3,12 @@ package ku.olga.route_builder.presentation.user_points.list
 import android.os.Bundle
 import android.view.*
 import ku.olga.route_builder.R
-import ku.olga.route_builder.presentation.App
+import ku.olga.route_builder.domain.model.UserPoint
 import ku.olga.route_builder.presentation.base.BaseFragment
+import ku.olga.route_builder.presentation.user_points.OnUserPointsChangeListener
 
-class UserPointsListFragment : BaseFragment() {
-    private val userPointsPresenter = UserPointsListPresenter(App.pointsRepository)
+class UserPointsListFragment : BaseFragment(), OnUserPointsChangeListener {
+    private val userPointsPresenter = UserPointsListPresenter()
     private var userPointsView: UserPointsListView? = null
 
     override fun onCreateView(
@@ -33,5 +34,9 @@ class UserPointsListFragment : BaseFragment() {
 
     companion object {
         fun newInstance() = UserPointsListFragment()
+    }
+
+    override fun onUserPointsChanged(userPoints: List<UserPoint>) {
+        userPointsPresenter.setUserPoints(userPoints)
     }
 }

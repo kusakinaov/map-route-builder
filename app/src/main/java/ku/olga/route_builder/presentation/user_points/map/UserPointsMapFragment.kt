@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import ku.olga.route_builder.R
+import ku.olga.route_builder.domain.model.UserPoint
 import ku.olga.route_builder.presentation.App
 import ku.olga.route_builder.presentation.base.BaseFragment
+import ku.olga.route_builder.presentation.user_points.OnUserPointsChangeListener
 
-class UserPointsMapFragment : BaseFragment() {
+class UserPointsMapFragment : BaseFragment(), OnUserPointsChangeListener {
     private val presenter = UserPointsMapPresenter(App.pointsRepository)
     private lateinit var mapView: UserPointsMapView
 
@@ -47,5 +49,9 @@ class UserPointsMapFragment : BaseFragment() {
 
     companion object {
         fun newInstance() = UserPointsMapFragment()
+    }
+
+    override fun onUserPointsChanged(userPoints: List<UserPoint>) {
+        presenter.setUserPoints(userPoints)
     }
 }

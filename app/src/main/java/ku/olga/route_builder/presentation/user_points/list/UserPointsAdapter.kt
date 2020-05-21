@@ -33,7 +33,10 @@ class UserPointsAdapter : BaseAdapter<UserPoint, UserPointsAdapter.PointHolder>(
         private fun bindView() {
             point?.let {
                 itemView.textViewTitle.text = it.title
-                itemView.textViewDescription.text = it.description
+                itemView.textViewDescription.apply {
+                    text = it.description
+                    visibility = if (text.isNullOrEmpty()) View.GONE else View.VISIBLE
+                }
             }
         }
     }
