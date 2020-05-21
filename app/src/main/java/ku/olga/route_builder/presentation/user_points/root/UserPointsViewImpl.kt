@@ -1,6 +1,7 @@
 package ku.olga.route_builder.presentation.user_points.root
 
 import android.view.View
+import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_user_points.*
 import kotlinx.android.synthetic.main.fragment_user_points.view.*
@@ -23,16 +24,15 @@ class UserPointsViewImpl(val fragment: UserPointsFragment, private val userPoint
         }
     }
 
-    override fun isPressBackConsumed(): Boolean {
+    override fun isPressBackConsumed() = when (val childFragment = getChildFragment()) {
+        is BaseFragment -> childFragment.isPressBackConsumed()
+        else -> false
+    }
+
+    private fun getChildFragment(): Fragment? {
         val fragments = fragment.childFragmentManager.fragments
         val currentPosition = fragment.viewPager?.currentItem ?: 0
-        if (fragments.size > currentPosition) {
-            val fragment = fragments[currentPosition]
-            if (fragment is BaseFragment) {
-                return fragment.isPressBackConsumed()
-            }
-        }
-        return false
+        return if (fragments.size > currentPosition) fragments[currentPosition] else null
     }
 
     override fun onAttach() {

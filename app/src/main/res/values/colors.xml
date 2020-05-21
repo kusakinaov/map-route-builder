@@ -3,17 +3,9 @@
   <color name="primaryColor">#fafafa</color>
   <color name="primaryLightColor">#ffffff</color>
   <color name="primaryDarkColor">#c7c7c7</color>
-  <color name="secondaryColor">#43a047</color>
-  <color name="secondaryLightColor">#76d275</color>
-  <color name="secondaryDarkColor">#00701a</color>
-  <color name="primaryTextColor">#000000</color>
-  <color name="secondaryTextColor">#000000</color>
-
-  <color name="map_icon">#F44336</color>
-  <color name="map_icon_text">#fff</color>
-
-  <color name="white">#fff</color>
-  <color name="black">#000</color>
-  <color name="textColorPrimary">#000</color>
-  <color name="black12">#1E000000</color>
+  <color name="secondaryColor">#9e9d24</color>
+  <color name="secondaryLightColor">#d2ce56</color>
+  <color name="secondaryDarkColor">#6c6f00</color>
+  <color name="primaryTextColor">#424242</color>
+  <color name="secondaryTextColor">#fafafa</color>
 </resources>
