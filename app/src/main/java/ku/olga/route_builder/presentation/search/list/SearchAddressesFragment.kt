@@ -15,13 +15,13 @@ import ku.olga.route_builder.presentation.App
 import ku.olga.route_builder.presentation.base.BaseFragment
 import ku.olga.route_builder.presentation.search.categories.CategoriesFragment
 import ku.olga.route_builder.presentation.hideKeyboard
-import ku.olga.route_builder.presentation.search.item.SearchAddressFragment
+import ku.olga.route_builder.presentation.point.EditPointFragment
 
 class SearchAddressesFragment : BaseFragment() {
     private val searchPresenter = SearchAddressesPresenter(App.addressRepository)
     private var searchAddressesView: SearchAddressesView? = null
     private val searchAdapter =
-        SearchAddressAdapter().apply { onClickAddressListener = { openSearchAddress(it) } }
+            SearchAddressAdapter().apply { onClickAddressListener = { openSearchAddress(it) } }
 
     override fun getTitle(resources: Resources) = resources.getString(R.string.ttl_search)
 
@@ -34,36 +34,34 @@ class SearchAddressesFragment : BaseFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View =
-        inflater.inflate(R.layout.fragment_search, container, false)
+            inflater.inflate(R.layout.fragment_search, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         searchAddressesView = SearchAddressesViewImpl(
-            this,
-            searchPresenter,
-            searchAdapter
+                this,
+                searchPresenter,
+                searchAdapter
         )
         searchAddressesView?.onAttach()
     }
 
     private fun openSearchAddress(searchAddress: SearchAddress) {
         hideKeyboard()
-        replaceFragment(
-            SearchAddressFragment.newInstance(
-                this@SearchAddressesFragment,
-                REQ_CODE_VIEW_SEARCH_ADDRESS, searchAddress
-            ), true
-        )
+        replaceFragment(EditPointFragment
+                .newInstance(this@SearchAddressesFragment, REQ_CODE_VIEW_SEARCH_ADDRESS,
+                        searchAddress.postalAddress, searchAddress.lat, searchAddress.lon),
+                true)
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         searchPresenter.checkLocationPermission()
@@ -111,6 +109,6 @@ class SearchAddressesFragment : BaseFragment() {
 
     companion object {
         fun newInstance(target: Fragment, requestCode: Int) =
-            SearchAddressesFragment().apply { setTargetFragment(target, requestCode) }
+                SearchAddressesFragment().apply { setTargetFragment(target, requestCode) }
     }
 }

@@ -5,7 +5,9 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import kotlinx.android.synthetic.main.fragment_category.*
 import kotlinx.android.synthetic.main.fragment_category.view.*
+import kotlinx.android.synthetic.main.fragment_category.view.mapView
 import ku.olga.route_builder.R
 import ku.olga.route_builder.domain.model.Coordinates
 import ku.olga.route_builder.domain.model.POI
