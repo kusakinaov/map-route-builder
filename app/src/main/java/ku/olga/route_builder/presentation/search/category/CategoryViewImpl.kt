@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.fragment_category.view.*
 import ku.olga.route_builder.R
+import ku.olga.route_builder.domain.model.Coordinates
 import ku.olga.route_builder.domain.model.POI
 import ku.olga.route_builder.presentation.convertSpToPx
 import ku.olga.route_builder.presentation.getBitmap
@@ -67,7 +68,7 @@ class CategoryViewImpl(private val fragment: CategoryFragment,
     private fun buildMapListener() = DelayedMapListener(object : MapListener {
         override fun onScroll(event: ScrollEvent?): Boolean {
             event?.source?.let {
-                presenter.onBoundingBoxChanged(it.mapCenter?.latitude, it.mapCenter?.longitude,
+                presenter.onBoundingBoxChanged(it.mapCenter.latitude, it.mapCenter.longitude,
                         it.boundingBox.toAppBoundingBox())
             }
             return true
@@ -75,7 +76,7 @@ class CategoryViewImpl(private val fragment: CategoryFragment,
 
         override fun onZoom(event: ZoomEvent?): Boolean {
             event?.source?.let {
-                presenter.onBoundingBoxChanged(it.mapCenter?.latitude, it.mapCenter?.longitude,
+                presenter.onBoundingBoxChanged(it.mapCenter.latitude, it.mapCenter.longitude,
                         it.boundingBox.toAppBoundingBox())
             }
             return true
@@ -94,7 +95,7 @@ class CategoryViewImpl(private val fragment: CategoryFragment,
         fragment.view?.mapView?.onPause()
     }
 
-    override fun showPOIs(pois: List<POI>) {
+    override fun setPOIs(pois: List<POI>) {
         markerOverlay.items.clear()
         fragment.context?.let {
             val poiIcon = ContextCompat.getDrawable(it, R.drawable.ic_place)
@@ -141,9 +142,10 @@ class CategoryViewImpl(private val fragment: CategoryFragment,
         return false
     }
 
-    override fun moveTo(geoPoint: GeoPoint, animate: Boolean) {
+    override fun moveTo(latitude: Double, longitude: Double, animate: Boolean) {
         fragment.view?.mapView?.controller?.apply {
-            animateTo(geoPoint, DEFAULT_ZOOM_LEVEL, if (animate) DEFAULT_MOVE_SPEED else NONE_MOVE_SPEED)
+            animateTo(GeoPoint(latitude, longitude),
+                    DEFAULT_ZOOM_LEVEL, if (animate) DEFAULT_MOVE_SPEED else NONE_MOVE_SPEED)
         }
     }
 

@@ -1,22 +1,27 @@
 package ku.olga.route_builder.presentation.user_points.map
 
+import ku.olga.route_builder.domain.model.Coordinates
 import ku.olga.route_builder.domain.model.UserPoint
-import ku.olga.route_builder.domain.repository.PointsCacheRepository
+import ku.olga.route_builder.presentation.App
 import ku.olga.route_builder.presentation.base.BasePresenter
 
-class UserPointsMapPresenter(private val pointsRepository: PointsCacheRepository) : BasePresenter<UserPointsMapView>() {
+class UserPointsMapPresenter : BasePresenter<UserPointsMapView>() {
     private val userPoints = mutableListOf<UserPoint>()
 
     override fun attachView(view: UserPointsMapView) {
         super.attachView(view)
-        bindUserPoints()
+        if (userPoints.isEmpty()) {
+            App.application.getLastCoordinates().let {
+                view.moveTo(it.latitude, it.longitude, false)
+            }
+        } else bindUserPoints()
     }
 
     fun setUserPoints(userPoints: List<UserPoint>) {
         this.userPoints.clear()
         this.userPoints.addAll(userPoints)
 
-        view?.setUserPoints(userPoints)
+        bindUserPoints()
     }
 
     private fun bindUserPoints() {
@@ -42,5 +47,9 @@ class UserPointsMapPresenter(private val pointsRepository: PointsCacheRepository
             showUserPoint(userPoint)
         }
         return true
+    }
+
+    fun onCenterChanged(latitude: Double, longitude: Double) {
+        App.application.setLastCoordinates(Coordinates(latitude, longitude))
     }
 }

@@ -16,6 +16,9 @@ import ku.olga.route_builder.presentation.convertSpToPx
 import ku.olga.route_builder.presentation.getBitmap
 import ku.olga.route_builder.presentation.point.EditPointFragment
 import org.osmdroid.bonuspack.clustering.RadiusMarkerClusterer
+import org.osmdroid.events.MapListener
+import org.osmdroid.events.ScrollEvent
+import org.osmdroid.events.ZoomEvent
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.BoundingBox
 import org.osmdroid.util.GeoPoint
@@ -44,6 +47,7 @@ class UserPointsMapViewImpl(private val fragment: Fragment,
                 setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
                 zoomController.setVisibility(CustomZoomButtonsController.Visibility.ALWAYS)
                 setMultiTouchControls(true)
+                addMapListener(buildMapListener())
                 overlays.add(markerOverlay)
             }
             it.buttonEdit.setOnClickListener {
@@ -52,6 +56,17 @@ class UserPointsMapViewImpl(private val fragment: Fragment,
                 }
             }
         }
+    }
+
+    private fun buildMapListener() = object : MapListener {
+        override fun onScroll(event: ScrollEvent?): Boolean {
+            event?.source?.let {
+                presenter.onCenterChanged(it.mapCenter.latitude, it.mapCenter.longitude)
+            }
+            return true
+        }
+
+        override fun onZoom(event: ZoomEvent?) = true
     }
 
     override fun onAttach() {
@@ -139,6 +154,11 @@ class UserPointsMapViewImpl(private val fragment: Fragment,
         markerOverlay.invalidate()
     }
 
+    override fun moveTo(latitude: Double, longitude: Double, animated: Boolean) {
+        fragment.mapView?.controller?.animateTo(GeoPoint(latitude, longitude),
+                DEFAULT_ZOOM_LEVEL, if (animated) DEFAULT_MOVE_SPEED else NONE_MOVE_SPEED)
+    }
+
     private fun buildMarker(point: UserPoint, poiIcon: Drawable?): Marker =
             Marker(fragment.view?.mapView).apply {
                 title = point.title
@@ -157,8 +177,7 @@ class UserPointsMapViewImpl(private val fragment: Fragment,
     }
 
     override fun moveTo(userPoint: UserPoint, animated: Boolean) {
-        fragment.mapView?.controller?.animateTo(GeoPoint(userPoint.lat, userPoint.lon),
-                DEFAULT_ZOOM_LEVEL, if (animated) DEFAULT_MOVE_SPEED else NONE_MOVE_SPEED)
+        moveTo(userPoint.lat, userPoint.lon, animated)
     }
 
     private fun buildBoundingBox(userPoints: List<UserPoint>) =
