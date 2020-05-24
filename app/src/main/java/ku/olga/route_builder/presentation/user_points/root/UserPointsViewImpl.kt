@@ -14,7 +14,11 @@ import ku.olga.route_builder.presentation.base.BaseFragment
 import ku.olga.route_builder.presentation.search.list.SearchAddressesFragment
 import ku.olga.route_builder.presentation.user_points.OnUserPointsChangeListener
 
-class UserPointsViewImpl(val fragment: UserPointsFragment, private val presenter: UserPointsPresenter, private val userPointsAdapter: UserPointsAdapter) : UserPointsView {
+class UserPointsViewImpl(
+    private val fragment: UserPointsFragment,
+    private val presenter: UserPointsPresenter,
+    private val userPointsAdapter: UserPointsAdapter
+) : UserPointsView {
     private val pageChangeListener = object : ViewPager.OnPageChangeListener {
         override fun onPageScrollStateChanged(state: Int) {
         }
@@ -33,9 +37,12 @@ class UserPointsViewImpl(val fragment: UserPointsFragment, private val presenter
                 adapter = userPointsAdapter
                 addOnPageChangeListener(pageChangeListener)
             }
-            buttonAdd.setOnClickListener {
-                fragment.replaceFragment(SearchAddressesFragment
+            buttonAdd.apply{
+                setOnClickListener {
+                    fragment.replaceFragment(SearchAddressesFragment
                         .newInstance(fragment, REQ_CODE_SEARCH_POINT))
+                }
+                show()
             }
         }
     }

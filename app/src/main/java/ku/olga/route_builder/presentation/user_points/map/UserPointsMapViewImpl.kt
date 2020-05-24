@@ -172,7 +172,7 @@ class UserPointsMapViewImpl(private val fragment: Fragment,
         val boundingBox = buildBoundingBox(userPoints)
         fragment.mapView?.apply {
             controller?.setCenter(GeoPoint(boundingBox.centerLatitude, boundingBox.centerLongitude))
-            zoomToBoundingBox(boundingBox, false)
+            //todo
         }
     }
 

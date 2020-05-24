@@ -28,13 +28,13 @@ class UserPointsMapFragment : BaseFragment(), OnUserPointsChangeListener {
     }
 
     override fun onPause() {
-        mapView.onPause()
         super.onPause()
+        mapView.onPause()
     }
 
     override fun onDestroyView() {
-        mapView.onDetach()
         super.onDestroyView()
+        mapView.onDetach()
     }
 
     override fun isPressBackConsumed() = mapView.hideUserPoint()
