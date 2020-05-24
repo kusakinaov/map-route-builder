@@ -5,14 +5,15 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import kotlinx.android.synthetic.main.fragment_category.*
 import kotlinx.android.synthetic.main.fragment_category.view.*
-import kotlinx.android.synthetic.main.fragment_category.view.mapView
 import ku.olga.route_builder.R
-import ku.olga.route_builder.domain.model.Coordinates
+import ku.olga.route_builder.REQ_CODE_EDIT_POINT
 import ku.olga.route_builder.domain.model.POI
+import ku.olga.route_builder.domain.model.UserPoint
+import ku.olga.route_builder.domain.model.UserPointType
 import ku.olga.route_builder.presentation.convertSpToPx
 import ku.olga.route_builder.presentation.getBitmap
+import ku.olga.route_builder.presentation.point.EditPointFragment
 import org.osmdroid.bonuspack.clustering.RadiusMarkerClusterer
 import org.osmdroid.events.DelayedMapListener
 import org.osmdroid.events.MapListener
@@ -25,8 +26,10 @@ import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.overlay.Marker
 import ku.olga.route_builder.domain.model.BoundingBox as AppBoundingBox
 
-class CategoryViewImpl(private val fragment: CategoryFragment,
-                       private val presenter: CategoryPresenter) : CategoryView {
+class CategoryViewImpl(
+        private val fragment: CategoryFragment,
+        private val presenter: CategoryPresenter
+) : CategoryView {
     private var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>? = null
 
     private lateinit var markerOverlay: RadiusMarkerClusterer
@@ -51,6 +54,19 @@ class CategoryViewImpl(private val fragment: CategoryFragment,
                 addMapListener(buildMapListener())
                 overlays.add(markerOverlay)
             }
+            it.buttonAdd.setOnClickListener {
+                it.tag.let {
+                    if (it is POI) {
+                        fragment.replaceFragment(
+                                EditPointFragment.newInstance(
+                                        fragment, REQ_CODE_EDIT_POINT,
+                                        UserPoint(null, it.title, it.description,
+                                                it.latitude, it.longitude, null, UserPointType.POI)
+                                ), true
+                        )
+                    }
+                }
+            }
         }
     }
 
@@ -60,9 +76,15 @@ class CategoryViewImpl(private val fragment: CategoryFragment,
 
         override fun onStateChanged(bottomSheet: View, newState: Int) {
             when (newState) {
-                BottomSheetBehavior.STATE_EXPANDED -> fragment.view?.buttonAdd?.visibility = View.VISIBLE
+                BottomSheetBehavior.STATE_EXPANDED -> fragment.view?.buttonAdd?.visibility =
+                        View.VISIBLE
                 BottomSheetBehavior.STATE_HIDDEN,
-                BottomSheetBehavior.STATE_COLLAPSED -> fragment.view?.buttonAdd?.visibility = View.GONE
+                BottomSheetBehavior.STATE_COLLAPSED -> {
+                    fragment.view?.buttonAdd?.apply {
+                        visibility = View.GONE
+                        tag = null
+                    }
+                }
             }
         }
     }
@@ -128,6 +150,7 @@ class CategoryViewImpl(private val fragment: CategoryFragment,
                 text = poi.description
                 visibility = if (text.isNullOrEmpty()) View.GONE else View.VISIBLE
             }
+            buttonAdd.tag = poi
         }
         bottomSheetBehavior?.apply {
             peekHeight = fragment.view?.layoutContent?.measuredHeight ?: 0
@@ -146,8 +169,10 @@ class CategoryViewImpl(private val fragment: CategoryFragment,
 
     override fun moveTo(latitude: Double, longitude: Double, animate: Boolean) {
         fragment.view?.mapView?.controller?.apply {
-            animateTo(GeoPoint(latitude, longitude),
-                    DEFAULT_ZOOM_LEVEL, if (animate) DEFAULT_MOVE_SPEED else NONE_MOVE_SPEED)
+            animateTo(
+                    GeoPoint(latitude, longitude),
+                    DEFAULT_ZOOM_LEVEL, if (animate) DEFAULT_MOVE_SPEED else NONE_MOVE_SPEED
+            )
         }
     }
 
