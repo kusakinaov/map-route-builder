@@ -1,5 +1,7 @@
 package ku.olga.route_builder.presentation.search.category
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -10,6 +12,7 @@ import kotlinx.android.synthetic.main.fragment_category.view.mapView
 import kotlinx.android.synthetic.main.fragment_user_points_map.*
 import ku.olga.route_builder.R
 import ku.olga.route_builder.REQ_CODE_EDIT_POINT
+import ku.olga.route_builder.REQ_CODE_LOCATION_PERMISSION
 import ku.olga.route_builder.domain.model.POI
 import ku.olga.route_builder.domain.model.UserPoint
 import ku.olga.route_builder.presentation.convertDpToPx
@@ -179,7 +182,7 @@ class CategoryViewImpl(
         val boundingBox = buildBoundingBox(pois)
         fragment.mapView?.apply {
             post {
-                zoomToBoundingBox(boundingBox, animate, convertDpToPx(resources, 8f).toInt())
+                zoomToBoundingBox(boundingBox, animate, convertDpToPx(resources, BORDER_SIZE).toInt())
             }
         }
     }
@@ -187,6 +190,23 @@ class CategoryViewImpl(
     override fun openEditPOI(userPoint: UserPoint) {
         fragment.replaceFragment(EditPointFragment
                 .newInstance(fragment, REQ_CODE_EDIT_POINT, userPoint), true)
+    }
+
+    override fun hasLocationPermission(): Boolean {
+        fragment.context?.let {
+            return ContextCompat.checkSelfPermission(
+                    it,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+        return false
+    }
+
+    override fun requestLocationPermission() {
+        fragment.requestPermissions(
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                REQ_CODE_LOCATION_PERMISSION
+        )
     }
 
     private fun buildBoundingBox(pois: List<POI>) =
@@ -208,5 +228,6 @@ class CategoryViewImpl(
         private const val NONE_MOVE_SPEED = 0L
         private const val DEFAULT_MOVE_SPEED = 500L
         private const val DEFAULT_ZOOM_LEVEL = 15.0
+        private const val BORDER_SIZE = 40f
     }
 }
