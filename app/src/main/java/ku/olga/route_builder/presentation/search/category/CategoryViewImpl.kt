@@ -12,7 +12,6 @@ import ku.olga.route_builder.R
 import ku.olga.route_builder.REQ_CODE_EDIT_POINT
 import ku.olga.route_builder.domain.model.POI
 import ku.olga.route_builder.domain.model.UserPoint
-import ku.olga.route_builder.domain.model.UserPointType
 import ku.olga.route_builder.presentation.convertDpToPx
 import ku.olga.route_builder.presentation.convertSpToPx
 import ku.olga.route_builder.presentation.getBitmap
@@ -41,6 +40,7 @@ class CategoryViewImpl(
         fragment.view?.let {
             bottomSheetBehavior = BottomSheetBehavior.from(it.layoutContent).apply {
                 addBottomSheetCallback(buildBottomSheetCallback())
+                peekHeight = 0
                 state = BottomSheetBehavior.STATE_HIDDEN
             }
             markerOverlay = RadiusMarkerClusterer(it.context).apply {
@@ -63,15 +63,7 @@ class CategoryViewImpl(
             }
             it.buttonAdd.setOnClickListener {
                 it.tag.let {
-                    if (it is POI) {
-                        fragment.replaceFragment(
-                                EditPointFragment.newInstance(
-                                        fragment, REQ_CODE_EDIT_POINT,
-                                        UserPoint(null, it.title, it.description,
-                                                it.latitude, it.longitude, null, UserPointType.POI)
-                                ), true
-                        )
-                    }
+                    if (it is POI) presenter.onClickAddPOI(it)
                 }
             }
         }
@@ -188,6 +180,11 @@ class CategoryViewImpl(
         fragment.mapView?.apply {
             zoomToBoundingBox(boundingBox, animate, convertDpToPx(resources, 8f).toInt())
         }
+    }
+
+    override fun openEditPOI(userPoint: UserPoint) {
+        fragment.replaceFragment(EditPointFragment
+                .newInstance(fragment, REQ_CODE_EDIT_POINT, userPoint), true)
     }
 
     private fun buildBoundingBox(pois: List<POI>) =

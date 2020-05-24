@@ -1,10 +1,7 @@
 package ku.olga.route_builder.presentation.search.category
 
 import kotlinx.coroutines.*
-import ku.olga.route_builder.domain.model.BoundingBox
-import ku.olga.route_builder.domain.model.Category
-import ku.olga.route_builder.domain.model.Coordinates
-import ku.olga.route_builder.domain.model.POI
+import ku.olga.route_builder.domain.model.*
 import ku.olga.route_builder.domain.repository.POIRepository
 import ku.olga.route_builder.presentation.App
 import ku.olga.route_builder.presentation.base.BasePresenter
@@ -47,14 +44,25 @@ class CategoryPresenter(private val poiRepository: POIRepository) : BasePresente
     private fun bindPOIs(move: Boolean, animated: Boolean = true) {
         view?.apply {
             setPOIs(pois)
-            if (move) {
-                when {
-                    pois.size == 1 -> moveTo(pois[0].latitude, pois[0].longitude, true)
-                    pois.isNotEmpty() -> moveTo(pois, animated)
-                }
+            if (pois.isNotEmpty()) {
+                moveTo(pois[0].latitude, pois[0].longitude, true)
             }
+//            if (move) {
+//                when {
+//                    pois.size == 1 -> moveTo(pois[0].latitude, pois[0].longitude, true)
+//                    pois.isNotEmpty() -> moveTo(pois, animated)
+//                }
+//            }
         }
     }
 
     fun getTitle(): String = category?.title ?: ""
+
+    fun onClickAddPOI(poi: POI) {
+        view?.apply {
+            hidePOIDetails()
+            openEditPOI(UserPoint(null, poi.title, poi.description,
+                    poi.latitude, poi.longitude, null, UserPointType.POI))
+        }
+    }
 }
