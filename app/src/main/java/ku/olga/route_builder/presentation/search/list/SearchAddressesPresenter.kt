@@ -7,13 +7,17 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import kotlinx.coroutines.*
+import ku.olga.route_builder.domain.model.Category
 import ku.olga.route_builder.domain.model.SearchAddress
 import ku.olga.route_builder.domain.repository.AddressRepository
+import ku.olga.route_builder.domain.repository.CategoryRepository
 import ku.olga.route_builder.presentation.base.BasePresenter
 import java.io.IOException
 
-class SearchAddressesPresenter(private val addressRepository: AddressRepository) :
-    BasePresenter<SearchAddressesView>() {
+class SearchAddressesPresenter(
+    private val addressRepository: AddressRepository,
+    private val categoryRepository: CategoryRepository
+) : BasePresenter<SearchAddressesView>() {
     var locationClient: FusedLocationProviderClient? = null
 
     private var query: String? = null
@@ -30,6 +34,7 @@ class SearchAddressesPresenter(private val addressRepository: AddressRepository)
     }
     private var job: Job? = null
     private val addresses = mutableListOf<SearchAddress>()
+    private val categories = mutableListOf<Category>()
 
     override fun attachView(view: SearchAddressesView) {
         super.attachView(view)
@@ -41,7 +46,9 @@ class SearchAddressesPresenter(private val addressRepository: AddressRepository)
             }
         }
         bindQuery()
-        bindAddresses()
+        bindData()
+
+        if (!isValidQuery() && categories.isEmpty()) loadCategories()
     }
 
     override fun detachView() {
@@ -65,9 +72,9 @@ class SearchAddressesPresenter(private val addressRepository: AddressRepository)
     private fun startLocationUpdates() {
         requestingLocationUpdates = true
         locationClient?.requestLocationUpdates(
-                buildLocationRequest(),
-                locationCallback,
-                Looper.getMainLooper()
+            buildLocationRequest(),
+            locationCallback,
+            Looper.getMainLooper()
         )
     }
 
@@ -86,25 +93,42 @@ class SearchAddressesPresenter(private val addressRepository: AddressRepository)
         }
     }
 
+    private fun loadCategories() = CoroutineScope(Dispatchers.IO).launch {
+        try {
+            withContext(Dispatchers.Main) { showProgress() }
+            val categories = categoryRepository.getCategories(query)
+            withContext(Dispatchers.Main) { setCategories(categories) }
+        } catch (e: IOException) {
+            withContext(Dispatchers.Main) { view?.showDefaultError() }
+        }
+    }
+
+    private fun setCategories(categories: List<Category>) {
+        this.categories.clear()
+        this.categories.addAll(categories)
+        bindData()
+    }
+
     private fun setAddresses(addresses: List<SearchAddress>?) {
         this.addresses.clear()
         if (addresses?.isNotEmpty() == true) {
             this.addresses.addAll(addresses)
         }
-        bindAddresses()
+        bindData()
     }
 
-    private fun bindAddresses() {
+    private fun bindData() {
         view?.apply {
             bindAddresses(addresses)
-            if (addresses.isEmpty()) {
-                if (isValidQuery()) {
+            bindCategories(categories)
+            if (isValidQuery()) {
+                if (addresses.isEmpty()) {
                     showEmpty()
                 } else {
-                    showNoSearch()
+                    showAddresses()
                 }
             } else {
-                showAddresses()
+                showCategories()
             }
         }
     }
@@ -131,7 +155,7 @@ class SearchAddressesPresenter(private val addressRepository: AddressRepository)
             job = runSearch()
         } else {
             addresses.clear()
-            bindAddresses()
+            bindData()
         }
     }
 }

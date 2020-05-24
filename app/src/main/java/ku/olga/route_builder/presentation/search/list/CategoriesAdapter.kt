@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.search.categories
+package ku.olga.route_builder.presentation.search.list
 
 import android.text.SpannableStringBuilder
 import android.text.Spanned

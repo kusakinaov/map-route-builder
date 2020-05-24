@@ -12,7 +12,7 @@ import ku.olga.route_builder.R
 import ku.olga.route_builder.domain.model.SearchAddress
 import ku.olga.route_builder.presentation.base.BaseAdapter
 
-class SearchAddressAdapter : BaseAdapter<SearchAddress, SearchAddressAdapter.AddressHolder>() {
+class AddressesAdapter : BaseAdapter<SearchAddress, AddressesAdapter.AddressHolder>() {
     private var query: String? = null
     var onClickAddressListener: ((SearchAddress) -> Unit)? = null
     var highlightColor: Int = 0

@@ -9,19 +9,26 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.gms.location.LocationServices
 import ku.olga.route_builder.R
+import ku.olga.route_builder.REQ_CODE_VIEW_CATEGORY
 import ku.olga.route_builder.REQ_CODE_VIEW_SEARCH_ADDRESS
+import ku.olga.route_builder.domain.model.Category
 import ku.olga.route_builder.domain.model.SearchAddress
 import ku.olga.route_builder.presentation.App
 import ku.olga.route_builder.presentation.base.BaseFragment
-import ku.olga.route_builder.presentation.search.categories.CategoriesFragment
 import ku.olga.route_builder.presentation.hideKeyboard
 import ku.olga.route_builder.presentation.point.EditPointFragment
+import ku.olga.route_builder.presentation.search.category.CategoryFragment
 
 class SearchAddressesFragment : BaseFragment() {
-    private val searchPresenter = SearchAddressesPresenter(App.addressRepository)
+    private val searchPresenter =
+        SearchAddressesPresenter(App.addressRepository, App.categoriesRepository)
     private var searchAddressesView: SearchAddressesView? = null
     private val searchAdapter =
-            SearchAddressAdapter().apply { onClickAddressListener = { openSearchAddress(it) } }
+        AddressesAdapter().apply { onClickAddressListener = { openSearchAddress(it) } }
+    private val categoriesAdapter = CategoriesAdapter()
+        .apply {
+        categoryClickListener = { openCategory(it) }
+    }
 
     override fun getTitle(resources: Resources) = resources.getString(R.string.ttl_search)
 
@@ -34,34 +41,44 @@ class SearchAddressesFragment : BaseFragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View =
-            inflater.inflate(R.layout.fragment_search, container, false)
+        inflater.inflate(R.layout.fragment_search, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         searchAddressesView = SearchAddressesViewImpl(
-                this,
-                searchPresenter,
-                searchAdapter
+            this,
+            searchPresenter,
+            searchAdapter,
+            categoriesAdapter
         )
         searchAddressesView?.onAttach()
     }
 
     private fun openSearchAddress(searchAddress: SearchAddress) {
         hideKeyboard()
-        replaceFragment(EditPointFragment
-                .newInstance(this@SearchAddressesFragment, REQ_CODE_VIEW_SEARCH_ADDRESS,
-                        searchAddress.postalAddress, searchAddress.lat, searchAddress.lon),
-                true)
+        replaceFragment(
+            EditPointFragment
+                .newInstance(
+                    this, REQ_CODE_VIEW_SEARCH_ADDRESS,
+                    searchAddress.postalAddress, searchAddress.lat, searchAddress.lon
+                ),
+            true
+        )
+    }
+
+    private fun openCategory(category: Category) {
+        hideKeyboard()
+        replaceFragment(CategoryFragment.newInstance(this, REQ_CODE_VIEW_CATEGORY, category), true)
     }
 
     override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<out String>,
-            grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         searchPresenter.checkLocationPermission()
@@ -80,35 +97,14 @@ class SearchAddressesFragment : BaseFragment() {
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
-        val searchItem = menu.findItem(R.id.actionSearch)
-        searchItem.expandActionView()
-        searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-            override fun onMenuItemActionExpand(item: MenuItem?) = true
-
-            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-                hideKeyboard()
-                fragmentManager?.popBackStack()
-                return false
-            }
-        })
-
-        val view = searchItem?.actionView
+        val view = menu.findItem(R.id.actionSearch)?.actionView
         if (view is SearchView) {
             searchAddressesView?.searchView = view
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.actionCategories) {
-            hideKeyboard()
-            replaceFragment(CategoriesFragment.newInstance(), true)
-            return true
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
     companion object {
         fun newInstance(target: Fragment, requestCode: Int) =
-                SearchAddressesFragment().apply { setTargetFragment(target, requestCode) }
+            SearchAddressesFragment().apply { setTargetFragment(target, requestCode) }
     }
 }
