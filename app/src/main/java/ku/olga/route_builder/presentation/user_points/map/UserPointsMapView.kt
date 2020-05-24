@@ -5,9 +5,8 @@ import ku.olga.route_builder.presentation.base.BaseView
 
 interface UserPointsMapView : BaseView {
     fun setUserPoints(userPoints: List<UserPoint>)
-    fun moveTo(latitude: Double, longitude: Double, animated: Boolean)
+    fun moveTo(latitude: Double, longitude: Double, zoomLevel: Double, animated: Boolean)
     fun moveTo(userPoints: List<UserPoint>, animated: Boolean)
-    fun moveTo(userPoint: UserPoint, animated: Boolean)
     fun onResume()
     fun onPause()
     fun hideUserPoint(): Boolean

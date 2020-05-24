@@ -8,27 +8,26 @@ import ku.olga.route_builder.presentation.base.BasePresenter
 class UserPointsMapPresenter : BasePresenter<UserPointsMapView>() {
     private val userPoints = mutableListOf<UserPoint>()
     private var center: Coordinates? = null
+    private var zoomLevel: Double = DEFAULT_ZOOM_LEVEL
 
     override fun attachView(view: UserPointsMapView) {
         super.attachView(view)
-        if (userPoints.isEmpty()) {
-            if (center != null) {
-                moveToCenter()
-            } else {
-                moveToMyCoordinates()
-            }
-        } else bindUserPoints()
+        when {
+            center != null -> moveToCenter()
+            userPoints.isEmpty() -> moveToMyCoordinates()
+            userPoints.isNotEmpty() -> bindUserPoints()
+        }
     }
 
     private fun moveToCenter() {
         center?.let {
-            view?.moveTo(it.latitude, it.longitude, false)
+            view?.moveTo(it.latitude, it.longitude, zoomLevel, false)
         }
     }
 
     private fun moveToMyCoordinates() {
         App.application.getLastCoordinates().let {
-            view?.moveTo(it.latitude, it.longitude, false)
+            view?.moveTo(it.latitude, it.longitude, zoomLevel, false)
         }
     }
 
@@ -43,7 +42,7 @@ class UserPointsMapPresenter : BasePresenter<UserPointsMapView>() {
         view?.apply {
             setUserPoints(userPoints)
             when {
-                userPoints.size == 1 -> moveTo(userPoints[0], false)
+                userPoints.size == 1 -> userPoints[0].let { moveTo(it.lat, it.lon, zoomLevel, false) }
                 userPoints.isNotEmpty() -> moveTo(userPoints, false)
             }
         }
@@ -58,13 +57,18 @@ class UserPointsMapPresenter : BasePresenter<UserPointsMapView>() {
 
     fun onClickMarker(userPoint: UserPoint): Boolean {
         view?.apply {
-            moveTo(userPoint, true)
+            moveTo(userPoint.lat, userPoint.lon, zoomLevel, true)
             showUserPoint(userPoint)
         }
         return true
     }
 
-    fun onCenterChanged(latitude: Double, longitude: Double) {
+    fun onCenterChanged(latitude: Double, longitude: Double, zoomLevel: Double) {
         center = Coordinates(latitude, longitude)
+        this.zoomLevel = zoomLevel
+    }
+
+    companion object {
+        private const val DEFAULT_ZOOM_LEVEL = 15.0
     }
 }
