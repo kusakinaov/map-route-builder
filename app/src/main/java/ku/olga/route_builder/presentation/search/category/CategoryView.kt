@@ -9,4 +9,5 @@ interface CategoryView : BaseView {
     fun setPOIs(pois: List<POI>)
     fun hidePOIDetails(): Boolean
     fun moveTo(latitude: Double, longitude: Double, animate: Boolean)
+    fun moveTo(pois: List<POI>, animate: Boolean)
 }

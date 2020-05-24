@@ -22,7 +22,7 @@ class CategoryPresenter(private val poiRepository: POIRepository) : BasePresente
             App.application.getLastCoordinates().let {
                 view.moveTo(it.latitude, it.longitude, false)
             }
-        } else bindPOIs()
+        } else bindPOIs(true, false)
     }
 
     fun onBoundingBoxChanged(latitude: Double, longitude: Double, boundingBox: BoundingBox) {
@@ -41,15 +41,17 @@ class CategoryPresenter(private val poiRepository: POIRepository) : BasePresente
         } catch (e: Exception) {
             withContext(Dispatchers.Main) { view?.showDefaultError() }
         }
-        withContext(Dispatchers.Main) { bindPOIs() }
+        withContext(Dispatchers.Main) { bindPOIs(false) }
     }
 
-    private fun bindPOIs() {
+    private fun bindPOIs(move: Boolean, animated: Boolean = true) {
         view?.apply {
             setPOIs(pois)
-            if (pois.size == 1) {
-                val poi = pois[0]
-                moveTo(poi.latitude, poi.longitude, true)
+            if (move) {
+                when {
+                    pois.size == 1 -> moveTo(pois[0].latitude, pois[0].longitude, true)
+                    pois.isNotEmpty() -> moveTo(pois, animated)
+                }
             }
         }
     }

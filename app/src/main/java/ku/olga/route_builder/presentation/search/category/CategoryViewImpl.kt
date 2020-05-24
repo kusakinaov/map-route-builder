@@ -6,11 +6,14 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.fragment_category.view.*
+import kotlinx.android.synthetic.main.fragment_category.view.mapView
+import kotlinx.android.synthetic.main.fragment_user_points_map.*
 import ku.olga.route_builder.R
 import ku.olga.route_builder.REQ_CODE_EDIT_POINT
 import ku.olga.route_builder.domain.model.POI
 import ku.olga.route_builder.domain.model.UserPoint
 import ku.olga.route_builder.domain.model.UserPointType
+import ku.olga.route_builder.presentation.convertDpToPx
 import ku.olga.route_builder.presentation.convertSpToPx
 import ku.olga.route_builder.presentation.getBitmap
 import ku.olga.route_builder.presentation.point.EditPointFragment
@@ -49,7 +52,11 @@ class CategoryViewImpl(
             }
             it.mapView.apply {
                 setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
-                zoomController.setVisibility(CustomZoomButtonsController.Visibility.ALWAYS)
+                zoomController.apply {
+                    setVisibility(CustomZoomButtonsController.Visibility.ALWAYS)
+                    minZoomLevel = 3.0
+                    maxZoomLevel = 20.0
+                }
                 setMultiTouchControls(true)
                 addMapListener(buildMapListener())
                 overlays.add(markerOverlay)
@@ -175,6 +182,16 @@ class CategoryViewImpl(
             )
         }
     }
+
+    override fun moveTo(pois: List<POI>, animate: Boolean) {
+        val boundingBox = buildBoundingBox(pois)
+        fragment.mapView?.apply {
+            zoomToBoundingBox(boundingBox, animate, convertDpToPx(resources, 8f).toInt())
+        }
+    }
+
+    private fun buildBoundingBox(pois: List<POI>) =
+            BoundingBox.fromGeoPointsSafe(pois.map { GeoPoint(it.latitude, it.longitude) })
 
     override fun onDetach() {
         presenter.detachView()
