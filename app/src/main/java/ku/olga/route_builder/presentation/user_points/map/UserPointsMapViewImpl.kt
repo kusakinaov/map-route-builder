@@ -12,6 +12,7 @@ import ku.olga.route_builder.R
 import ku.olga.route_builder.REQ_CODE_EDIT_POINT
 import ku.olga.route_builder.domain.model.UserPoint
 import ku.olga.route_builder.presentation.base.BaseFragment
+import ku.olga.route_builder.presentation.convertDpToPx
 import ku.olga.route_builder.presentation.convertSpToPx
 import ku.olga.route_builder.presentation.getBitmap
 import ku.olga.route_builder.presentation.point.EditPointFragment
@@ -25,8 +26,10 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.overlay.Marker
 
-class UserPointsMapViewImpl(private val fragment: Fragment,
-                            private val presenter: UserPointsMapPresenter) : UserPointsMapView {
+class UserPointsMapViewImpl(
+    private val fragment: Fragment,
+    private val presenter: UserPointsMapPresenter
+) : UserPointsMapView {
     private var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>? = null
     private lateinit var markerOverlay: RadiusMarkerClusterer
 
@@ -45,7 +48,11 @@ class UserPointsMapViewImpl(private val fragment: Fragment,
             }
             it.mapView.apply {
                 setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
-                zoomController.setVisibility(CustomZoomButtonsController.Visibility.ALWAYS)
+                zoomController.apply {
+                    setVisibility(CustomZoomButtonsController.Visibility.ALWAYS)
+                    minZoomLevel = 3.0
+                    maxZoomLevel = 20.0
+                }
                 setMultiTouchControls(true)
                 addMapListener(buildMapListener())
                 overlays.add(markerOverlay)
@@ -114,8 +121,10 @@ class UserPointsMapViewImpl(private val fragment: Fragment,
     override fun editUserPoint(userPoint: UserPoint) {
         val parent = fragment.parentFragment
         if (parent is BaseFragment) {
-            parent.replaceFragment(EditPointFragment
-                    .newInstance(parent, REQ_CODE_EDIT_POINT, userPoint), true)
+            parent.replaceFragment(
+                EditPointFragment
+                    .newInstance(parent, REQ_CODE_EDIT_POINT, userPoint), true
+            )
         }
     }
 
@@ -155,24 +164,25 @@ class UserPointsMapViewImpl(private val fragment: Fragment,
     }
 
     override fun moveTo(latitude: Double, longitude: Double, animated: Boolean) {
-        fragment.mapView?.controller?.animateTo(GeoPoint(latitude, longitude),
-                DEFAULT_ZOOM_LEVEL, if (animated) DEFAULT_MOVE_SPEED else NONE_MOVE_SPEED)
+        fragment.mapView?.controller?.animateTo(
+            GeoPoint(latitude, longitude),
+            DEFAULT_ZOOM_LEVEL, if (animated) DEFAULT_MOVE_SPEED else NONE_MOVE_SPEED
+        )
     }
 
     private fun buildMarker(point: UserPoint, poiIcon: Drawable?): Marker =
-            Marker(fragment.view?.mapView).apply {
-                title = point.title
-                snippet = point.description
-                position = GeoPoint(point.lat, point.lon)
-                icon = poiIcon
-                setOnMarkerClickListener { _, _ -> presenter.onClickMarker(point) }
-            }
+        Marker(fragment.view?.mapView).apply {
+            title = point.title
+            snippet = point.description
+            position = GeoPoint(point.lat, point.lon)
+            icon = poiIcon
+            setOnMarkerClickListener { _, _ -> presenter.onClickMarker(point) }
+        }
 
     override fun moveTo(userPoints: List<UserPoint>, animated: Boolean) {
         val boundingBox = buildBoundingBox(userPoints)
         fragment.mapView?.apply {
-            controller?.setCenter(GeoPoint(boundingBox.centerLatitude, boundingBox.centerLongitude))
-            //todo
+            zoomToBoundingBox(boundingBox, animated, convertDpToPx(resources, 8f).toInt())
         }
     }
 
@@ -181,7 +191,7 @@ class UserPointsMapViewImpl(private val fragment: Fragment,
     }
 
     private fun buildBoundingBox(userPoints: List<UserPoint>) =
-            BoundingBox.fromGeoPointsSafe(userPoints.map { GeoPoint(it.lat, it.lon) })
+        BoundingBox.fromGeoPointsSafe(userPoints.map { GeoPoint(it.lat, it.lon) })
 
     companion object {
         private const val NONE_MOVE_SPEED = 0L
