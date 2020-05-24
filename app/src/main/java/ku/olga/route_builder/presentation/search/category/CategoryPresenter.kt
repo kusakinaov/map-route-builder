@@ -13,34 +13,34 @@ class CategoryPresenter(private val poiRepository: POIRepository) : BaseLocation
     private var job: Job? = null
     private var boundingBox: BoundingBox? = null
     private var center: Coordinates? = null
+    private var zoomLevel = DEFAULT_ZOOM_LEVEL
 
     override fun attachView(view: CategoryView) {
         super.attachView(view)
-        if (pois.isEmpty()) {
-            if (center != null) {
-                moveToCenter()
-            } else {
-                moveToMyCoordinates()
-            }
-        } else bindPOIs(true, false)
+        when {
+            center != null -> moveToCenter()
+            pois.isEmpty() -> moveToMyCoordinates()
+            pois.isNotEmpty() -> bindPOIs(false)
+        }
     }
 
 
     private fun moveToCenter() {
         center?.let {
-            view?.moveTo(it.latitude, it.longitude, false)
+            view?.moveTo(it.latitude, it.longitude, zoomLevel, false)
         }
     }
 
     private fun moveToMyCoordinates() {
         App.application.getLastCoordinates().let {
-            view?.moveTo(it.latitude, it.longitude, false)
+            view?.moveTo(it.latitude, it.longitude, zoomLevel, false)
         }
     }
 
-    fun onBoundingBoxChanged(latitude: Double, longitude: Double, boundingBox: BoundingBox) {
+    fun onBoundingBoxChanged(latitude: Double, longitude: Double, boundingBox: BoundingBox, zoomLevel: Double) {
         this.boundingBox = boundingBox
         center = Coordinates(latitude, longitude)
+        this.zoomLevel = zoomLevel
         if (job?.isActive == true) job?.cancel()
         job = loadPOIs(boundingBox)
     }
@@ -62,7 +62,7 @@ class CategoryPresenter(private val poiRepository: POIRepository) : BaseLocation
             setPOIs(pois)
             if (move) {
                 when {
-                    pois.size == 1 -> moveTo(pois[0].latitude, pois[0].longitude, true)
+                    pois.size == 1 -> pois[0].let { moveTo(it.latitude, it.longitude, zoomLevel, true) }
                     pois.isNotEmpty() -> moveTo(pois, animated)
                 }
             }
@@ -77,5 +77,9 @@ class CategoryPresenter(private val poiRepository: POIRepository) : BaseLocation
             openEditPOI(UserPoint(null, poi.title, poi.description,
                     poi.latitude, poi.longitude, null, UserPointType.POI))
         }
+    }
+
+    companion object {
+        private const val DEFAULT_ZOOM_LEVEL = 15.0
     }
 }

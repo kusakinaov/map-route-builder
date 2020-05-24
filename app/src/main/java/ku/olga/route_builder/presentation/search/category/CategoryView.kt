@@ -10,7 +10,7 @@ interface CategoryView : BaseLocationView {
     fun onPause()
     fun setPOIs(pois: List<POI>)
     fun hidePOIDetails(): Boolean
-    fun moveTo(latitude: Double, longitude: Double, animate: Boolean)
+    fun moveTo(latitude: Double, longitude: Double, zoomLevel: Double, animate: Boolean)
     fun moveTo(pois: List<POI>, animate: Boolean)
     fun openEditPOI(userPoint: UserPoint)
 }

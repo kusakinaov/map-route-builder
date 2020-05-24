@@ -28,6 +28,7 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.BoundingBox
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
+import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import ku.olga.route_builder.domain.model.BoundingBox as AppBoundingBox
 
@@ -93,21 +94,22 @@ class CategoryViewImpl(
 
     private fun buildMapListener() = DelayedMapListener(object : MapListener {
         override fun onScroll(event: ScrollEvent?): Boolean {
-            event?.source?.let {
-                presenter.onBoundingBoxChanged(it.mapCenter.latitude, it.mapCenter.longitude,
-                        it.boundingBox.toAppBoundingBox())
-            }
+            event?.source?.let { onMapChanged(it) }
             return true
         }
 
         override fun onZoom(event: ZoomEvent?): Boolean {
-            event?.source?.let {
-                presenter.onBoundingBoxChanged(it.mapCenter.latitude, it.mapCenter.longitude,
-                        it.boundingBox.toAppBoundingBox())
-            }
+            event?.source?.let { onMapChanged(it) }
             return true
         }
     }, DELAY_LOAD_POI)
+
+    private fun onMapChanged(mapView: MapView) {
+        mapView.mapCenter.let {
+            presenter.onBoundingBoxChanged(it.latitude, it.longitude,
+                    mapView.boundingBox.toAppBoundingBox(), mapView.zoomLevelDouble)
+        }
+    }
 
     override fun onAttach() {
         presenter.attachView(this)
@@ -169,11 +171,11 @@ class CategoryViewImpl(
         return false
     }
 
-    override fun moveTo(latitude: Double, longitude: Double, animate: Boolean) {
+    override fun moveTo(latitude: Double, longitude: Double, zoomLevel: Double, animate: Boolean) {
         fragment.view?.mapView?.controller?.apply {
             animateTo(
                     GeoPoint(latitude, longitude),
-                    DEFAULT_ZOOM_LEVEL, if (animate) DEFAULT_MOVE_SPEED else NONE_MOVE_SPEED
+                    zoomLevel, if (animate) DEFAULT_MOVE_SPEED else NONE_MOVE_SPEED
             )
         }
     }
@@ -227,7 +229,6 @@ class CategoryViewImpl(
         private const val DELAY_LOAD_POI = 1000L
         private const val NONE_MOVE_SPEED = 0L
         private const val DEFAULT_MOVE_SPEED = 500L
-        private const val DEFAULT_ZOOM_LEVEL = 15.0
         private const val BORDER_SIZE = 40f
     }
 }
