@@ -7,14 +7,29 @@ import ku.olga.route_builder.presentation.base.BasePresenter
 
 class UserPointsMapPresenter : BasePresenter<UserPointsMapView>() {
     private val userPoints = mutableListOf<UserPoint>()
+    private var center: Coordinates? = null
 
     override fun attachView(view: UserPointsMapView) {
         super.attachView(view)
         if (userPoints.isEmpty()) {
-            App.application.getLastCoordinates().let {
-                view.moveTo(it.latitude, it.longitude, false)
+            if (center != null) {
+                moveToCenter()
+            } else {
+                moveToMyCoordinates()
             }
         } else bindUserPoints()
+    }
+
+    private fun moveToCenter() {
+        center?.let {
+            view?.moveTo(it.latitude, it.longitude, false)
+        }
+    }
+
+    private fun moveToMyCoordinates() {
+        App.application.getLastCoordinates().let {
+            view?.moveTo(it.latitude, it.longitude, false)
+        }
     }
 
     fun setUserPoints(userPoints: List<UserPoint>) {
@@ -50,6 +65,6 @@ class UserPointsMapPresenter : BasePresenter<UserPointsMapView>() {
     }
 
     fun onCenterChanged(latitude: Double, longitude: Double) {
-        App.application.setLastCoordinates(Coordinates(latitude, longitude))
+        center = Coordinates(latitude, longitude)
     }
 }

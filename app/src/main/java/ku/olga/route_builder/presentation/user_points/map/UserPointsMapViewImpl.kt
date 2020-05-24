@@ -183,7 +183,7 @@ class UserPointsMapViewImpl(
         val boundingBox = buildBoundingBox(userPoints)
         fragment.mapView?.apply {
             post {
-                zoomToBoundingBox(boundingBox, animated, convertDpToPx(resources, 8f).toInt())
+                zoomToBoundingBox(boundingBox, animated, convertDpToPx(resources, BORDER_SIZE).toInt())
             }
         }
     }
@@ -199,5 +199,6 @@ class UserPointsMapViewImpl(
         private const val NONE_MOVE_SPEED = 0L
         private const val DEFAULT_MOVE_SPEED = 500L
         private const val DEFAULT_ZOOM_LEVEL = 15.0
+        private const val BORDER_SIZE = 40f
     }
 }
