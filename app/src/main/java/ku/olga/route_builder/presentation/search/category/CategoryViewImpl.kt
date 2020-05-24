@@ -178,7 +178,9 @@ class CategoryViewImpl(
     override fun moveTo(pois: List<POI>, animate: Boolean) {
         val boundingBox = buildBoundingBox(pois)
         fragment.mapView?.apply {
-            zoomToBoundingBox(boundingBox, animate, convertDpToPx(resources, 8f).toInt())
+            post {
+                zoomToBoundingBox(boundingBox, animate, convertDpToPx(resources, 8f).toInt())
+            }
         }
     }
 

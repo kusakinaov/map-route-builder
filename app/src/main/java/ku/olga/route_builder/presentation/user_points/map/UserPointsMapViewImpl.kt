@@ -182,7 +182,9 @@ class UserPointsMapViewImpl(
     override fun moveTo(userPoints: List<UserPoint>, animated: Boolean) {
         val boundingBox = buildBoundingBox(userPoints)
         fragment.mapView?.apply {
-            zoomToBoundingBox(boundingBox, animated, convertDpToPx(resources, 8f).toInt())
+            post {
+                zoomToBoundingBox(boundingBox, animated, convertDpToPx(resources, 8f).toInt())
+            }
         }
     }
 

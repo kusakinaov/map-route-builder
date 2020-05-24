@@ -44,15 +44,12 @@ class CategoryPresenter(private val poiRepository: POIRepository) : BasePresente
     private fun bindPOIs(move: Boolean, animated: Boolean = true) {
         view?.apply {
             setPOIs(pois)
-            if (pois.isNotEmpty()) {
-                moveTo(pois[0].latitude, pois[0].longitude, true)
+            if (move) {
+                when {
+                    pois.size == 1 -> moveTo(pois[0].latitude, pois[0].longitude, true)
+                    pois.isNotEmpty() -> moveTo(pois, animated)
+                }
             }
-//            if (move) {
-//                when {
-//                    pois.size == 1 -> moveTo(pois[0].latitude, pois[0].longitude, true)
-//                    pois.isNotEmpty() -> moveTo(pois, animated)
-//                }
-//            }
         }
     }
 
