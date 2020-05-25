@@ -1,20 +1,28 @@
-package ku.olga.route_builder.presentation.list
+package ku.olga.route_builder.presentation.user_points.list
 
 import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.fragment_user_points.view.*
-import ku.olga.route_builder.REQ_CODE_SEARCH_POINT
+import kotlinx.android.synthetic.main.fragment_user_points_list.view.*
+import ku.olga.route_builder.REQ_CODE_EDIT_POINT
 import ku.olga.route_builder.domain.model.UserPoint
 import ku.olga.route_builder.presentation.base.BaseFragment
-import ku.olga.route_builder.presentation.map.UserPointsMapFragment
-import ku.olga.route_builder.presentation.search.list.SearchAddressesFragment
+import ku.olga.route_builder.presentation.point.EditPointFragment
 
-class UserPointsViewImpl(
-    private val fragment: BaseFragment,
-    private val presenter: UserPointsPresenter,
-    private val pointsAdapter: UserPointsAdapter
-) : UserPointsView {
+class UserPointsListViewImpl(
+        private val fragment: BaseFragment,
+        private val presenter: UserPointsListPresenter
+) : UserPointsListView {
+    private val pointsAdapter = UserPointsAdapter().apply {
+        onPointClickListener = {
+            val parent = fragment.parentFragment
+            if (parent is BaseFragment) {
+                parent.replaceFragment(EditPointFragment
+                        .newInstance(parent, REQ_CODE_EDIT_POINT, it), true)
+            }
+        }
+    }
+
     init {
         fragment.view?.apply {
             recyclerView.apply {
@@ -22,20 +30,16 @@ class UserPointsViewImpl(
                 adapter = pointsAdapter
                 addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             }
-            buttonAdd.setOnClickListener {
-                fragment.replaceFragment(
-                    SearchAddressesFragment.newInstance(fragment, REQ_CODE_SEARCH_POINT)
-                )
-            }
         }
     }
 
     override fun setUserPoints(userPoints: List<UserPoint>) {
         pointsAdapter.setItems(userPoints)
-    }
-
-    override fun onClickOpenMap() {
-        fragment.replaceFragment(UserPointsMapFragment())
+        if (pointsAdapter.itemCount > 0) {
+            showUserPoints()
+        } else {
+            showEmpty()
+        }
     }
 
     override fun showEmpty() {

@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.list
+package ku.olga.route_builder.presentation.user_points.list
 
 import android.view.LayoutInflater
 import android.view.View
@@ -37,7 +37,10 @@ class UserPointsAdapter @Inject constructor() :
         private fun bindView() {
             point?.let {
                 itemView.textViewTitle.text = it.title
-                itemView.textViewDescription.text = it.description
+                itemView.textViewDescription.apply {
+                    text = if (it.description?.isNotEmpty() == true) it.description else it.postalAddress
+                    visibility = if (text.isNullOrEmpty()) View.GONE else View.VISIBLE
+                }
             }
         }
     }

@@ -4,11 +4,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
+import kotlinx.android.synthetic.main.activity_main.*
 import ku.olga.route_builder.R
 import ku.olga.route_builder.presentation.base.BaseFragment
 import ku.olga.route_builder.presentation.dagger.component.ActivityComponent
 import ku.olga.route_builder.presentation.dagger.component.DaggerActivityComponent
-import ku.olga.route_builder.presentation.list.UserPointsFragment
+import ku.olga.route_builder.presentation.user_points.root.UserPointsFragment
 
 class MainActivity : AppCompatActivity() {
     private var activityComponent: ActivityComponent? = null
@@ -16,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setSupportActionBar(toolbar)
 
         activityComponent = DaggerActivityComponent.builder()
             .applicationComponent(App.application.applicationComponent)
@@ -23,7 +25,7 @@ class MainActivity : AppCompatActivity() {
 
         supportFragmentManager.addOnBackStackChangedListener { bindBackStack() }
         if (savedInstanceState == null) {
-            replaceFragment(UserPointsFragment(), false)
+            replaceFragment(UserPointsFragment.newInstance(), false)
         }
     }
 

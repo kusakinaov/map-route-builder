@@ -10,12 +10,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.location.LocationServices
 import ku.olga.route_builder.R
+import ku.olga.route_builder.REQ_CODE_VIEW_CATEGORY
 import ku.olga.route_builder.REQ_CODE_VIEW_SEARCH_ADDRESS
+import ku.olga.route_builder.domain.model.Category
 import ku.olga.route_builder.domain.model.SearchAddress
 import ku.olga.route_builder.presentation.MainActivity
 import ku.olga.route_builder.presentation.base.BaseFragment
 import ku.olga.route_builder.presentation.hideKeyboard
-import ku.olga.route_builder.presentation.search.item.SearchAddressFragment
+import ku.olga.route_builder.presentation.point.EditPointFragment
+import ku.olga.route_builder.presentation.search.category.CategoryFragment
 import javax.inject.Inject
 
 class SearchAddressesFragment : BaseFragment() {
@@ -23,7 +26,10 @@ class SearchAddressesFragment : BaseFragment() {
     lateinit var searchPresenter: SearchAddressesPresenter
 
     @Inject
-    lateinit var searchAdapter:SearchAddressAdapter
+    lateinit var searchAdapter: AddressesAdapter
+
+    @Inject
+    lateinit var categoriesAdapter: CategoriesAdapter
 
     private var searchAddressesView: SearchAddressesView? = null
 
@@ -35,6 +41,7 @@ class SearchAddressesFragment : BaseFragment() {
             highlightColor = ContextCompat.getColor(context, R.color.secondaryColor)
             onClickAddressListener = { openSearchAddress(it) }
         }
+        categoriesAdapter.categoryClickListener = { openCategory(it) }
         searchPresenter.apply {
             locationClient = LocationServices.getFusedLocationProviderClient(context)
         }
@@ -58,7 +65,8 @@ class SearchAddressesFragment : BaseFragment() {
         searchAddressesView = SearchAddressesViewImpl(
             this,
             searchPresenter,
-            searchAdapter
+            searchAdapter,
+            categoriesAdapter
         )
         searchAddressesView?.onAttach()
     }
@@ -66,11 +74,18 @@ class SearchAddressesFragment : BaseFragment() {
     private fun openSearchAddress(searchAddress: SearchAddress) {
         hideKeyboard()
         replaceFragment(
-            SearchAddressFragment.newInstance(
-                this@SearchAddressesFragment,
-                REQ_CODE_VIEW_SEARCH_ADDRESS, searchAddress
-            ), true
+            EditPointFragment
+                .newInstance(
+                    this, REQ_CODE_VIEW_SEARCH_ADDRESS,
+                    searchAddress.postalAddress, searchAddress.lat, searchAddress.lon
+                ),
+            true
         )
+    }
+
+    private fun openCategory(category: Category) {
+        hideKeyboard()
+        replaceFragment(CategoryFragment.newInstance(this, REQ_CODE_VIEW_CATEGORY, category), true)
     }
 
     override fun onRequestPermissionsResult(
@@ -97,29 +112,8 @@ class SearchAddressesFragment : BaseFragment() {
         super.onPrepareOptionsMenu(menu)
         val view = menu.findItem(R.id.actionSearch)?.actionView
         if (view is SearchView) {
-            view.apply {
-                isIconified = false
-                queryHint = getString(R.string.hint_search_points)
-                setOnQueryTextListener(buildOnQueryTextListener())
-            }
-            if (searchAddressesView is SearchAddressesViewImpl) {
-                (searchAddressesView as SearchAddressesViewImpl).searchView = view
-            }
+            searchAddressesView?.searchView = view
         }
-    }
-
-    private fun buildOnQueryTextListener() = object : SearchView.OnQueryTextListener {
-        override fun onQueryTextSubmit(query: String?) = true
-
-        override fun onQueryTextChange(newText: String?): Boolean {
-            onQueryChanged(newText)
-            return true
-        }
-    }
-
-    fun onQueryChanged(query: String?) {
-        searchPresenter.onQueryChanged(query)
-        searchAdapter.setQuery(query)
     }
 
     companion object {

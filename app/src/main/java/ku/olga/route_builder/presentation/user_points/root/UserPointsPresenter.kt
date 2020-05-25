@@ -1,6 +1,9 @@
-package ku.olga.route_builder.presentation.list
+package ku.olga.route_builder.presentation.user_points.root
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ku.olga.route_builder.domain.model.UserPoint
 import ku.olga.route_builder.domain.repository.PointsCacheRepository
 import ku.olga.route_builder.presentation.base.BasePresenter
@@ -12,7 +15,7 @@ class UserPointsPresenter @Inject constructor(private val pointsRepository: Poin
 
     override fun attachView(view: UserPointsView) {
         super.attachView(view)
-        view.setUserPoints(userPoints)
+        bindUserPoints()
         getUserPoints()
     }
 
@@ -20,14 +23,11 @@ class UserPointsPresenter @Inject constructor(private val pointsRepository: Poin
         userPoints.clear()
         userPoints.addAll(pointsRepository.getUserPoints())
         withContext(Dispatchers.Main) {
-            view?.apply {
-                setUserPoints(userPoints)
-                if (userPoints.isEmpty()) {
-                    showEmpty()
-                } else {
-                    showUserPoints()
-                }
-            }
+            bindUserPoints()
         }
+    }
+
+    fun bindUserPoints() {
+        view?.bindUserPoints(userPoints)
     }
 }

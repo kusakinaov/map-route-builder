@@ -6,34 +6,54 @@ import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_search.view.*
+import kotlinx.android.synthetic.main.layout_error.view.*
+import ku.olga.route_builder.R
 import ku.olga.route_builder.REQ_CODE_LOCATION_PERMISSION
+import ku.olga.route_builder.domain.model.Category
 import ku.olga.route_builder.domain.model.SearchAddress
 
 class SearchAddressesViewImpl(
     private val fragment: Fragment,
     private val presenter: SearchAddressesPresenter,
-    private val searchAdapter: SearchAddressAdapter
+    private val addressesAdapter: AddressesAdapter,
+    private val categoriesAdapter: CategoriesAdapter
 ) : SearchAddressesView {
-    var searchView: SearchView? = null
+    override var searchView: SearchView? = null
         set(value) {
             field = value
             presenter.bindQuery()
+            value?.apply {
+                queryHint = context.getString(R.string.hint_search_address)
+                setOnQueryTextListener(buildOnQueryTextListener())
+            }
         }
+
+    private fun buildOnQueryTextListener() = object : SearchView.OnQueryTextListener {
+        override fun onQueryTextSubmit(query: String?) = true
+
+        override fun onQueryTextChange(newText: String?): Boolean {
+            presenter.onQueryChanged(newText)
+            addressesAdapter.setQuery(newText)
+            return true
+        }
+    }
 
     init {
         fragment.view?.apply {
             recyclerView.apply {
                 layoutManager = LinearLayoutManager(context)
-                adapter = searchAdapter
+                adapter = addressesAdapter
+                addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             }
             buttonRetry.setOnClickListener { presenter.onClickRetry() }
         }
     }
 
     override fun bindAddresses(addresses: List<SearchAddress>) {
-        searchAdapter.setItems(addresses)
+        addressesAdapter.setItems(addresses)
     }
 
     override fun showEmpty() {
@@ -69,7 +89,26 @@ class SearchAddressesViewImpl(
     override fun showAddresses() {
         fragment.view?.apply {
             groupError.visibility = View.GONE
-            recyclerView.visibility = View.VISIBLE
+            recyclerView.apply {
+                visibility = View.VISIBLE
+                adapter = addressesAdapter
+            }
+            textViewEmpty.visibility = View.GONE
+            progressBar.visibility = View.GONE
+        }
+    }
+
+    override fun bindCategories(categories: List<Category>) {
+        categoriesAdapter.setItems(categories)
+    }
+
+    override fun showCategories() {
+        fragment.view?.apply {
+            groupError.visibility = View.GONE
+            recyclerView.apply {
+                visibility = View.VISIBLE
+                adapter = categoriesAdapter
+            }
             textViewEmpty.visibility = View.GONE
             progressBar.visibility = View.GONE
         }

@@ -13,8 +13,8 @@ import ku.olga.route_builder.domain.model.SearchAddress
 import ku.olga.route_builder.presentation.base.BaseAdapter
 import javax.inject.Inject
 
-class SearchAddressAdapter @Inject constructor() :
-    BaseAdapter<SearchAddress, SearchAddressAdapter.AddressHolder>() {
+class AddressesAdapter @Inject constructor() :
+    BaseAdapter<SearchAddress, AddressesAdapter.AddressHolder>() {
     private var query: String? = null
     var onClickAddressListener: ((SearchAddress) -> Unit)? = null
     var highlightColor: Int = 0
