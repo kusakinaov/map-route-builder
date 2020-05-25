@@ -4,8 +4,9 @@ import kotlinx.coroutines.*
 import ku.olga.route_builder.domain.model.UserPoint
 import ku.olga.route_builder.domain.repository.PointsCacheRepository
 import ku.olga.route_builder.presentation.base.BasePresenter
+import javax.inject.Inject
 
-class UserPointsPresenter(private val pointsRepository: PointsCacheRepository) :
+class UserPointsPresenter @Inject constructor(private val pointsRepository: PointsCacheRepository) :
     BasePresenter<UserPointsView>() {
     private val userPoints = mutableListOf<UserPoint>()
 

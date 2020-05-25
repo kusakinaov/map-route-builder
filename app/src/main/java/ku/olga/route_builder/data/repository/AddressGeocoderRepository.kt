@@ -5,8 +5,9 @@ import android.location.Geocoder
 import ku.olga.route_builder.domain.model.SearchAddress
 import ku.olga.route_builder.domain.repository.AddressRepository
 import java.lang.StringBuilder
+import javax.inject.Inject
 
-class AddressGeocoderRepository(private val geocoder: Geocoder) : AddressRepository {
+class AddressGeocoderRepository @Inject constructor(private val geocoder: Geocoder) : AddressRepository {
     override suspend fun searchAddress(query: String?) =
         geocoder.getFromLocationName(query, MAX_ADDRESS_SEARCH_RESULTS).map { it.toSearchAddress() }
             .toList()

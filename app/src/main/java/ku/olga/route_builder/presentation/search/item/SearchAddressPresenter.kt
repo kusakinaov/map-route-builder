@@ -5,8 +5,9 @@ import ku.olga.route_builder.domain.model.SearchAddress
 import ku.olga.route_builder.domain.repository.AddressRepository
 import ku.olga.route_builder.presentation.base.BasePresenter
 import java.io.IOException
+import javax.inject.Inject
 
-class SearchAddressPresenter(private val addressRepository: AddressRepository) :
+class SearchAddressPresenter @Inject constructor(private val addressRepository: AddressRepository) :
     BasePresenter<SearchAddressView>() {
     private var searchAddress: SearchAddress? = null
     private var job: Job? = null

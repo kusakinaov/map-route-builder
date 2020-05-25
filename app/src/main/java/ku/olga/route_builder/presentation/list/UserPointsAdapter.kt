@@ -8,12 +8,16 @@ import kotlinx.android.synthetic.main.item_user_point.view.*
 import ku.olga.route_builder.R
 import ku.olga.route_builder.domain.model.UserPoint
 import ku.olga.route_builder.presentation.base.BaseAdapter
+import javax.inject.Inject
 
-class UserPointsAdapter : BaseAdapter<UserPoint, UserPointsAdapter.PointHolder>() {
+class UserPointsAdapter @Inject constructor() :
+    BaseAdapter<UserPoint, UserPointsAdapter.PointHolder>() {
     var onPointClickListener: ((UserPoint) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-            PointHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_user_point, parent, false))
+        PointHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.item_user_point, parent, false)
+        )
 
     override fun onBindViewHolder(holder: PointHolder, position: Int) {
         holder.point = getItem(position)

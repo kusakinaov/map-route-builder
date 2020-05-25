@@ -3,15 +3,38 @@ package ku.olga.route_builder.presentation.list
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.*
+import androidx.fragment.app.FragmentActivity
 import ku.olga.route_builder.R
-import ku.olga.route_builder.presentation.App
+import ku.olga.route_builder.REQ_CODE_EDIT_POINT
+import ku.olga.route_builder.presentation.MainActivity
 import ku.olga.route_builder.presentation.base.BaseFragment
+import ku.olga.route_builder.presentation.point.EditPointFragment
+import javax.inject.Inject
 
 class UserPointsFragment : BaseFragment() {
-    private val userPointsPresenter = UserPointsPresenter(App.pointsRepository)
+    @Inject
+    lateinit var userPointsPresenter: UserPointsPresenter
+
+    @Inject
+    lateinit var pointsAdapter: UserPointsAdapter
+
     private var userPointsView: UserPointsView? = null
 
     override fun getTitle(resources: Resources) = resources.getString(R.string.ttl_point_list)
+
+    override fun inject(activity: FragmentActivity) {
+        if (activity is MainActivity) {
+            activity.getActivityComponent()?.inject(this)
+        }
+        pointsAdapter.apply {
+            onPointClickListener = {
+                replaceFragment(
+                    EditPointFragment.newInstance(this@UserPointsFragment, REQ_CODE_EDIT_POINT, it),
+                    true
+                )
+            }
+        }
+    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -28,7 +51,7 @@ class UserPointsFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        userPointsView = UserPointsViewImpl(this, userPointsPresenter).apply {
+        userPointsView = UserPointsViewImpl(this, userPointsPresenter, pointsAdapter).apply {
             onAttach()
         }
     }

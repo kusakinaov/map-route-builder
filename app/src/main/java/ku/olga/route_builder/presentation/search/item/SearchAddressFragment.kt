@@ -6,14 +6,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import ku.olga.route_builder.R
 import ku.olga.route_builder.domain.model.SearchAddress
-import ku.olga.route_builder.presentation.App
+import ku.olga.route_builder.presentation.MainActivity
 import ku.olga.route_builder.presentation.base.BaseFragment
+import javax.inject.Inject
 
 class SearchAddressFragment : BaseFragment() {
+    @Inject
+    lateinit var searchAddressPresenter: SearchAddressPresenter
+
     private var searchAddressView: SearchAddressView? = null
-    private val searchAddressPresenter = SearchAddressPresenter(App.addressRepository)
+
+    override fun inject(activity: FragmentActivity) {
+        if (activity is MainActivity) {
+            activity.getActivityComponent()?.inject(this)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

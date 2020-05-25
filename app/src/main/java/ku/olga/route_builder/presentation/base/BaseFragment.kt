@@ -1,14 +1,23 @@
 package ku.olga.route_builder.presentation.base
 
+import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import com.google.android.material.snackbar.Snackbar
 import ku.olga.route_builder.R
 import ku.olga.route_builder.presentation.MainActivity
 
 abstract class BaseFragment : Fragment() {
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        activity?.let { inject(it) }
+    }
+
+    open fun inject(activity: FragmentActivity) {}
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)

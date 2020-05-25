@@ -11,8 +11,10 @@ import kotlinx.android.synthetic.main.item_address.view.*
 import ku.olga.route_builder.R
 import ku.olga.route_builder.domain.model.SearchAddress
 import ku.olga.route_builder.presentation.base.BaseAdapter
+import javax.inject.Inject
 
-class SearchAddressAdapter : BaseAdapter<SearchAddress, SearchAddressAdapter.AddressHolder>() {
+class SearchAddressAdapter @Inject constructor() :
+    BaseAdapter<SearchAddress, SearchAddressAdapter.AddressHolder>() {
     private var query: String? = null
     var onClickAddressListener: ((SearchAddress) -> Unit)? = null
     var highlightColor: Int = 0

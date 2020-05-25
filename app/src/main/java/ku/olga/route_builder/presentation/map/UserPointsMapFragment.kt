@@ -5,18 +5,32 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
 import ku.olga.route_builder.R
-import ku.olga.route_builder.presentation.App
+import ku.olga.route_builder.presentation.MainActivity
 import ku.olga.route_builder.presentation.base.BaseFragment
+import javax.inject.Inject
 
 class UserPointsMapFragment : BaseFragment() {
-    private val presenter = UserPointsMapPresenter(App.pointsRepository)
+    @Inject
+    lateinit var presenter: UserPointsMapPresenter
+
     private lateinit var mapView: UserPointsMapView
 
     override fun getTitle(resources: Resources) = resources.getString(R.string.ttl_map)
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-            inflater.inflate(R.layout.fragment_user_points_map, container, false)
+    override fun inject(activity: FragmentActivity) {
+        if (activity is MainActivity) {
+            activity.getActivityComponent()?.inject(this)
+        }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View =
+        inflater.inflate(R.layout.fragment_user_points_map, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
