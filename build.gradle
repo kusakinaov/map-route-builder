@@ -25,4 +25,12 @@ task clean(type: Delete) {
 
 ext {
     GOOGLE_MAPS_API_KEY = "AIzaSyDAsUtfMLbEeSsEwoJBK59Nt7DH7rvFpvc"
+    room_version = "2.2.5"
+    dagger_version = "2.27"
+
+    room = "androidx.room:room-runtime:$room_version"
+    roomCompiler = "androidx.room:room-compiler:$room_version"
+
+    dagger = "com.google.dagger:dagger:$dagger_version"
+    daggerCompiler = "com.google.dagger:dagger-compiler:$dagger_version"
 }
