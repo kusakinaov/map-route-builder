@@ -31,7 +31,10 @@ class SearchAddressesFragment : BaseFragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        searchAdapter.highlightColor = ContextCompat.getColor(context, R.color.secondaryColor)
+        searchAdapter.apply {
+            highlightColor = ContextCompat.getColor(context, R.color.secondaryColor)
+            onClickAddressListener = { openSearchAddress(it) }
+        }
         searchPresenter.apply {
             locationClient = LocationServices.getFusedLocationProviderClient(context)
         }
@@ -41,7 +44,6 @@ class SearchAddressesFragment : BaseFragment() {
         if (activity is MainActivity) {
             activity.getActivityComponent()?.inject(this)
         }
-        searchAdapter.apply { onClickAddressListener = { openSearchAddress(it) } }
     }
 
     override fun onCreateView(

@@ -16,7 +16,7 @@ abstract class BaseFragment : Fragment() {
         activity?.let { inject(it) }
     }
 
-    open fun inject(activity: FragmentActivity) {}
+    abstract fun inject(activity: FragmentActivity)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

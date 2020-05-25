@@ -1,5 +1,6 @@
 package ku.olga.route_builder.presentation.list
 
+import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.*
@@ -26,13 +27,15 @@ class UserPointsFragment : BaseFragment() {
         if (activity is MainActivity) {
             activity.getActivityComponent()?.inject(this)
         }
-        pointsAdapter.apply {
-            onPointClickListener = {
-                replaceFragment(
-                    EditPointFragment.newInstance(this@UserPointsFragment, REQ_CODE_EDIT_POINT, it),
-                    true
-                )
-            }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        pointsAdapter.onPointClickListener = {
+            replaceFragment(
+                EditPointFragment.newInstance(this@UserPointsFragment, REQ_CODE_EDIT_POINT, it),
+                true
+            )
         }
     }
 
