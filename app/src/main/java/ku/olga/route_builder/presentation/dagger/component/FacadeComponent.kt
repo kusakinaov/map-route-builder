@@ -6,7 +6,6 @@ import ku.olga.core_api.ProvidersFacade
 import ku.olga.core_api.provider.AddressRepositoryProvider
 import ku.olga.core_api.provider.POIRepositoryProvider
 import ku.olga.core_api.provider.UserPointsRepositoryProvider
-import ku.olga.core_api.repository.AddressRepository
 import ku.olga.route_builder.presentation.App
 
 @Component(

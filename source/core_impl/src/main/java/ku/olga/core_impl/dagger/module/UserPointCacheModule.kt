@@ -11,6 +11,7 @@ import ku.olga.core_api.repository.PointsCacheRepository
 import ku.olga.core_api.annotation.ApplicationContext
 import ku.olga.core_api.database.AppDatabaseContract
 import ku.olga.core_impl.room.AppDatabase
+import javax.inject.Singleton
 
 @Module(includes = [UserPointCacheModule.BindsModule::class])
 class UserPointCacheModule {
@@ -25,6 +26,7 @@ class UserPointCacheModule {
     @Module
     interface BindsModule {
         @Binds
+        @Singleton
         fun providesPointsCacheRepository(repository: PointsDbCacheRepository): PointsCacheRepository
     }
 }

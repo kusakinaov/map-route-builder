@@ -8,6 +8,7 @@ import ku.olga.core_api.repository.AddressRepository
 import ku.olga.core_impl.repository.AddressNominatimGeocoderRepository
 import org.osmdroid.bonuspack.location.GeocoderNominatim
 import java.util.Locale
+import javax.inject.Singleton
 
 @Module(includes = [AddressModule.BindsModule::class])
 class AddressModule {
@@ -19,6 +20,7 @@ class AddressModule {
     @Module
     interface BindsModule {
         @Binds
+        @Singleton
         fun providesAddressRepository(repository: AddressNominatimGeocoderRepository): AddressRepository
     }
 }
