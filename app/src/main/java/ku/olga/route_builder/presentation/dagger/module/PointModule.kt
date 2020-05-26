@@ -9,8 +9,8 @@ import dagger.Reusable
 import ku.olga.route_builder.data.repository.PointsDbCacheRepository
 import ku.olga.route_builder.data.room.AppDatabase
 import ku.olga.route_builder.domain.repository.PointsCacheRepository
-import ku.olga.route_builder.presentation.dagger.annotation.ActivityScope
-import ku.olga.route_builder.presentation.dagger.annotation.ApplicationContext
+import ku.olga.core_api.annotation.ActivityScope
+import ku.olga.core_api.annotation.ApplicationContext
 
 @Module(includes = [PointModule.BindsModule::class])
 class PointModule {

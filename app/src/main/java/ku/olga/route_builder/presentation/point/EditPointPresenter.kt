@@ -1,8 +1,8 @@
 package ku.olga.route_builder.presentation.point
 
 import kotlinx.coroutines.*
-import ku.olga.route_builder.domain.model.UserPoint
-import ku.olga.route_builder.domain.model.UserPointType
+import ku.olga.core_api.dto.UserPoint
+import ku.olga.core_api.dto.UserPointType
 import ku.olga.route_builder.domain.repository.PointsCacheRepository
 import ku.olga.route_builder.presentation.base.BasePresenter
 import javax.inject.Inject
@@ -14,7 +14,12 @@ class EditPointPresenter @Inject constructor(private val pointsRepository: Point
     private var description: String = ""
 
     fun setAddress(postalAddress: String?, lat: Double, lon: Double) {
-        point = UserPoint(postalAddress = postalAddress, lat = lat, lon = lon, type = UserPointType.ADDRESS)
+        point = UserPoint(
+            postalAddress = postalAddress,
+            lat = lat,
+            lon = lon,
+            type = UserPointType.ADDRESS
+        )
         point?.let {
             setTitle(it.title ?: "")
             setDescription(it.description ?: "")

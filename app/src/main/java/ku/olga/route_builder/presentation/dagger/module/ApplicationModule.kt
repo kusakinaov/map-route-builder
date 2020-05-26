@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import android.content.res.AssetManager
 import dagger.Module
 import dagger.Provides
-import ku.olga.route_builder.presentation.dagger.annotation.ApplicationContext
+import ku.olga.core_api.annotation.ApplicationContext
 import androidx.preference.PreferenceManager
 
 @Module

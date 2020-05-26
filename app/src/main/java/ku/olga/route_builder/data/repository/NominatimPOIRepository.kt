@@ -1,10 +1,10 @@
 package ku.olga.route_builder.data.repository
 
-import ku.olga.route_builder.domain.model.Category
+import ku.olga.core_api.dto.Category
 import ku.olga.route_builder.domain.repository.POIRepository
 import org.osmdroid.bonuspack.location.NominatimPOIProvider
 import org.osmdroid.bonuspack.location.POI
-import ku.olga.route_builder.domain.model.POI as AppPOI
+import ku.olga.core_api.dto.POI as AppPOI
 import ku.olga.route_builder.domain.model.BoundingBox
 import org.osmdroid.util.BoundingBox as ApiBoundingBox
 

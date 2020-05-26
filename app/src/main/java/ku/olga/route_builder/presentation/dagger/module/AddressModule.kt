@@ -6,7 +6,7 @@ import dagger.Provides
 import dagger.Reusable
 import ku.olga.route_builder.data.repository.AddressNominatimGeocoderRepository
 import ku.olga.route_builder.domain.repository.AddressRepository
-import ku.olga.route_builder.presentation.dagger.annotation.ActivityScope
+import ku.olga.core_api.annotation.ActivityScope
 import org.osmdroid.bonuspack.location.GeocoderNominatim
 import java.util.Locale
 

@@ -1,9 +1,9 @@
-package ku.olga.route_builder.data.room.entity
+package ku.olga.core_api.database.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import ku.olga.route_builder.domain.model.UserPointType
+import ku.olga.core_api.dto.UserPointType
 
 @Entity(tableName = "user_point")
 data class UserPoint(

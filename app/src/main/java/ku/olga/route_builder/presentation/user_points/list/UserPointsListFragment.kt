@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.FragmentActivity
 import ku.olga.route_builder.R
-import ku.olga.route_builder.domain.model.UserPoint
+import ku.olga.core_api.dto.UserPoint
 import ku.olga.route_builder.presentation.MainActivity
 import ku.olga.route_builder.presentation.base.BaseFragment
 import ku.olga.route_builder.presentation.user_points.OnUserPointsChangeListener

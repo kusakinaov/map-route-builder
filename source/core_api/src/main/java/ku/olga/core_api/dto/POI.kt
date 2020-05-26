@@ -1,4 +1,4 @@
-package ku.olga.route_builder.domain.model
+package ku.olga.core_api.dto
 
 data class POI(val id: Long,
     val latitude: Double,

@@ -1,7 +1,7 @@
 package ku.olga.route_builder.presentation.dagger.component
 
 import dagger.Component
-import ku.olga.route_builder.presentation.dagger.annotation.ActivityScope
+import ku.olga.core_api.annotation.ActivityScope
 import ku.olga.route_builder.presentation.dagger.module.AddressModule
 import ku.olga.route_builder.presentation.dagger.module.POIModule
 import ku.olga.route_builder.presentation.dagger.module.PointModule

@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.dagger.annotation
+package ku.olga.core_api.annotation
 
 import javax.inject.Qualifier
 

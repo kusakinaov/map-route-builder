@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_address.view.*
 import ku.olga.route_builder.R
-import ku.olga.route_builder.domain.model.SearchAddress
+import ku.olga.core_api.dto.SearchAddress
 import ku.olga.route_builder.presentation.base.BaseAdapter
 import javax.inject.Inject
 

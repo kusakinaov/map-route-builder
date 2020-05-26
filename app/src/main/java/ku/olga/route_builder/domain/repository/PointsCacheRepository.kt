@@ -1,6 +1,6 @@
 package ku.olga.route_builder.domain.repository
 
-import ku.olga.route_builder.domain.model.UserPoint
+import ku.olga.core_api.dto.UserPoint
 
 interface PointsCacheRepository {
     suspend fun saveUserPoint(userPoint: UserPoint): Long

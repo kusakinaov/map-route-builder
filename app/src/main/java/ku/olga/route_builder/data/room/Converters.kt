@@ -1,7 +1,7 @@
 package ku.olga.route_builder.data.room
 
 import androidx.room.TypeConverter
-import ku.olga.route_builder.domain.model.UserPointType
+import ku.olga.core_api.dto.UserPointType
 
 class Converters {
     @TypeConverter

@@ -1,7 +1,7 @@
-package ku.olga.route_builder.data.room.dao
+package ku.olga.core_api.database
 
 import androidx.room.*
-import ku.olga.route_builder.data.room.entity.UserPoint
+import ku.olga.core_api.database.entity.UserPoint
 
 @Dao
 interface UserPointDao {

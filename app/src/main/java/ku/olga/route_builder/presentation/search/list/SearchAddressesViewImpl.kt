@@ -12,8 +12,8 @@ import kotlinx.android.synthetic.main.fragment_search.view.*
 import kotlinx.android.synthetic.main.layout_error.view.*
 import ku.olga.route_builder.R
 import ku.olga.route_builder.REQ_CODE_LOCATION_PERMISSION
-import ku.olga.route_builder.domain.model.Category
-import ku.olga.route_builder.domain.model.SearchAddress
+import ku.olga.core_api.dto.Category
+import ku.olga.core_api.dto.SearchAddress
 
 class SearchAddressesViewImpl(
     private val fragment: Fragment,

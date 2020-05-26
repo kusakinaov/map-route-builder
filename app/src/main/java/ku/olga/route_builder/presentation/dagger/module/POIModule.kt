@@ -9,7 +9,7 @@ import ku.olga.route_builder.data.repository.CategoryNominatimRepository
 import ku.olga.route_builder.data.repository.NominatimPOIRepository
 import ku.olga.route_builder.domain.repository.CategoryRepository
 import ku.olga.route_builder.domain.repository.POIRepository
-import ku.olga.route_builder.presentation.dagger.annotation.ActivityScope
+import ku.olga.core_api.annotation.ActivityScope
 import org.osmdroid.bonuspack.location.NominatimPOIProvider
 
 @Module

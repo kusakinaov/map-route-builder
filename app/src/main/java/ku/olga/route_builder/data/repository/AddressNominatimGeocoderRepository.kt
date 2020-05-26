@@ -1,7 +1,7 @@
 package ku.olga.route_builder.data.repository
 
 import android.location.Address
-import ku.olga.route_builder.domain.model.SearchAddress
+import ku.olga.core_api.dto.SearchAddress
 import ku.olga.route_builder.domain.repository.AddressRepository
 import org.osmdroid.bonuspack.location.GeocoderNominatim
 import java.lang.StringBuilder
@@ -17,7 +17,11 @@ class AddressNominatimGeocoderRepository @Inject constructor(val geocoderNominat
         geocoderNominatim.getFromLocation(lat, lon, MAX_ADDRESS_SEARCH_RESULTS)
             .map { it.toSearchAddress() }
 
-    private fun Address.toSearchAddress() = SearchAddress(buildPostalAddress(), latitude, longitude)
+    private fun Address.toSearchAddress() = SearchAddress(
+        buildPostalAddress(),
+        latitude,
+        longitude
+    )
 
     private fun Address.buildPostalAddress(): String {
         val builder = StringBuilder()

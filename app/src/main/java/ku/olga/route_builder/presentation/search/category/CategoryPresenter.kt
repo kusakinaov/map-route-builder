@@ -1,6 +1,10 @@
 package ku.olga.route_builder.presentation.search.category
 
 import kotlinx.coroutines.*
+import ku.olga.core_api.dto.Category
+import ku.olga.core_api.dto.POI
+import ku.olga.core_api.dto.UserPoint
+import ku.olga.core_api.dto.UserPointType
 import ku.olga.route_builder.domain.model.*
 import ku.olga.route_builder.domain.repository.POIRepository
 import ku.olga.route_builder.presentation.App
@@ -75,8 +79,12 @@ class CategoryPresenter @Inject constructor(private val poiRepository: POIReposi
     fun onClickAddPOI(poi: POI) {
         view?.apply {
             hidePOIDetails()
-            openEditPOI(UserPoint(null, poi.title, poi.description,
-                    poi.latitude, poi.longitude, null, UserPointType.POI))
+            openEditPOI(
+                UserPoint(
+                    null, poi.title, poi.description,
+                    poi.latitude, poi.longitude, null, UserPointType.POI
+                )
+            )
         }
     }
 
