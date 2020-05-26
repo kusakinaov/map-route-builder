@@ -1,6 +1,6 @@
 package ku.olga.route_builder.presentation.user_points.map
 
-import ku.olga.route_builder.domain.model.Coordinates
+import ku.olga.core_api.dto.Coordinates
 import ku.olga.core_api.dto.UserPoint
 import ku.olga.route_builder.presentation.App
 import ku.olga.route_builder.presentation.base.BasePresenter

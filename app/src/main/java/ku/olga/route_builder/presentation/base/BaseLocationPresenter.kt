@@ -5,7 +5,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
-import ku.olga.route_builder.domain.model.Coordinates
+import ku.olga.core_api.dto.Coordinates
 import ku.olga.route_builder.presentation.App
 
 open class BaseLocationPresenter<T : BaseLocationView> : BasePresenter<T>() {
@@ -15,7 +15,12 @@ open class BaseLocationPresenter<T : BaseLocationView> : BasePresenter<T>() {
             locationResult ?: return
 
             for (l in locationResult.locations) {
-                onCoordinatesChanged(Coordinates(l.latitude, l.longitude))
+                onCoordinatesChanged(
+                    Coordinates(
+                        l.latitude,
+                        l.longitude
+                    )
+                )
             }
         }
     }

@@ -4,7 +4,7 @@ import android.app.Application
 import ku.olga.route_builder.presentation.dagger.component.ApplicationComponent
 import android.content.SharedPreferences
 import ku.olga.core.CoreProvidersFactory
-import ku.olga.route_builder.domain.model.Coordinates
+import ku.olga.core_api.dto.Coordinates
 import ku.olga.route_builder.presentation.dagger.component.DaggerFacadeComponent
 import ku.olga.route_builder.presentation.dagger.component.FacadeComponent
 import org.osmdroid.config.Configuration

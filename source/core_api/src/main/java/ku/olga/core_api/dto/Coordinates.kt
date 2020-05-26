@@ -1,3 +1,3 @@
-package ku.olga.route_builder.domain.model
+package ku.olga.core_api.dto
 
 data class Coordinates(val latitude: Double, val longitude: Double)
