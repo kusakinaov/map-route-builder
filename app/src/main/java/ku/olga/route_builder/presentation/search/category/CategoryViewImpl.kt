@@ -30,7 +30,7 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
-import ku.olga.route_builder.domain.model.BoundingBox as AppBoundingBox
+import ku.olga.core_api.dto.BoundingBox as AppBoundingBox
 
 class CategoryViewImpl(
         private val fragment: CategoryFragment,

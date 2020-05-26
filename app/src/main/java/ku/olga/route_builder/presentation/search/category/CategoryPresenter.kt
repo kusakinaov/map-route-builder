@@ -1,12 +1,9 @@
 package ku.olga.route_builder.presentation.search.category
 
 import kotlinx.coroutines.*
-import ku.olga.core_api.dto.Category
-import ku.olga.core_api.dto.POI
-import ku.olga.core_api.dto.UserPoint
-import ku.olga.core_api.dto.UserPointType
+import ku.olga.core_api.dto.*
 import ku.olga.route_builder.domain.model.*
-import ku.olga.route_builder.domain.repository.POIRepository
+import ku.olga.core_api.repository.POIRepository
 import ku.olga.route_builder.presentation.App
 import ku.olga.route_builder.presentation.base.BaseLocationPresenter
 import java.lang.Exception

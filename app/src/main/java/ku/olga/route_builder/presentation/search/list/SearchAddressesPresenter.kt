@@ -4,13 +4,15 @@ import kotlinx.coroutines.*
 import ku.olga.core_api.dto.Category
 import ku.olga.core_api.dto.SearchAddress
 import ku.olga.core_api.repository.AddressRepository
-import ku.olga.route_builder.domain.repository.CategoryRepository
+import ku.olga.core_api.repository.POIRepository
 import ku.olga.route_builder.presentation.base.BaseLocationPresenter
 import java.io.IOException
 import javax.inject.Inject
 
-class SearchAddressesPresenter @Inject constructor(private val addressRepository: AddressRepository,
-                                                   private val categoryRepository: CategoryRepository) :
+class SearchAddressesPresenter @Inject constructor(
+    private val addressRepository: AddressRepository,
+    private val poiRepository: POIRepository
+) :
     BaseLocationPresenter<SearchAddressesView>() {
     private var query: String? = null
     private var job: Job? = null
@@ -44,7 +46,7 @@ class SearchAddressesPresenter @Inject constructor(private val addressRepository
     private fun loadCategories() = CoroutineScope(Dispatchers.IO).launch {
         try {
             withContext(Dispatchers.Main) { showProgress() }
-            val categories = categoryRepository.getCategories(query)
+            val categories = poiRepository.getCategories(query)
             withContext(Dispatchers.Main) { setCategories(categories) }
         } catch (e: IOException) {
             withContext(Dispatchers.Main) { view?.showDefaultError() }

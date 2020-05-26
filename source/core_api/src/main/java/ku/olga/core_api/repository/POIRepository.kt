@@ -1,9 +1,10 @@
-package ku.olga.route_builder.domain.repository
+package ku.olga.core_api.repository
 
-import ku.olga.route_builder.domain.model.BoundingBox
+import ku.olga.core_api.dto.BoundingBox
 import ku.olga.core_api.dto.Category
 import ku.olga.core_api.dto.POI
 
 interface POIRepository {
+    suspend fun getCategories(query: String?): List<Category>
     suspend fun getPOIs(boundingBox: BoundingBox, category: Category): List<POI>
 }
