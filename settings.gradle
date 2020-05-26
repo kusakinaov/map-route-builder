@@ -1,3 +1,4 @@
 rootProject.name = 'map-route-builder'
 include ':app', ':source:core_api'
 include ':source:core_impl'
+include ':source:core'

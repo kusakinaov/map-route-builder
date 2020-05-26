@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         activityComponent = DaggerActivityComponent.builder()
-            .applicationComponent(App.application.applicationComponent)
+            .facadeComponent(App.application.facadeComponent)
             .build()
 
         supportFragmentManager.addOnBackStackChangedListener { bindBackStack() }

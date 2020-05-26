@@ -4,7 +4,6 @@ import dagger.Component
 import ku.olga.core_api.annotation.ActivityScope
 import ku.olga.route_builder.presentation.dagger.module.AddressModule
 import ku.olga.route_builder.presentation.dagger.module.POIModule
-import ku.olga.core_impl.dagger.UserPointCacheModule
 import ku.olga.route_builder.presentation.point.EditPointFragment
 import ku.olga.route_builder.presentation.search.category.CategoryFragment
 import ku.olga.route_builder.presentation.search.list.SearchAddressesFragment
@@ -14,8 +13,8 @@ import ku.olga.route_builder.presentation.user_points.root.UserPointsFragment
 
 @ActivityScope
 @Component(
-    dependencies = [ApplicationComponent::class],
-    modules = [AddressModule::class, UserPointCacheModule::class, POIModule::class]
+    dependencies = [FacadeComponent::class],
+    modules = [AddressModule::class, POIModule::class]
 )
 interface ActivityComponent {
     fun inject(fragment: SearchAddressesFragment)
