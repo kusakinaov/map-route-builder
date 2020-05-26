@@ -1,12 +1,11 @@
-package ku.olga.route_builder.presentation.dagger.module
+package ku.olga.core_impl.dagger.module
 
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import ku.olga.route_builder.data.repository.AddressNominatimGeocoderRepository
-import ku.olga.route_builder.domain.repository.AddressRepository
-import ku.olga.core_api.annotation.ActivityScope
+import ku.olga.core_api.repository.AddressRepository
+import ku.olga.core_impl.repository.AddressNominatimGeocoderRepository
 import org.osmdroid.bonuspack.location.GeocoderNominatim
 import java.util.Locale
 
@@ -19,7 +18,6 @@ class AddressModule {
 
     @Module
     interface BindsModule {
-        @ActivityScope
         @Binds
         fun providesAddressRepository(repository: AddressNominatimGeocoderRepository): AddressRepository
     }

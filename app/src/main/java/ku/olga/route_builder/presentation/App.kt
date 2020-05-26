@@ -31,8 +31,10 @@ class App : Application() {
 
         facadeComponent = DaggerFacadeComponent.builder()
             .applicationProvider(ApplicationComponent.get(this))
+            .addressRepositoryProvider(CoreProvidersFactory.buildAddressRepositoryProvider())
             .userPointsRepositoryProvider(
-                CoreProvidersFactory.buildUserPointRepositoryProvider(ApplicationComponent.get(this))
+                CoreProvidersFactory
+                    .buildUserPointRepositoryProvider(ApplicationComponent.get(this))
             ).build()
         facadeComponent.inject(this)
 

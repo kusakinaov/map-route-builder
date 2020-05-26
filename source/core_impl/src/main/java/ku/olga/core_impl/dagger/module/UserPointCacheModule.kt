@@ -1,4 +1,4 @@
-package ku.olga.core_impl.dagger
+package ku.olga.core_impl.dagger.module
 
 import android.content.Context
 import androidx.room.Room

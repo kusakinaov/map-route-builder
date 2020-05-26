@@ -1,8 +1,8 @@
-package ku.olga.route_builder.data.repository
+package ku.olga.core_impl.repository
 
 import android.location.Address
 import ku.olga.core_api.dto.SearchAddress
-import ku.olga.route_builder.domain.repository.AddressRepository
+import ku.olga.core_api.repository.AddressRepository
 import org.osmdroid.bonuspack.location.GeocoderNominatim
 import java.lang.StringBuilder
 import javax.inject.Inject

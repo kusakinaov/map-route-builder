@@ -1,4 +1,4 @@
-package ku.olga.core_api
+package ku.olga.core_api.provider
 
 import ku.olga.core_api.database.AppDatabaseContract
 import ku.olga.core_api.repository.PointsCacheRepository

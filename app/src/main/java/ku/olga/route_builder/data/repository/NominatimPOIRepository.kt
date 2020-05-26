@@ -13,7 +13,8 @@ class NominatimPOIRepository(private val poiProvider: NominatimPOIProvider) : PO
         poiProvider.getPOIInside(boundingBox.toApiBoundingBox(), category.key, 100)
             ?.map { it.toAppPOI() }?.toList() ?: emptyList()
 
-    private fun POI.toAppPOI() = AppPOI(mId,
+    private fun POI.toAppPOI() = AppPOI(
+        mId,
         mLocation.latitude,
         mLocation.longitude,
         "",
@@ -22,7 +23,8 @@ class NominatimPOIRepository(private val poiProvider: NominatimPOIProvider) : PO
         mUrl,
         mRank,
         mCategory,
-        mType)
+        mType
+    )
 
     private fun BoundingBox.toApiBoundingBox() =
         ApiBoundingBox(latNorth, lonEast, latSouth, lonWest)

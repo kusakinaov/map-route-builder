@@ -1,4 +1,4 @@
-package ku.olga.core_api
+package ku.olga.core_api.provider
 
 import android.content.Context
 import android.content.SharedPreferences
