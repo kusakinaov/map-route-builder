@@ -6,6 +6,4 @@ import ku.olga.route_builder.presentation.App
 import ku.olga.route_builder.presentation.dagger.module.ApplicationModule
 
 @Component(modules = [ApplicationModule::class])
-interface ApplicationComponent : ApplicationProvider {
-    fun inject(app: App)
-}
+interface ApplicationComponent : ApplicationProvider

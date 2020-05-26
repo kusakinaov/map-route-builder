@@ -1,12 +1,13 @@
-package ku.olga.route_builder.data.repository
+package ku.olga.core_impl.repository
 
-import ku.olga.route_builder.data.room.AppDatabase
+import ku.olga.core_api.database.AppDatabaseContract
 import ku.olga.core_api.dto.UserPoint
-import ku.olga.route_builder.domain.repository.PointsCacheRepository
+import ku.olga.core_api.repository.PointsCacheRepository
 import javax.inject.Inject
 import ku.olga.core_api.database.entity.UserPoint as RoomUserPoint
 
-class PointsDbCacheRepository @Inject constructor(private val appDatabase: AppDatabase) : PointsCacheRepository {
+class PointsDbCacheRepository @Inject constructor(private val appDatabase: AppDatabaseContract) :
+    PointsCacheRepository {
     override suspend fun saveUserPoint(userPoint: UserPoint): Long {
         if (userPoint.id == 0L) {
             userPoint.id = appDatabase.userPointDao().getMaxIdx() + 1

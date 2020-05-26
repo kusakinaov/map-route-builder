@@ -1,4 +1,4 @@
-package ku.olga.route_builder.domain.repository
+package ku.olga.core_api.repository
 
 import ku.olga.core_api.dto.UserPoint
 

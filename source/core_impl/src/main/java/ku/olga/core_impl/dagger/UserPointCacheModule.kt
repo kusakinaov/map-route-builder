@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.dagger.module
+package ku.olga.core_impl.dagger
 
 import android.content.Context
 import androidx.room.Room
@@ -6,17 +6,17 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import ku.olga.route_builder.data.repository.PointsDbCacheRepository
-import ku.olga.route_builder.data.room.AppDatabase
-import ku.olga.route_builder.domain.repository.PointsCacheRepository
-import ku.olga.core_api.annotation.ActivityScope
+import ku.olga.core_impl.repository.PointsDbCacheRepository
+import ku.olga.core_api.repository.PointsCacheRepository
 import ku.olga.core_api.annotation.ApplicationContext
+import ku.olga.core_api.database.AppDatabaseContract
+import ku.olga.core_impl.room.AppDatabase
 
-@Module(includes = [PointModule.BindsModule::class])
-class PointModule {
+@Module(includes = [UserPointCacheModule.BindsModule::class])
+class UserPointCacheModule {
     @Provides
     @Reusable
-    fun providesAppDatabase(@ApplicationContext context: Context): AppDatabase =
+    fun providesAppDatabase(@ApplicationContext context: Context): AppDatabaseContract =
         Room
             .databaseBuilder(context, AppDatabase::class.java, "route-builder-database")
             .fallbackToDestructiveMigration()
@@ -24,7 +24,6 @@ class PointModule {
 
     @Module
     interface BindsModule {
-        @ActivityScope
         @Binds
         fun providesPointsCacheRepository(repository: PointsDbCacheRepository): PointsCacheRepository
     }

@@ -6,8 +6,9 @@ import ku.olga.route_builder.presentation.dagger.component.DaggerApplicationComp
 import ku.olga.route_builder.presentation.dagger.module.ApplicationModule
 import android.content.SharedPreferences
 import ku.olga.route_builder.domain.model.Coordinates
+import ku.olga.route_builder.presentation.dagger.component.DaggerFacadeComponent
+import ku.olga.route_builder.presentation.dagger.component.FacadeComponent
 import org.osmdroid.config.Configuration
-import java.util.Locale
 import javax.inject.Inject
 
 class App : Application() {
@@ -21,6 +22,7 @@ class App : Application() {
     }
 
     lateinit var applicationComponent: ApplicationComponent
+    lateinit var facadeComponent: FacadeComponent
     @Inject
     lateinit var preferences: SharedPreferences
 
@@ -30,7 +32,13 @@ class App : Application() {
         applicationComponent = DaggerApplicationComponent.builder()
             .applicationModule(ApplicationModule(this))
             .build()
-        applicationComponent.inject(this)
+
+        facadeComponent = DaggerFacadeComponent.builder()
+            .applicationProvider(applicationComponent)
+
+//            .appDatabaseProvider()
+            .build()
+        facadeComponent.inject(this)
 
         Configuration.getInstance().load(this, preferences)
     }

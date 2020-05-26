@@ -1,4 +1,4 @@
-package ku.olga.route_builder.data.room
+package ku.olga.core_impl.room
 
 import androidx.room.TypeConverter
 import ku.olga.core_api.dto.UserPointType

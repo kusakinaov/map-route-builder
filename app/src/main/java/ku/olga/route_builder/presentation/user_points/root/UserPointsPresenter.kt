@@ -5,7 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ku.olga.core_api.dto.UserPoint
-import ku.olga.route_builder.domain.repository.PointsCacheRepository
+import ku.olga.core_api.repository.PointsCacheRepository
 import ku.olga.route_builder.presentation.base.BasePresenter
 import javax.inject.Inject
 
