@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.location.LocationServices
 import ku.olga.core_api.AppWithFacade
 import ku.olga.core_api.dto.Category
+import ku.olga.core_api.mediator.EditPointMediator
 import ku.olga.ui_core.base.BaseFragment
 import javax.inject.Inject
 
@@ -19,6 +20,9 @@ class CategoryFragment : BaseFragment() {
 
     @Inject
     lateinit var categoryPresenter: CategoryPresenter
+
+    @Inject
+    lateinit var editPointMediator: EditPointMediator
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -38,14 +42,16 @@ class CategoryFragment : BaseFragment() {
 
     override fun getTitle(resources: Resources) = categoryPresenter.getTitle()
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View =
-            inflater.inflate(R.layout.fragment_category, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View =
+        inflater.inflate(R.layout.fragment_category, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        categoryView = CategoryViewImpl(this, categoryPresenter)
+        categoryView = CategoryViewImpl(this, categoryPresenter, editPointMediator)
         categoryView?.onAttach()
     }
 
@@ -67,9 +73,9 @@ class CategoryFragment : BaseFragment() {
     override fun isPressBackConsumed(): Boolean = categoryView?.hidePOIDetails() ?: false
 
     override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<out String>,
-            grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         categoryPresenter.checkLocationPermission()
@@ -78,9 +84,9 @@ class CategoryFragment : BaseFragment() {
     companion object {
         private const val CATEGORY = "category"
         fun newInstance(target: Fragment, requestCode: Int, category: Category) =
-                CategoryFragment().apply {
-                    setTargetFragment(target, requestCode)
-                    arguments = Bundle().apply { putSerializable(CATEGORY, category) }
-                }
+            CategoryFragment().apply {
+                setTargetFragment(target, requestCode)
+                arguments = Bundle().apply { putSerializable(CATEGORY, category) }
+            }
     }
 }

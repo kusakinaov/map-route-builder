@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.fragment_category.view.*
 import kotlinx.android.synthetic.main.fragment_category.view.mapView
 import ku.olga.core_api.dto.POI
 import ku.olga.core_api.dto.UserPoint
+import ku.olga.core_api.mediator.EditPointMediator
 import ku.olga.ui_core.utils.convertDpToPx
 import ku.olga.ui_core.utils.convertSpToPx
 import ku.olga.ui_core.utils.getBitmap
@@ -31,7 +32,8 @@ import ku.olga.core_api.dto.BoundingBox as AppBoundingBox
 
 class CategoryViewImpl(
         private val fragment: CategoryFragment,
-        private val presenter: CategoryPresenter
+        private val presenter: CategoryPresenter,
+        private val editPointMediator: EditPointMediator
 ) : CategoryView {
     private var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>? = null
 
@@ -198,9 +200,7 @@ class CategoryViewImpl(
     }
 
     override fun openEditPOI(userPoint: UserPoint) {
-        TODO()
-//        fragment.replaceFragment(EditPointFragment
-//                .newInstance(fragment, REQ_CODE_EDIT_POINT, userPoint), true)
+        editPointMediator.editPoint(fragment, REQ_CODE_EDIT_POINT, userPoint)
     }
 
     override fun hasLocationPermission(): Boolean {

@@ -12,7 +12,7 @@ import javax.inject.Inject
 class CategoryPresenter @Inject constructor(
     private val poiRepository: POIRepository,
     preferences: SharedPreferences
-) : BaseLocationPresenter<ku.olga.category.CategoryView>(preferences) {
+) : BaseLocationPresenter<CategoryView>(preferences) {
     var category: Category? = null
     private val pois = mutableListOf<POI>()
     private var job: Job? = null
@@ -21,7 +21,7 @@ class CategoryPresenter @Inject constructor(
     private var zoomLevel =
         DEFAULT_ZOOM_LEVEL
 
-    override fun attachView(view: ku.olga.category.CategoryView) {
+    override fun attachView(view: CategoryView) {
         super.attachView(view)
         when {
             center != null -> moveToCenter()

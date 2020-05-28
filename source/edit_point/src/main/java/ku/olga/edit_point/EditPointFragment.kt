@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import ku.olga.core_api.AppWithFacade
 import ku.olga.ui_core.REQ_CODE_CONFIRM_DELETE_POINT
 import ku.olga.core_api.dto.UserPoint
 import ku.olga.ui_core.base.BaseFragment
@@ -19,24 +20,17 @@ class EditPointFragment : BaseFragment() {
     private var editPointView: EditPointView? = null
 
     override fun inject(activity: FragmentActivity) {
-//        if (activity is MainActivity) {
-//            activity.getActivityComponent()?.inject(this)
-//        }
-        TODO()
+        activity.application?.let {
+            if (it is AppWithFacade) {
+                EditPointComponent.build(it.getFacade()).inject(this)
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            if (it.containsKey(USER_POINT)) {
-                presenter.setPoint(it.getSerializable(USER_POINT) as UserPoint)
-            } else {
-                presenter.setAddress(
-                    it.getString(ADDRESS),
-                    it.getDouble(LATITUDE),
-                    it.getDouble(LONGITUDE)
-                )
-            }
+            presenter.setPoint(it.getSerializable(USER_POINT) as UserPoint)
         }
     }
 
@@ -91,26 +85,7 @@ class EditPointFragment : BaseFragment() {
     override fun getBackButtonRes() = R.drawable.ic_close
 
     companion object {
-        private const val ADDRESS = "address"
-        private const val LATITUDE = "latitude"
-        private const val LONGITUDE = "longitude"
         private const val USER_POINT = "user_point"
-
-        fun newInstance(
-            target: Fragment,
-            requestCode: Int,
-            postalAddress: String,
-            lat: Double,
-            lon: Double
-        ) =
-            EditPointFragment().apply {
-                setTargetFragment(target, requestCode)
-                arguments = Bundle().apply {
-                    putString(ADDRESS, postalAddress)
-                    putDouble(LATITUDE, lat)
-                    putDouble(LONGITUDE, lon)
-                }
-            }
 
         fun newInstance(target: Fragment, requestCode: Int, userPoint: UserPoint) =
             EditPointFragment().apply {

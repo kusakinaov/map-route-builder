@@ -14,6 +14,8 @@ import ku.olga.ui_core.REQ_CODE_VIEW_CATEGORY
 import ku.olga.ui_core.REQ_CODE_VIEW_SEARCH_ADDRESS
 import ku.olga.core_api.dto.Category
 import ku.olga.core_api.dto.SearchAddress
+import ku.olga.core_api.dto.UserPoint
+import ku.olga.core_api.dto.UserPointType
 import ku.olga.route_builder.presentation.MainActivity
 import ku.olga.ui_core.base.BaseFragment
 import ku.olga.ui_core.utils.hideKeyboard
@@ -75,8 +77,14 @@ class SearchAddressesFragment : BaseFragment() {
         replaceFragment(
             EditPointFragment
                 .newInstance(
-                    this, REQ_CODE_VIEW_SEARCH_ADDRESS,
-                    searchAddress.postalAddress, searchAddress.lat, searchAddress.lon
+                    this,
+                    REQ_CODE_VIEW_SEARCH_ADDRESS,
+                    UserPoint(
+                        postalAddress = searchAddress.postalAddress,
+                        lat = searchAddress.lat,
+                        lon = searchAddress.lon,
+                        type = UserPointType.ADDRESS
+                    )
                 ),
             true
         )
@@ -85,8 +93,11 @@ class SearchAddressesFragment : BaseFragment() {
     private fun openCategory(category: Category) {
         hideKeyboard()
         replaceFragment(
-            ku.olga.category.CategoryFragment.newInstance(this,
-            REQ_CODE_VIEW_CATEGORY, category), true)
+            ku.olga.category.CategoryFragment.newInstance(
+                this,
+                REQ_CODE_VIEW_CATEGORY, category
+            ), true
+        )
     }
 
     override fun onRequestPermissionsResult(
