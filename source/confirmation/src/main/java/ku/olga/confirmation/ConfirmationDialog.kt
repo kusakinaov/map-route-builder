@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation
+package ku.olga.confirmation
 
 import android.app.Activity
 import android.content.DialogInterface
@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.layout_confirmation_dialog.*
-import ku.olga.route_builder.R
 
 class ConfirmationDialog : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,7 +18,7 @@ class ConfirmationDialog : DialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-        inflater.inflate(R.layout.layout_confirmation_dialog, container, false)
+            inflater.inflate(R.layout.layout_confirmation_dialog, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -58,7 +57,9 @@ class ConfirmationDialog : DialogFragment() {
                     putString(MESSAGE, message)
                 }
             }
-            dialog.show(fragmentManager, TAG)
+            dialog.show(fragmentManager,
+                    TAG
+            )
         }
     }
 }

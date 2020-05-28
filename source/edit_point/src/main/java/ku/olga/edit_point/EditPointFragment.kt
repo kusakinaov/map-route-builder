@@ -10,12 +10,16 @@ import androidx.fragment.app.FragmentActivity
 import ku.olga.core_api.AppWithFacade
 import ku.olga.ui_core.REQ_CODE_CONFIRM_DELETE_POINT
 import ku.olga.core_api.dto.UserPoint
+import ku.olga.core_api.mediator.ConfirmationMediator
 import ku.olga.ui_core.base.BaseFragment
 import javax.inject.Inject
 
 class EditPointFragment : BaseFragment() {
     @Inject
     lateinit var presenter: EditPointPresenter
+
+    @Inject
+    lateinit var confirmationMediator: ConfirmationMediator
 
     private var editPointView: EditPointView? = null
 
@@ -45,7 +49,7 @@ class EditPointFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        editPointView = EditPointViewImpl(this, presenter)
+        editPointView = EditPointViewImpl(this, presenter, confirmationMediator)
         editPointView?.onAttach()
     }
 

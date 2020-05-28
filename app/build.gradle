@@ -60,4 +60,5 @@ dependencies {
     implementation project(':source:category')
     implementation project(':source:edit_point')
     implementation project(':source:search')
+    implementation project(':source:confirmation')
 }
