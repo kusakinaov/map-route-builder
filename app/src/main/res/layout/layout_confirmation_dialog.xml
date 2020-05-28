@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minWidth="296dp"
     android:paddingBottom="8dp"
-    tools:ignore="RtlCompat">
+    tools:ignore="RtlCompat"
+    tools:theme="@style/AppTheme.Dialog">
 
     <TextView
         android:id="@+id/textViewMessage"
@@ -16,7 +16,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginRight="24dp"
         android:textAppearance="@style/TextAppearance.Primary"
-        tools:text="@tools:sample/lorem/random" />
+        tools:text="@tools:sample/lorem" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonPositive"
@@ -38,5 +38,4 @@
         android:layout_marginEnd="8dp"
         android:layout_toStartOf="@id/buttonPositive"
         android:text="@android:string/cancel" />
-
 </RelativeLayout>
