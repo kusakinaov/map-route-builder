@@ -10,20 +10,25 @@ import kotlinx.android.synthetic.main.fragment_user_points.view.viewPager
 import ku.olga.route_builder.R
 import ku.olga.ui_core.REQ_CODE_SEARCH_POINT
 import ku.olga.core_api.dto.UserPoint
+import ku.olga.core_api.mediator.SearchMediator
 import ku.olga.ui_core.base.BaseFragment
-import ku.olga.route_builder.presentation.search.list.SearchAddressesFragment
 import ku.olga.route_builder.presentation.user_points.OnUserPointsChangeListener
 
 class UserPointsViewImpl(
     private val fragment: BaseFragment,
     private val presenter: UserPointsPresenter,
-    private val userPointsAdapter: UserPointsAdapter
+    private val userPointsAdapter: UserPointsAdapter,
+    private val searchMediator: SearchMediator
 ) : UserPointsView {
     private val pageChangeListener = object : ViewPager.OnPageChangeListener {
         override fun onPageScrollStateChanged(state: Int) {
         }
 
-        override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+        override fun onPageScrolled(
+            position: Int,
+            positionOffset: Float,
+            positionOffsetPixels: Int
+        ) {
         }
 
         override fun onPageSelected(position: Int) {
@@ -38,12 +43,9 @@ class UserPointsViewImpl(
                 addOnPageChangeListener(pageChangeListener)
                 setOnTouchListener { _, _ -> true }
             }
-            buttonAdd.apply{
+            buttonAdd.apply {
                 setOnClickListener {
-                    fragment.replaceFragment(SearchAddressesFragment
-                        .newInstance(fragment,
-                            REQ_CODE_SEARCH_POINT
-                        ), true)
+                    searchMediator.openSearch(fragment, REQ_CODE_SEARCH_POINT)
                 }
                 show()
             }

@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.search.list
+package ku.olga.search
 
 import android.content.Context
 import android.content.res.Resources
@@ -9,17 +9,17 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.location.LocationServices
-import ku.olga.route_builder.R
+import ku.olga.core_api.AppWithFacade
 import ku.olga.ui_core.REQ_CODE_VIEW_CATEGORY
 import ku.olga.ui_core.REQ_CODE_VIEW_SEARCH_ADDRESS
 import ku.olga.core_api.dto.Category
 import ku.olga.core_api.dto.SearchAddress
 import ku.olga.core_api.dto.UserPoint
 import ku.olga.core_api.dto.UserPointType
-import ku.olga.route_builder.presentation.MainActivity
+import ku.olga.core_api.mediator.CategoryMediator
+import ku.olga.core_api.mediator.EditPointMediator
 import ku.olga.ui_core.base.BaseFragment
 import ku.olga.ui_core.utils.hideKeyboard
-import ku.olga.edit_point.EditPointFragment
 import javax.inject.Inject
 
 class SearchAddressesFragment : BaseFragment() {
@@ -31,6 +31,12 @@ class SearchAddressesFragment : BaseFragment() {
 
     @Inject
     lateinit var categoriesAdapter: CategoriesAdapter
+
+    @Inject
+    lateinit var categoryMediator: CategoryMediator
+
+    @Inject
+    lateinit var editPointMediator: EditPointMediator
 
     private var searchAddressesView: SearchAddressesView? = null
 
@@ -49,8 +55,10 @@ class SearchAddressesFragment : BaseFragment() {
     }
 
     override fun inject(activity: FragmentActivity) {
-        if (activity is MainActivity) {
-            activity.getActivityComponent()?.inject(this)
+        activity.application?.let {
+            if (it is AppWithFacade) {
+                SearchComponent.build(it.getFacade()).inject(this)
+            }
         }
     }
 
@@ -74,30 +82,21 @@ class SearchAddressesFragment : BaseFragment() {
 
     private fun openSearchAddress(searchAddress: SearchAddress) {
         hideKeyboard()
-        replaceFragment(
-            EditPointFragment
-                .newInstance(
-                    this,
-                    REQ_CODE_VIEW_SEARCH_ADDRESS,
-                    UserPoint(
-                        postalAddress = searchAddress.postalAddress,
-                        lat = searchAddress.lat,
-                        lon = searchAddress.lon,
-                        type = UserPointType.ADDRESS
-                    )
-                ),
-            true
+        editPointMediator.editPoint(
+            this,
+            REQ_CODE_VIEW_SEARCH_ADDRESS,
+            UserPoint(
+                postalAddress = searchAddress.postalAddress,
+                lat = searchAddress.lat,
+                lon = searchAddress.lon,
+                type = UserPointType.ADDRESS
+            )
         )
     }
 
     private fun openCategory(category: Category) {
         hideKeyboard()
-        replaceFragment(
-            ku.olga.category.CategoryFragment.newInstance(
-                this,
-                REQ_CODE_VIEW_CATEGORY, category
-            ), true
-        )
+        categoryMediator.openCategory(this, REQ_CODE_VIEW_CATEGORY, category)
     }
 
     override fun onRequestPermissionsResult(
@@ -130,6 +129,7 @@ class SearchAddressesFragment : BaseFragment() {
 
     companion object {
         fun newInstance(target: Fragment, requestCode: Int) =
-            SearchAddressesFragment().apply { setTargetFragment(target, requestCode) }
+            SearchAddressesFragment()
+                .apply { setTargetFragment(target, requestCode) }
     }
 }

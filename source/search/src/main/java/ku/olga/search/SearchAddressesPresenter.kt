@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.search.list
+package ku.olga.search
 
 import android.content.SharedPreferences
 import kotlinx.coroutines.*
@@ -14,13 +14,13 @@ class SearchAddressesPresenter @Inject constructor(
     private val addressRepository: AddressRepository,
     private val poiRepository: POIRepository,
     preferences: SharedPreferences
-) : BaseLocationPresenter<SearchAddressesView>(preferences) {
+) : BaseLocationPresenter<ku.olga.search.SearchAddressesView>(preferences) {
     private var query: String? = null
     private var job: Job? = null
     private val addresses = mutableListOf<SearchAddress>()
     private val categories = mutableListOf<Category>()
 
-    override fun attachView(view: SearchAddressesView) {
+    override fun attachView(view: ku.olga.search.SearchAddressesView) {
         super.attachView(view)
         bindQuery()
         bindData()

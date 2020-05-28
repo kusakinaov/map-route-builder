@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
+import ku.olga.core_api.mediator.SearchMediator
 import ku.olga.route_builder.R
 import ku.olga.route_builder.presentation.MainActivity
 import ku.olga.ui_core.base.BaseFragment
@@ -16,6 +17,9 @@ import javax.inject.Inject
 class UserPointsFragment : BaseFragment(), UserPointsMapFragment.BottomSheetCallback {
     @Inject
     lateinit var presenter: UserPointsPresenter
+
+    @Inject
+    lateinit var searchMediator: SearchMediator
 
     private lateinit var userPointsAdapter: UserPointsAdapter
     private var userPointsView: UserPointsView? = null
@@ -42,7 +46,7 @@ class UserPointsFragment : BaseFragment(), UserPointsMapFragment.BottomSheetCall
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        userPointsView = UserPointsViewImpl(this, presenter, userPointsAdapter)
+        userPointsView = UserPointsViewImpl(this, presenter, userPointsAdapter, searchMediator)
         userPointsView?.onAttach()
     }
 

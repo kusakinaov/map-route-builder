@@ -5,7 +5,9 @@ import dagger.Module
 import ku.olga.category.CategoryMediatorImpl
 import ku.olga.core_api.mediator.CategoryMediator
 import ku.olga.core_api.mediator.EditPointMediator
+import ku.olga.core_api.mediator.SearchMediator
 import ku.olga.edit_point.EditPointMediatorImpl
+import ku.olga.search.SearchMediatorImpl
 
 @Module
 interface MediatorsBinding {
@@ -14,4 +16,7 @@ interface MediatorsBinding {
 
     @Binds
     fun bindEditPointMediator(editPointMediatorImpl: EditPointMediatorImpl): EditPointMediator
+
+    @Binds
+    fun bindSearchMediator(searchMediatorImpl: SearchMediatorImpl): SearchMediator
 }

@@ -3,12 +3,7 @@
     <string name="hint_empty_points">Список пуст</string>
     <string name="ttl_user_points">Мои точки</string>
     <string name="desc_add_point">Добавить точку</string>
-    <string name="error_search_points">Не удалось выполнить запрос</string>
-    <string name="button_retry">Повторить</string>
-    <string name="hint_empty_search">Ничего не найдено</string>
-    <string name="ttl_search">Поиск</string>
     <string name="action_search">Поиск</string>
-    <string name="hint_search_address">Введите адрес</string>
     <string name="hint_input_title">Введите название</string>
     <string name="hint_input_description">Введите описание</string>
     <string name="hint_no_title">Нет заголовка</string>

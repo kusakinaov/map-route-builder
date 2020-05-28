@@ -3,7 +3,7 @@ package ku.olga.route_builder.presentation.dagger.component
 import dagger.Component
 import ku.olga.core_api.annotation.ActivityScope
 import ku.olga.edit_point.EditPointFragment
-import ku.olga.route_builder.presentation.search.list.SearchAddressesFragment
+import ku.olga.search.SearchAddressesFragment
 import ku.olga.route_builder.presentation.user_points.list.UserPointsListFragment
 import ku.olga.route_builder.presentation.user_points.map.UserPointsMapFragment
 import ku.olga.route_builder.presentation.user_points.root.UserPointsFragment
@@ -11,7 +11,7 @@ import ku.olga.route_builder.presentation.user_points.root.UserPointsFragment
 @ActivityScope
 @Component(dependencies = [FacadeComponent::class])
 interface ActivityComponent {
-    fun inject(fragment: SearchAddressesFragment)
+    fun inject(fragment: ku.olga.search.SearchAddressesFragment)
     fun inject(fragment: UserPointsFragment)
     fun inject(fragment: UserPointsMapFragment)
     fun inject(fragment: EditPointFragment)

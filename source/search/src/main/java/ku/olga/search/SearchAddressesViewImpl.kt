@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.search.list
+package ku.olga.search
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_search.view.*
 import kotlinx.android.synthetic.main.layout_error.view.*
-import ku.olga.route_builder.R
 import ku.olga.ui_core.REQ_CODE_LOCATION_PERMISSION
 import ku.olga.core_api.dto.Category
 import ku.olga.core_api.dto.SearchAddress

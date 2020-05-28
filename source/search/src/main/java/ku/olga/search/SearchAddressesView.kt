@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.search.list
+package ku.olga.search
 
 import androidx.appcompat.widget.SearchView
 import ku.olga.core_api.dto.Category

@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.search.list
+package ku.olga.search
 
 import android.text.SpannableStringBuilder
 import android.text.Spanned
@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_category.view.*
-import ku.olga.route_builder.R
 import ku.olga.core_api.dto.Category
 import ku.olga.ui_core.base.BaseAdapter
 import java.util.*

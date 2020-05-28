@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ttl_search">Поиск</string>
+    <string name="hint_empty_search">Ничего не найдено</string>
+    <string name="error_search_points">Не удалось выполнить запрос</string>
+    <string name="button_retry">Повторить</string>
+    <string name="hint_search_address">Введите адрес</string>
+</resources>
