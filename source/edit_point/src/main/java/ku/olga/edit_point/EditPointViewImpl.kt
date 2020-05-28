@@ -1,15 +1,11 @@
-package ku.olga.route_builder.presentation.point
+package ku.olga.edit_point
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
 import android.text.Editable
 import android.view.View
 import androidx.fragment.app.FragmentManager
 import kotlinx.android.synthetic.main.fragment_edit_point.view.*
-import ku.olga.route_builder.R
-import ku.olga.ui_core.REQ_CODE_CONFIRM_DELETE_POINT
-import ku.olga.route_builder.presentation.ConfirmationDialog
 import ku.olga.ui_core.base.BaseFragment
 import ku.olga.ui_core.view.SimpleTextWatcher
 
@@ -67,9 +63,10 @@ class EditPointViewImpl(
     }
 
     override fun showConfirmationDeleteDialog(title: String) {
-        ConfirmationDialog.show(fragment,
-            REQ_CODE_CONFIRM_DELETE_POINT,
-                fragment.getString(R.string.question_confirm_delete_point, title), Bundle())
+        TODO()
+//        ConfirmationDialog.show(fragment,
+//            REQ_CODE_CONFIRM_DELETE_POINT,
+//                fragment.getString(R.string.question_confirm_delete_point, title), Bundle())
     }
 
     override fun notifyDeleteSuccessful() {

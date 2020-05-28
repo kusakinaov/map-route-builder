@@ -17,8 +17,7 @@ import ku.olga.core_api.dto.SearchAddress
 import ku.olga.route_builder.presentation.MainActivity
 import ku.olga.ui_core.base.BaseFragment
 import ku.olga.ui_core.utils.hideKeyboard
-import ku.olga.route_builder.presentation.point.EditPointFragment
-import ku.olga.category.CategoryFragment
+import ku.olga.edit_point.EditPointFragment
 import javax.inject.Inject
 
 class SearchAddressesFragment : BaseFragment() {

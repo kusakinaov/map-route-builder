@@ -11,12 +11,10 @@
     <string name="hint_search_address">Введите адрес</string>
     <string name="hint_input_title">Введите название</string>
     <string name="hint_input_description">Введите описание</string>
-    <string name="ttl_edit">Редактирование</string>
     <string name="hint_no_title">Нет заголовка</string>
     <string name="hint_no_description">Нет описания</string>
     <string name="action_save">Сохранить</string>
     <string name="button_delete">УДАЛИТЬ</string>
-    <string name="question_confirm_delete_point">Удалить точку %s?</string>
     <string name="tab_user_points_list">Список</string>
     <string name="tab_user_points_map">Карта</string>
 </resources>

@@ -7,7 +7,7 @@ import kotlinx.android.synthetic.main.fragment_user_points_list.view.*
 import ku.olga.ui_core.REQ_CODE_EDIT_POINT
 import ku.olga.core_api.dto.UserPoint
 import ku.olga.ui_core.base.BaseFragment
-import ku.olga.route_builder.presentation.point.EditPointFragment
+import ku.olga.edit_point.EditPointFragment
 
 class UserPointsListViewImpl(
     private val fragment: BaseFragment,
@@ -17,7 +17,8 @@ class UserPointsListViewImpl(
         onPointClickListener = {
             val parent = fragment.parentFragment
             if (parent is BaseFragment) {
-                parent.replaceFragment(EditPointFragment
+                parent.replaceFragment(
+                    EditPointFragment
                         .newInstance(parent,
                             REQ_CODE_EDIT_POINT, it), true)
             }

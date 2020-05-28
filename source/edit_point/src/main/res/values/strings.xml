@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ttl_edit">Редактирование</string>
+    <string name="question_confirm_delete_point">Удалить точку %s?</string>
+</resources>

@@ -2,8 +2,7 @@ package ku.olga.route_builder.presentation.dagger.component
 
 import dagger.Component
 import ku.olga.core_api.annotation.ActivityScope
-import ku.olga.route_builder.presentation.point.EditPointFragment
-import ku.olga.category.CategoryFragment
+import ku.olga.edit_point.EditPointFragment
 import ku.olga.route_builder.presentation.search.list.SearchAddressesFragment
 import ku.olga.route_builder.presentation.user_points.list.UserPointsListFragment
 import ku.olga.route_builder.presentation.user_points.map.UserPointsMapFragment

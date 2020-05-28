@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.point
+package ku.olga.edit_point
 
 import ku.olga.ui_core.base.BaseView
 

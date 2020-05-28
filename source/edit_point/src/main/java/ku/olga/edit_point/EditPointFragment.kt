@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.point
+package ku.olga.edit_point
 
 import android.app.Activity
 import android.content.Intent
@@ -7,10 +7,8 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import ku.olga.route_builder.R
 import ku.olga.ui_core.REQ_CODE_CONFIRM_DELETE_POINT
 import ku.olga.core_api.dto.UserPoint
-import ku.olga.route_builder.presentation.MainActivity
 import ku.olga.ui_core.base.BaseFragment
 import javax.inject.Inject
 
@@ -21,9 +19,10 @@ class EditPointFragment : BaseFragment() {
     private var editPointView: EditPointView? = null
 
     override fun inject(activity: FragmentActivity) {
-        if (activity is MainActivity) {
-            activity.getActivityComponent()?.inject(this)
-        }
+//        if (activity is MainActivity) {
+//            activity.getActivityComponent()?.inject(this)
+//        }
+        TODO()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
