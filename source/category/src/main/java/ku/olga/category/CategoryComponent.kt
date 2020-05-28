@@ -1,7 +1,6 @@
 package ku.olga.category
 
 import dagger.Component
-import ku.olga.category.di.DaggerCategoryComponent
 import ku.olga.core_api.ProvidersFacade
 
 @Component(
