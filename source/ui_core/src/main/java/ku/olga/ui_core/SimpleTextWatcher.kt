@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.view
+package ku.olga.ui_core
 
 import android.text.TextWatcher
 

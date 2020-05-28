@@ -16,7 +16,7 @@ import ku.olga.core_api.dto.Category
 import ku.olga.core_api.dto.SearchAddress
 import ku.olga.route_builder.presentation.MainActivity
 import ku.olga.route_builder.presentation.base.BaseFragment
-import ku.olga.route_builder.presentation.hideKeyboard
+import ku.olga.ui_core.hideKeyboard
 import ku.olga.route_builder.presentation.point.EditPointFragment
 import ku.olga.route_builder.presentation.search.category.CategoryFragment
 import javax.inject.Inject

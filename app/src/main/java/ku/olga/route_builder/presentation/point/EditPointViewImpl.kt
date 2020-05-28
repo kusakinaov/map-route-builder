@@ -11,7 +11,7 @@ import ku.olga.route_builder.R
 import ku.olga.route_builder.REQ_CODE_CONFIRM_DELETE_POINT
 import ku.olga.route_builder.presentation.ConfirmationDialog
 import ku.olga.route_builder.presentation.base.BaseFragment
-import ku.olga.route_builder.presentation.view.SimpleTextWatcher
+import ku.olga.ui_core.SimpleTextWatcher
 
 class EditPointViewImpl(
         val fragment: BaseFragment,
@@ -19,12 +19,14 @@ class EditPointViewImpl(
 ) : EditPointView {
     init {
         fragment.view?.apply {
-            editTextTitle.addTextChangedListener(object : SimpleTextWatcher {
+            editTextTitle.addTextChangedListener(object :
+                ku.olga.ui_core.SimpleTextWatcher {
                 override fun afterTextChanged(s: Editable?) {
                     presenter.setTitle(s?.toString() ?: "")
                 }
             })
-            editTextDescription.addTextChangedListener(object : SimpleTextWatcher {
+            editTextDescription.addTextChangedListener(object :
+                ku.olga.ui_core.SimpleTextWatcher {
                 override fun afterTextChanged(s: Editable?) {
                     presenter.setDescription(s?.toString() ?: "")
                 }

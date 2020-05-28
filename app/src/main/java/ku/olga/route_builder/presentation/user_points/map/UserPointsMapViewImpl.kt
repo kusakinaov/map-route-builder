@@ -12,9 +12,9 @@ import ku.olga.route_builder.R
 import ku.olga.route_builder.REQ_CODE_EDIT_POINT
 import ku.olga.core_api.dto.UserPoint
 import ku.olga.route_builder.presentation.base.BaseFragment
-import ku.olga.route_builder.presentation.convertDpToPx
-import ku.olga.route_builder.presentation.convertSpToPx
-import ku.olga.route_builder.presentation.getBitmap
+import ku.olga.ui_core.convertDpToPx
+import ku.olga.ui_core.convertSpToPx
+import ku.olga.ui_core.getBitmap
 import ku.olga.route_builder.presentation.point.EditPointFragment
 import org.osmdroid.bonuspack.clustering.RadiusMarkerClusterer
 import org.osmdroid.events.MapListener
@@ -41,7 +41,14 @@ class UserPointsMapViewImpl(
                 state = BottomSheetBehavior.STATE_HIDDEN
             }
             markerOverlay = RadiusMarkerClusterer(it.context).apply {
-                setIcon(getBitmap(ContextCompat.getDrawable(it.context, R.drawable.cluster)!!))
+                setIcon(
+                    getBitmap(
+                        ContextCompat.getDrawable(
+                            it.context,
+                            R.drawable.cluster
+                        )!!
+                    )
+                )
                 textPaint.apply {
                     color = ContextCompat.getColor(it.context, R.color.map_icon_text)
                     textSize = convertSpToPx(it.resources, 16f)
@@ -191,7 +198,10 @@ class UserPointsMapViewImpl(
         val boundingBox = buildBoundingBox(userPoints)
         fragment.mapView?.apply {
             post {
-                zoomToBoundingBox(boundingBox, animated, convertDpToPx(resources, BORDER_SIZE).toInt())
+                zoomToBoundingBox(boundingBox, animated, convertDpToPx(
+                    resources,
+                    BORDER_SIZE
+                ).toInt())
             }
         }
     }

@@ -60,4 +60,5 @@ dependencies {
     kapt daggerCompiler
 
     implementation project(':source:core')
+    implementation project(':source:ui_core')
 }

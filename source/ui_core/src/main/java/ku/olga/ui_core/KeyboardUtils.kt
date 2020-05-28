@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation
+package ku.olga.ui_core
 
 import android.app.Activity
 import android.view.inputmethod.InputMethodManager

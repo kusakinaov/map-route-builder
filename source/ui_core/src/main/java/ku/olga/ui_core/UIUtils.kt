@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation
+package ku.olga.ui_core
 
 import android.content.res.Resources
 import android.graphics.Bitmap

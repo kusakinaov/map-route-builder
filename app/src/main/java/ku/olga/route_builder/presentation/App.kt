@@ -4,13 +4,15 @@ import android.app.Application
 import ku.olga.route_builder.presentation.dagger.component.ApplicationComponent
 import android.content.SharedPreferences
 import ku.olga.core.CoreProvidersFactory
+import ku.olga.core_api.AppWithFacade
+import ku.olga.core_api.ProvidersFacade
 import ku.olga.core_api.dto.Coordinates
 import ku.olga.route_builder.presentation.dagger.component.DaggerFacadeComponent
 import ku.olga.route_builder.presentation.dagger.component.FacadeComponent
 import org.osmdroid.config.Configuration
 import javax.inject.Inject
 
-class App : Application() {
+class App : Application(), AppWithFacade {
     companion object {
         private const val LATITUDE = "latitude"
         private const val LONGITUDE = "longitude"
@@ -65,4 +67,6 @@ class App : Application() {
                 java.lang.Double.doubleToRawLongBits(defaultDouble)
             )
         )
+
+    override fun getFacade(): ProvidersFacade = facadeComponent
 }
