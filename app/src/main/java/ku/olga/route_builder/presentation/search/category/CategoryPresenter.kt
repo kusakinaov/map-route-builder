@@ -4,8 +4,8 @@ import android.content.SharedPreferences
 import kotlinx.coroutines.*
 import ku.olga.core_api.dto.*
 import ku.olga.core_api.repository.POIRepository
-import ku.olga.ui_core.BaseLocationPresenter
-import ku.olga.ui_core.getLastCoordinates
+import ku.olga.ui_core.base.BaseLocationPresenter
+import ku.olga.ui_core.utils.getLastCoordinates
 import java.lang.Exception
 import javax.inject.Inject
 

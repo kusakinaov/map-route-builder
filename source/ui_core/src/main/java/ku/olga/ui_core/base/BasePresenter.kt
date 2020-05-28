@@ -1,4 +1,4 @@
-package ku.olga.ui_core
+package ku.olga.ui_core.base
 
 abstract class BasePresenter<T : BaseView> {
     var view: T? = null

@@ -10,7 +10,8 @@ import kotlinx.android.synthetic.main.fragment_edit_point.view.*
 import ku.olga.route_builder.R
 import ku.olga.route_builder.REQ_CODE_CONFIRM_DELETE_POINT
 import ku.olga.route_builder.presentation.ConfirmationDialog
-import ku.olga.ui_core.BaseFragment
+import ku.olga.ui_core.base.BaseFragment
+import ku.olga.ui_core.view.SimpleTextWatcher
 
 class EditPointViewImpl(
     val fragment: BaseFragment,
@@ -19,13 +20,13 @@ class EditPointViewImpl(
     init {
         fragment.view?.apply {
             editTextTitle.addTextChangedListener(object :
-                ku.olga.ui_core.SimpleTextWatcher {
+                SimpleTextWatcher {
                 override fun afterTextChanged(s: Editable?) {
                     presenter.setTitle(s?.toString() ?: "")
                 }
             })
             editTextDescription.addTextChangedListener(object :
-                ku.olga.ui_core.SimpleTextWatcher {
+                SimpleTextWatcher {
                 override fun afterTextChanged(s: Editable?) {
                     presenter.setDescription(s?.toString() ?: "")
                 }

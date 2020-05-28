@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import ku.olga.route_builder.R
 import ku.olga.route_builder.presentation.MainActivity
-import ku.olga.ui_core.BaseFragment
+import ku.olga.ui_core.base.BaseFragment
 import ku.olga.route_builder.presentation.user_points.map.UserPointsMapFragment
 import javax.inject.Inject
 

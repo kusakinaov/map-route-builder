@@ -1,7 +1,7 @@
 package ku.olga.route_builder.presentation.user_points.list
 
 import ku.olga.core_api.dto.UserPoint
-import ku.olga.ui_core.BasePresenter
+import ku.olga.ui_core.base.BasePresenter
 import javax.inject.Inject
 
 class UserPointsListPresenter @Inject constructor(): BasePresenter<UserPointsListView>() {

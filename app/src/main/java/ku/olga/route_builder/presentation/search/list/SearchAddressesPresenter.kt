@@ -6,7 +6,7 @@ import ku.olga.core_api.dto.Category
 import ku.olga.core_api.dto.SearchAddress
 import ku.olga.core_api.repository.AddressRepository
 import ku.olga.core_api.repository.POIRepository
-import ku.olga.ui_core.BaseLocationPresenter
+import ku.olga.ui_core.base.BaseLocationPresenter
 import java.io.IOException
 import javax.inject.Inject
 

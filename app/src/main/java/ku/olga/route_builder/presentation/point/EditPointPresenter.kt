@@ -4,7 +4,7 @@ import kotlinx.coroutines.*
 import ku.olga.core_api.dto.UserPoint
 import ku.olga.core_api.dto.UserPointType
 import ku.olga.core_api.repository.PointsCacheRepository
-import ku.olga.ui_core.BasePresenter
+import ku.olga.ui_core.base.BasePresenter
 import javax.inject.Inject
 
 class EditPointPresenter @Inject constructor(private val pointsRepository: PointsCacheRepository) : BasePresenter<EditPointView>() {

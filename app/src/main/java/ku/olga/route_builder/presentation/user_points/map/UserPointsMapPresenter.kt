@@ -3,9 +3,8 @@ package ku.olga.route_builder.presentation.user_points.map
 import android.content.SharedPreferences
 import ku.olga.core_api.dto.Coordinates
 import ku.olga.core_api.dto.UserPoint
-import ku.olga.route_builder.presentation.App
-import ku.olga.ui_core.BasePresenter
-import ku.olga.ui_core.getLastCoordinates
+import ku.olga.ui_core.base.BasePresenter
+import ku.olga.ui_core.utils.getLastCoordinates
 import javax.inject.Inject
 
 class UserPointsMapPresenter @Inject constructor(val preferences: SharedPreferences) :

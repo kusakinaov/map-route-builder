@@ -1,4 +1,4 @@
-package ku.olga.ui_core
+package ku.olga.ui_core.utils
 
 import android.content.res.Resources
 import android.graphics.Bitmap

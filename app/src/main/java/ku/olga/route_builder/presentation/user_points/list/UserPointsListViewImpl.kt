@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_user_points_list.view.*
 import ku.olga.route_builder.REQ_CODE_EDIT_POINT
 import ku.olga.core_api.dto.UserPoint
-import ku.olga.ui_core.BaseFragment
+import ku.olga.ui_core.base.BaseFragment
 import ku.olga.route_builder.presentation.point.EditPointFragment
 
 class UserPointsListViewImpl(

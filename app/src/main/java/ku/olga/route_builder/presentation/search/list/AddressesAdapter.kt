@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_address.view.*
 import ku.olga.route_builder.R
 import ku.olga.core_api.dto.SearchAddress
-import ku.olga.ui_core.BaseAdapter
+import ku.olga.ui_core.base.BaseAdapter
 import javax.inject.Inject
 
 class AddressesAdapter @Inject constructor() :

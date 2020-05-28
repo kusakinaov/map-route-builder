@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import ku.olga.route_builder.R
-import ku.olga.ui_core.BaseFragment
+import ku.olga.ui_core.base.BaseFragment
 import ku.olga.route_builder.presentation.dagger.component.ActivityComponent
 import ku.olga.route_builder.presentation.dagger.component.DaggerActivityComponent
 import ku.olga.route_builder.presentation.user_points.root.UserPointsFragment

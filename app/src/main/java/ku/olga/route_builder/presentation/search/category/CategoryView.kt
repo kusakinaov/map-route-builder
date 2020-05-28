@@ -2,7 +2,7 @@ package ku.olga.route_builder.presentation.search.category
 
 import ku.olga.core_api.dto.POI
 import ku.olga.core_api.dto.UserPoint
-import ku.olga.ui_core.BaseLocationView
+import ku.olga.ui_core.base.BaseLocationView
 
 interface CategoryView : BaseLocationView {
     fun onResume()

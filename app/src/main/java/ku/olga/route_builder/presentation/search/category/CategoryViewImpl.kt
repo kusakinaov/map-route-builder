@@ -15,9 +15,9 @@ import ku.olga.route_builder.REQ_CODE_EDIT_POINT
 import ku.olga.route_builder.REQ_CODE_LOCATION_PERMISSION
 import ku.olga.core_api.dto.POI
 import ku.olga.core_api.dto.UserPoint
-import ku.olga.ui_core.convertDpToPx
-import ku.olga.ui_core.convertSpToPx
-import ku.olga.ui_core.getBitmap
+import ku.olga.ui_core.utils.convertDpToPx
+import ku.olga.ui_core.utils.convertSpToPx
+import ku.olga.ui_core.utils.getBitmap
 import ku.olga.route_builder.presentation.point.EditPointFragment
 import org.osmdroid.bonuspack.clustering.RadiusMarkerClusterer
 import org.osmdroid.events.DelayedMapListener
@@ -58,7 +58,8 @@ class CategoryViewImpl(
                 )
                 textPaint.apply {
                     color = ContextCompat.getColor(it.context, R.color.map_icon_text)
-                    textSize = convertSpToPx(it.resources, 16f)
+                    textSize =
+                        convertSpToPx(it.resources, 16f)
                 }
             }
             it.mapView.apply {

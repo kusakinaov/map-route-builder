@@ -12,7 +12,7 @@ import com.google.android.gms.location.LocationServices
 import ku.olga.route_builder.R
 import ku.olga.core_api.dto.Category
 import ku.olga.route_builder.presentation.MainActivity
-import ku.olga.ui_core.BaseFragment
+import ku.olga.ui_core.base.BaseFragment
 import javax.inject.Inject
 
 class CategoryFragment : BaseFragment() {

@@ -11,10 +11,10 @@ import kotlinx.android.synthetic.main.fragment_user_points_map.view.*
 import ku.olga.route_builder.R
 import ku.olga.route_builder.REQ_CODE_EDIT_POINT
 import ku.olga.core_api.dto.UserPoint
-import ku.olga.ui_core.BaseFragment
-import ku.olga.ui_core.convertDpToPx
-import ku.olga.ui_core.convertSpToPx
-import ku.olga.ui_core.getBitmap
+import ku.olga.ui_core.base.BaseFragment
+import ku.olga.ui_core.utils.convertDpToPx
+import ku.olga.ui_core.utils.convertSpToPx
+import ku.olga.ui_core.utils.getBitmap
 import ku.olga.route_builder.presentation.point.EditPointFragment
 import org.osmdroid.bonuspack.clustering.RadiusMarkerClusterer
 import org.osmdroid.events.MapListener
@@ -51,7 +51,8 @@ class UserPointsMapViewImpl(
                 )
                 textPaint.apply {
                     color = ContextCompat.getColor(it.context, R.color.map_icon_text)
-                    textSize = convertSpToPx(it.resources, 16f)
+                    textSize =
+                        convertSpToPx(it.resources, 16f)
                 }
             }
             it.mapView.apply {

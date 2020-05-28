@@ -1,4 +1,4 @@
-package ku.olga.ui_core
+package ku.olga.ui_core.base
 
 import androidx.recyclerview.widget.RecyclerView
 

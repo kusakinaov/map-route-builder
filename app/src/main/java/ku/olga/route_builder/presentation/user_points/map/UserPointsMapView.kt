@@ -1,7 +1,7 @@
 package ku.olga.route_builder.presentation.user_points.map
 
 import ku.olga.core_api.dto.UserPoint
-import ku.olga.ui_core.BaseView
+import ku.olga.ui_core.base.BaseView
 
 interface UserPointsMapView : BaseView {
     fun setUserPoints(userPoints: List<UserPoint>)

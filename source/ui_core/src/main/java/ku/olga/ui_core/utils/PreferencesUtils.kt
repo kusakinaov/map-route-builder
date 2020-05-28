@@ -1,4 +1,4 @@
-package ku.olga.ui_core
+package ku.olga.ui_core.utils
 
 import android.content.SharedPreferences
 import ku.olga.core_api.dto.Coordinates
@@ -23,8 +23,14 @@ private fun SharedPreferences.getDouble(key: String, defaultDouble: Double): Dou
     )
 
 fun getLastCoordinates(preferences: SharedPreferences) = Coordinates(
-    preferences.getDouble(LATITUDE, DEFAULT_LATITUDE),
-    preferences.getDouble(LONGITUDE, DEFAULT_LONGITUDE)
+    preferences.getDouble(
+        LATITUDE,
+        DEFAULT_LATITUDE
+    ),
+    preferences.getDouble(
+        LONGITUDE,
+        DEFAULT_LONGITUDE
+    )
 )
 
 fun setLastCoordinates(preferences: SharedPreferences, coordinates: Coordinates) {

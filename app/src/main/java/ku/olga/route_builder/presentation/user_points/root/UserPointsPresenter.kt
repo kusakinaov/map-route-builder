@@ -6,7 +6,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ku.olga.core_api.dto.UserPoint
 import ku.olga.core_api.repository.PointsCacheRepository
-import ku.olga.ui_core.BasePresenter
+import ku.olga.ui_core.base.BasePresenter
 import javax.inject.Inject
 
 class UserPointsPresenter @Inject constructor(private val pointsRepository: PointsCacheRepository) :

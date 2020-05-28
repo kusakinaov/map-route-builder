@@ -1,4 +1,4 @@
-package ku.olga.ui_core
+package ku.olga.ui_core.base
 
 import android.content.SharedPreferences
 import android.os.Looper
@@ -7,6 +7,7 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import ku.olga.core_api.dto.Coordinates
+import ku.olga.ui_core.utils.setLastCoordinates
 
 open class BaseLocationPresenter<T : BaseLocationView>(val preferences: SharedPreferences) :
     BasePresenter<T>() {

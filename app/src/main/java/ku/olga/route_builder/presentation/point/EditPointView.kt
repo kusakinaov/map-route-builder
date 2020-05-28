@@ -1,6 +1,6 @@
 package ku.olga.route_builder.presentation.point
 
-import ku.olga.ui_core.BaseView
+import ku.olga.ui_core.base.BaseView
 
 interface EditPointView : BaseView {
     fun bindTitle(title: String)

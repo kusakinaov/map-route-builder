@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_user_point.view.*
 import ku.olga.route_builder.R
 import ku.olga.core_api.dto.UserPoint
-import ku.olga.ui_core.BaseAdapter
+import ku.olga.ui_core.base.BaseAdapter
 import javax.inject.Inject
 
 class UserPointsAdapter @Inject constructor() :
