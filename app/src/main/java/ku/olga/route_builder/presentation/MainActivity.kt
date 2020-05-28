@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity(), FragmentContainer {
         }
     }
 
-    fun setBackButton(drawableRes: Int) {
+    private fun setBackButton(drawableRes: Int) {
         supportActionBar?.setHomeAsUpIndicator(drawableRes)
     }
 

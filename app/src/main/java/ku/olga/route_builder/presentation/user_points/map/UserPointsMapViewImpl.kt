@@ -9,7 +9,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.fragment_user_points_map.*
 import kotlinx.android.synthetic.main.fragment_user_points_map.view.*
 import ku.olga.route_builder.R
-import ku.olga.route_builder.REQ_CODE_EDIT_POINT
+import ku.olga.ui_core.REQ_CODE_EDIT_POINT
 import ku.olga.core_api.dto.UserPoint
 import ku.olga.ui_core.base.BaseFragment
 import ku.olga.ui_core.utils.convertDpToPx
@@ -139,7 +139,8 @@ class UserPointsMapViewImpl(
         if (parent is BaseFragment) {
             parent.replaceFragment(
                     EditPointFragment
-                            .newInstance(parent, REQ_CODE_EDIT_POINT, userPoint), true
+                            .newInstance(parent,
+                                REQ_CODE_EDIT_POINT, userPoint), true
             )
         }
     }

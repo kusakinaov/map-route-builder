@@ -4,7 +4,7 @@ import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_user_points_list.view.*
-import ku.olga.route_builder.REQ_CODE_EDIT_POINT
+import ku.olga.ui_core.REQ_CODE_EDIT_POINT
 import ku.olga.core_api.dto.UserPoint
 import ku.olga.ui_core.base.BaseFragment
 import ku.olga.route_builder.presentation.point.EditPointFragment
@@ -18,7 +18,8 @@ class UserPointsListViewImpl(
             val parent = fragment.parentFragment
             if (parent is BaseFragment) {
                 parent.replaceFragment(EditPointFragment
-                        .newInstance(parent, REQ_CODE_EDIT_POINT, it), true)
+                        .newInstance(parent,
+                            REQ_CODE_EDIT_POINT, it), true)
             }
         }
     }

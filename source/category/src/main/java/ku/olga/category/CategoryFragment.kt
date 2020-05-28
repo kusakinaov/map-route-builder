@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.search.category
+package ku.olga.category
 
 import android.content.Context
 import android.content.res.Resources
@@ -9,9 +9,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.location.LocationServices
-import ku.olga.route_builder.R
+import ku.olga.core_api.AppWithFacade
 import ku.olga.core_api.dto.Category
-import ku.olga.route_builder.presentation.MainActivity
 import ku.olga.ui_core.base.BaseFragment
 import javax.inject.Inject
 
@@ -30,8 +29,10 @@ class CategoryFragment : BaseFragment() {
     }
 
     override fun inject(activity: FragmentActivity) {
-        if (activity is MainActivity) {
-            activity.getActivityComponent()?.inject(this)
+        activity.application?.let {
+            if (it is AppWithFacade) {
+                CategoryComponent.build(it.getFacade()).inject(this)
+            }
         }
     }
 

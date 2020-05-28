@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.search.category
+package ku.olga.category
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -9,16 +9,13 @@ import androidx.core.content.ContextCompat
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.fragment_category.view.*
 import kotlinx.android.synthetic.main.fragment_category.view.mapView
-import kotlinx.android.synthetic.main.fragment_user_points_map.*
-import ku.olga.route_builder.R
-import ku.olga.route_builder.REQ_CODE_EDIT_POINT
-import ku.olga.route_builder.REQ_CODE_LOCATION_PERMISSION
 import ku.olga.core_api.dto.POI
 import ku.olga.core_api.dto.UserPoint
 import ku.olga.ui_core.utils.convertDpToPx
 import ku.olga.ui_core.utils.convertSpToPx
 import ku.olga.ui_core.utils.getBitmap
-import ku.olga.route_builder.presentation.point.EditPointFragment
+import ku.olga.ui_core.REQ_CODE_EDIT_POINT
+import ku.olga.ui_core.REQ_CODE_LOCATION_PERMISSION
 import org.osmdroid.bonuspack.clustering.RadiusMarkerClusterer
 import org.osmdroid.events.DelayedMapListener
 import org.osmdroid.events.MapListener
@@ -190,7 +187,7 @@ class CategoryViewImpl(
 
     override fun moveTo(pois: List<POI>, animate: Boolean) {
         val boundingBox = buildBoundingBox(pois)
-        fragment.mapView?.apply {
+        fragment.view?.mapView?.apply {
             post {
                 zoomToBoundingBox(boundingBox, animate, convertDpToPx(
                     resources,
@@ -201,8 +198,9 @@ class CategoryViewImpl(
     }
 
     override fun openEditPOI(userPoint: UserPoint) {
-        fragment.replaceFragment(EditPointFragment
-                .newInstance(fragment, REQ_CODE_EDIT_POINT, userPoint), true)
+        TODO()
+//        fragment.replaceFragment(EditPointFragment
+//                .newInstance(fragment, REQ_CODE_EDIT_POINT, userPoint), true)
     }
 
     override fun hasLocationPermission(): Boolean {

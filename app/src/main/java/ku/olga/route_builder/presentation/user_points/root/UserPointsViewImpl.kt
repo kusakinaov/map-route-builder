@@ -8,7 +8,7 @@ import kotlinx.android.synthetic.main.fragment_user_points.*
 import kotlinx.android.synthetic.main.fragment_user_points.view.*
 import kotlinx.android.synthetic.main.fragment_user_points.view.viewPager
 import ku.olga.route_builder.R
-import ku.olga.route_builder.REQ_CODE_SEARCH_POINT
+import ku.olga.ui_core.REQ_CODE_SEARCH_POINT
 import ku.olga.core_api.dto.UserPoint
 import ku.olga.ui_core.base.BaseFragment
 import ku.olga.route_builder.presentation.search.list.SearchAddressesFragment
@@ -41,7 +41,9 @@ class UserPointsViewImpl(
             buttonAdd.apply{
                 setOnClickListener {
                     fragment.replaceFragment(SearchAddressesFragment
-                        .newInstance(fragment, REQ_CODE_SEARCH_POINT), true)
+                        .newInstance(fragment,
+                            REQ_CODE_SEARCH_POINT
+                        ), true)
                 }
                 show()
             }

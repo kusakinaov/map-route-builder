@@ -17,7 +17,6 @@
     <string name="action_save">Сохранить</string>
     <string name="button_delete">УДАЛИТЬ</string>
     <string name="question_confirm_delete_point">Удалить точку %s?</string>
-    <string name="error_search_pois">Не удалось выполнить запрос</string>
     <string name="tab_user_points_list">Список</string>
     <string name="tab_user_points_map">Карта</string>
 </resources>

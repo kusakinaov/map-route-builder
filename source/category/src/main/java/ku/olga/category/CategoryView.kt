@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.search.category
+package ku.olga.category
 
 import ku.olga.core_api.dto.POI
 import ku.olga.core_api.dto.UserPoint

@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.search.category
+package ku.olga.category
 
 import android.content.SharedPreferences
 import kotlinx.coroutines.*
@@ -12,15 +12,16 @@ import javax.inject.Inject
 class CategoryPresenter @Inject constructor(
     private val poiRepository: POIRepository,
     preferences: SharedPreferences
-) : BaseLocationPresenter<CategoryView>(preferences) {
+) : BaseLocationPresenter<ku.olga.category.CategoryView>(preferences) {
     var category: Category? = null
     private val pois = mutableListOf<POI>()
     private var job: Job? = null
     private var boundingBox: BoundingBox? = null
     private var center: Coordinates? = null
-    private var zoomLevel = DEFAULT_ZOOM_LEVEL
+    private var zoomLevel =
+        DEFAULT_ZOOM_LEVEL
 
-    override fun attachView(view: CategoryView) {
+    override fun attachView(view: ku.olga.category.CategoryView) {
         super.attachView(view)
         when {
             center != null -> moveToCenter()

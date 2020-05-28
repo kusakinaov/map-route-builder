@@ -8,7 +8,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import ku.olga.route_builder.R
-import ku.olga.route_builder.REQ_CODE_CONFIRM_DELETE_POINT
+import ku.olga.ui_core.REQ_CODE_CONFIRM_DELETE_POINT
 import ku.olga.core_api.dto.UserPoint
 import ku.olga.route_builder.presentation.MainActivity
 import ku.olga.ui_core.base.BaseFragment

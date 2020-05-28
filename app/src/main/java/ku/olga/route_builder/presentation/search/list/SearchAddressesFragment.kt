@@ -10,15 +10,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.location.LocationServices
 import ku.olga.route_builder.R
-import ku.olga.route_builder.REQ_CODE_VIEW_CATEGORY
-import ku.olga.route_builder.REQ_CODE_VIEW_SEARCH_ADDRESS
+import ku.olga.ui_core.REQ_CODE_VIEW_CATEGORY
+import ku.olga.ui_core.REQ_CODE_VIEW_SEARCH_ADDRESS
 import ku.olga.core_api.dto.Category
 import ku.olga.core_api.dto.SearchAddress
 import ku.olga.route_builder.presentation.MainActivity
 import ku.olga.ui_core.base.BaseFragment
 import ku.olga.ui_core.utils.hideKeyboard
 import ku.olga.route_builder.presentation.point.EditPointFragment
-import ku.olga.route_builder.presentation.search.category.CategoryFragment
+import ku.olga.category.CategoryFragment
 import javax.inject.Inject
 
 class SearchAddressesFragment : BaseFragment() {
@@ -85,7 +85,9 @@ class SearchAddressesFragment : BaseFragment() {
 
     private fun openCategory(category: Category) {
         hideKeyboard()
-        replaceFragment(CategoryFragment.newInstance(this, REQ_CODE_VIEW_CATEGORY, category), true)
+        replaceFragment(
+            ku.olga.category.CategoryFragment.newInstance(this,
+            REQ_CODE_VIEW_CATEGORY, category), true)
     }
 
     override fun onRequestPermissionsResult(
