@@ -1,12 +1,15 @@
 package ku.olga.route_builder.presentation.user_points.map
 
+import android.content.SharedPreferences
 import ku.olga.core_api.dto.Coordinates
 import ku.olga.core_api.dto.UserPoint
 import ku.olga.route_builder.presentation.App
-import ku.olga.route_builder.presentation.base.BasePresenter
+import ku.olga.ui_core.BasePresenter
+import ku.olga.ui_core.getLastCoordinates
 import javax.inject.Inject
 
-class UserPointsMapPresenter @Inject constructor(): BasePresenter<UserPointsMapView>() {
+class UserPointsMapPresenter @Inject constructor(val preferences: SharedPreferences) :
+    BasePresenter<UserPointsMapView>() {
     private val userPoints = mutableListOf<UserPoint>()
     private var center: Coordinates? = null
     private var zoomLevel: Double = DEFAULT_ZOOM_LEVEL
@@ -27,7 +30,7 @@ class UserPointsMapPresenter @Inject constructor(): BasePresenter<UserPointsMapV
     }
 
     private fun moveToMyCoordinates() {
-        App.application.getLastCoordinates().let {
+        getLastCoordinates(preferences).let {
             view?.moveTo(it.latitude, it.longitude, zoomLevel, false)
         }
     }
@@ -43,7 +46,14 @@ class UserPointsMapPresenter @Inject constructor(): BasePresenter<UserPointsMapV
         view?.apply {
             setUserPoints(userPoints)
             when {
-                userPoints.size == 1 -> userPoints[0].let { moveTo(it.lat, it.lon, zoomLevel, false) }
+                userPoints.size == 1 -> userPoints[0].let {
+                    moveTo(
+                        it.lat,
+                        it.lon,
+                        zoomLevel,
+                        false
+                    )
+                }
                 userPoints.isNotEmpty() -> moveTo(userPoints, false)
             }
         }

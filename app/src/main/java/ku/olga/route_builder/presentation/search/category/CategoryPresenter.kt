@@ -1,14 +1,18 @@
 package ku.olga.route_builder.presentation.search.category
 
+import android.content.SharedPreferences
 import kotlinx.coroutines.*
 import ku.olga.core_api.dto.*
 import ku.olga.core_api.repository.POIRepository
-import ku.olga.route_builder.presentation.App
-import ku.olga.route_builder.presentation.base.BaseLocationPresenter
+import ku.olga.ui_core.BaseLocationPresenter
+import ku.olga.ui_core.getLastCoordinates
 import java.lang.Exception
 import javax.inject.Inject
 
-class CategoryPresenter @Inject constructor(private val poiRepository: POIRepository) : BaseLocationPresenter<CategoryView>() {
+class CategoryPresenter @Inject constructor(
+    private val poiRepository: POIRepository,
+    preferences: SharedPreferences
+) : BaseLocationPresenter<CategoryView>(preferences) {
     var category: Category? = null
     private val pois = mutableListOf<POI>()
     private var job: Job? = null
@@ -33,12 +37,17 @@ class CategoryPresenter @Inject constructor(private val poiRepository: POIReposi
     }
 
     private fun moveToMyCoordinates() {
-        App.application.getLastCoordinates().let {
+        getLastCoordinates(preferences).let {
             view?.moveTo(it.latitude, it.longitude, zoomLevel, false)
         }
     }
 
-    fun onBoundingBoxChanged(latitude: Double, longitude: Double, boundingBox: BoundingBox, zoomLevel: Double) {
+    fun onBoundingBoxChanged(
+        latitude: Double,
+        longitude: Double,
+        boundingBox: BoundingBox,
+        zoomLevel: Double
+    ) {
         this.boundingBox = boundingBox
         center = Coordinates(latitude, longitude)
         this.zoomLevel = zoomLevel
@@ -63,7 +72,14 @@ class CategoryPresenter @Inject constructor(private val poiRepository: POIReposi
             setPOIs(pois)
             if (move) {
                 when {
-                    pois.size == 1 -> pois[0].let { moveTo(it.latitude, it.longitude, zoomLevel, true) }
+                    pois.size == 1 -> pois[0].let {
+                        moveTo(
+                            it.latitude,
+                            it.longitude,
+                            zoomLevel,
+                            true
+                        )
+                    }
                     pois.isNotEmpty() -> moveTo(pois, animated)
                 }
             }

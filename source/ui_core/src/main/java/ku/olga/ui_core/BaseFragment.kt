@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.base
+package ku.olga.ui_core
 
 import android.content.Context
 import android.content.res.Resources
@@ -7,8 +7,6 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.snackbar.Snackbar
-import ku.olga.route_builder.R
-import ku.olga.route_builder.presentation.MainActivity
 
 abstract class BaseFragment : Fragment() {
     override fun onAttach(context: Context) {
@@ -44,13 +42,17 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
-    fun replaceFragment(fragment: Fragment) {
-        replaceFragment(fragment, true)
-    }
-
     fun replaceFragment(fragment: Fragment, addToBackStack: Boolean) {
-        if (activity is MainActivity) {
-            (activity as MainActivity).replaceFragment(fragment, addToBackStack)
+        activity?.let {
+            if (it is FragmentContainer) {
+                it.supportFragmentManager.beginTransaction()
+                    .replace(it.getFragmentContainerId(), fragment)
+                    .apply {
+                        if (addToBackStack) {
+                            addToBackStack(fragment::class.simpleName)
+                        }
+                    }.commit()
+            }
         }
     }
 

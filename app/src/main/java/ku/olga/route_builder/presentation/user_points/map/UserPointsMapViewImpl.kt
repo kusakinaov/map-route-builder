@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.fragment_user_points_map.view.*
 import ku.olga.route_builder.R
 import ku.olga.route_builder.REQ_CODE_EDIT_POINT
 import ku.olga.core_api.dto.UserPoint
-import ku.olga.route_builder.presentation.base.BaseFragment
+import ku.olga.ui_core.BaseFragment
 import ku.olga.ui_core.convertDpToPx
 import ku.olga.ui_core.convertSpToPx
 import ku.olga.ui_core.getBitmap

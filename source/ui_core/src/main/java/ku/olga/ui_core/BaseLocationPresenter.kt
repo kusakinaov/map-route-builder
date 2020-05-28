@@ -1,14 +1,15 @@
-package ku.olga.route_builder.presentation.base
+package ku.olga.ui_core
 
+import android.content.SharedPreferences
 import android.os.Looper
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import ku.olga.core_api.dto.Coordinates
-import ku.olga.route_builder.presentation.App
 
-open class BaseLocationPresenter<T : BaseLocationView> : BasePresenter<T>() {
+open class BaseLocationPresenter<T : BaseLocationView>(val preferences: SharedPreferences) :
+    BasePresenter<T>() {
     var locationClient: FusedLocationProviderClient? = null
     private val locationCallback: LocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult?) {
@@ -48,9 +49,9 @@ open class BaseLocationPresenter<T : BaseLocationView> : BasePresenter<T>() {
     private fun startLocationUpdates() {
         requestingLocationUpdates = true
         locationClient?.requestLocationUpdates(
-                buildLocationRequest(),
-                locationCallback,
-                Looper.getMainLooper()
+            buildLocationRequest(),
+            locationCallback,
+            Looper.getMainLooper()
         )
     }
 
@@ -68,6 +69,6 @@ open class BaseLocationPresenter<T : BaseLocationView> : BasePresenter<T>() {
 
     fun onCoordinatesChanged(coordinates: Coordinates) {
         this.coordinates = coordinates
-        App.application.setLastCoordinates(coordinates)
+        setLastCoordinates(preferences, coordinates)
     }
 }

@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.base
+package ku.olga.ui_core
 
 import androidx.recyclerview.widget.RecyclerView
 

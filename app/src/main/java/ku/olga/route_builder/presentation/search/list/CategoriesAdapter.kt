@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_category.view.*
 import ku.olga.route_builder.R
 import ku.olga.core_api.dto.Category
-import ku.olga.route_builder.presentation.base.BaseAdapter
+import ku.olga.ui_core.BaseAdapter
 import java.util.*
 import javax.inject.Inject
 

@@ -10,12 +10,11 @@ import kotlinx.android.synthetic.main.fragment_edit_point.view.*
 import ku.olga.route_builder.R
 import ku.olga.route_builder.REQ_CODE_CONFIRM_DELETE_POINT
 import ku.olga.route_builder.presentation.ConfirmationDialog
-import ku.olga.route_builder.presentation.base.BaseFragment
-import ku.olga.ui_core.SimpleTextWatcher
+import ku.olga.ui_core.BaseFragment
 
 class EditPointViewImpl(
-        val fragment: BaseFragment,
-        private val presenter: EditPointPresenter
+    val fragment: BaseFragment,
+    private val presenter: EditPointPresenter
 ) : EditPointView {
     init {
         fragment.view?.apply {

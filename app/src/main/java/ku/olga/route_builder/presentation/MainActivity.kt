@@ -3,15 +3,15 @@ package ku.olga.route_builder.presentation
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.activity_main.*
 import ku.olga.route_builder.R
-import ku.olga.route_builder.presentation.base.BaseFragment
+import ku.olga.ui_core.BaseFragment
 import ku.olga.route_builder.presentation.dagger.component.ActivityComponent
 import ku.olga.route_builder.presentation.dagger.component.DaggerActivityComponent
 import ku.olga.route_builder.presentation.user_points.root.UserPointsFragment
+import ku.olga.ui_core.FragmentContainer
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), FragmentContainer {
     private var activityComponent: ActivityComponent? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,17 +25,9 @@ class MainActivity : AppCompatActivity() {
 
         supportFragmentManager.addOnBackStackChangedListener { bindBackStack() }
         if (savedInstanceState == null) {
-            replaceFragment(UserPointsFragment.newInstance(), false)
+            supportFragmentManager.beginTransaction()
+                .replace(getFragmentContainerId(), UserPointsFragment.newInstance()).commit()
         }
-    }
-
-    fun replaceFragment(fragment: Fragment, addToBackStack: Boolean) {
-        val transaction = supportFragmentManager.beginTransaction()
-            .replace(R.id.layoutFragment, fragment)
-        if (addToBackStack) {
-            transaction.addToBackStack(fragment::class.simpleName)
-        }
-        transaction.commit()
     }
 
     private fun bindBackStack() {
@@ -56,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setHomeAsUpIndicator(drawableRes)
     }
 
-    private fun getFragment() = supportFragmentManager.findFragmentById(R.id.layoutFragment)
+    private fun getFragment() = supportFragmentManager.findFragmentById(getFragmentContainerId())
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         android.R.id.home -> {
@@ -80,4 +72,6 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         activityComponent = null
     }
+
+    override fun getFragmentContainerId(): Int = R.id.layoutFragment
 }

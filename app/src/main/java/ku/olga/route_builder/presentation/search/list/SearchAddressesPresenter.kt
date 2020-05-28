@@ -1,19 +1,20 @@
 package ku.olga.route_builder.presentation.search.list
 
+import android.content.SharedPreferences
 import kotlinx.coroutines.*
 import ku.olga.core_api.dto.Category
 import ku.olga.core_api.dto.SearchAddress
 import ku.olga.core_api.repository.AddressRepository
 import ku.olga.core_api.repository.POIRepository
-import ku.olga.route_builder.presentation.base.BaseLocationPresenter
+import ku.olga.ui_core.BaseLocationPresenter
 import java.io.IOException
 import javax.inject.Inject
 
 class SearchAddressesPresenter @Inject constructor(
     private val addressRepository: AddressRepository,
-    private val poiRepository: POIRepository
-) :
-    BaseLocationPresenter<SearchAddressesView>() {
+    private val poiRepository: POIRepository,
+    preferences: SharedPreferences
+) : BaseLocationPresenter<SearchAddressesView>(preferences) {
     private var query: String? = null
     private var job: Job? = null
     private val addresses = mutableListOf<SearchAddress>()

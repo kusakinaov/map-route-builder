@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.fragment_user_points.view.viewPager
 import ku.olga.route_builder.R
 import ku.olga.route_builder.REQ_CODE_SEARCH_POINT
 import ku.olga.core_api.dto.UserPoint
-import ku.olga.route_builder.presentation.base.BaseFragment
+import ku.olga.ui_core.BaseFragment
 import ku.olga.route_builder.presentation.search.list.SearchAddressesFragment
 import ku.olga.route_builder.presentation.user_points.OnUserPointsChangeListener
 
@@ -41,7 +41,7 @@ class UserPointsViewImpl(
             buttonAdd.apply{
                 setOnClickListener {
                     fragment.replaceFragment(SearchAddressesFragment
-                        .newInstance(fragment, REQ_CODE_SEARCH_POINT))
+                        .newInstance(fragment, REQ_CODE_SEARCH_POINT), true)
                 }
                 show()
             }
