@@ -57,6 +57,7 @@ dependencies {
 
     implementation project(':source:core')
     implementation project(':source:ui_core')
+    implementation project(':source:main')
     implementation project(':source:category')
     implementation project(':source:edit_point')
     implementation project(':source:search')

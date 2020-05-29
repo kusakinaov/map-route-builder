@@ -1,15 +1,12 @@
-package ku.olga.route_builder.presentation
+package ku.olga.main
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_main.*
 import ku.olga.core_api.AppWithFacade
 import ku.olga.core_api.mediator.UserPointsMediator
-import ku.olga.route_builder.R
 import ku.olga.ui_core.base.BaseFragment
-import ku.olga.route_builder.presentation.dagger.component.ActivityComponent
-import ku.olga.route_builder.presentation.dagger.component.DaggerActivityComponent
-import ku.olga.user_points.root.UserPointsFragment
 import ku.olga.ui_core.FragmentContainer
 import javax.inject.Inject
 
@@ -20,7 +17,7 @@ class MainActivity : AppCompatActivity(), FragmentContainer {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        setSupportActionBar(layoutAppBar.toolbar)
+        setSupportActionBar(toolbar)
 
         ActivityComponent.build((application as AppWithFacade).getFacade()).inject(this)
 
