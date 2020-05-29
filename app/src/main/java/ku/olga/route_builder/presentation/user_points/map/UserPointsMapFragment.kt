@@ -10,10 +10,12 @@ import ku.olga.route_builder.R
 import ku.olga.core_api.dto.UserPoint
 import ku.olga.route_builder.presentation.MainActivity
 import ku.olga.ui_core.base.BaseFragment
-import ku.olga.route_builder.presentation.user_points.OnUserPointsChangeListener
+import ku.olga.user_points.OnUserPointsChangeListener
+import ku.olga.user_points.map.UserPointsMapView
 import javax.inject.Inject
 
-class UserPointsMapFragment : BaseFragment(), OnUserPointsChangeListener {
+class UserPointsMapFragment : BaseFragment(),
+    OnUserPointsChangeListener {
     @Inject
     lateinit var presenter: UserPointsMapPresenter
 

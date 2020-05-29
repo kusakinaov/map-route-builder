@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.user_points
+package ku.olga.user_points
 
 import ku.olga.core_api.dto.UserPoint
 

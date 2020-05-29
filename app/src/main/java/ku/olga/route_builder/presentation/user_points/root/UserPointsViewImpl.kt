@@ -12,7 +12,7 @@ import ku.olga.ui_core.REQ_CODE_SEARCH_POINT
 import ku.olga.core_api.dto.UserPoint
 import ku.olga.core_api.mediator.SearchMediator
 import ku.olga.ui_core.base.BaseFragment
-import ku.olga.route_builder.presentation.user_points.OnUserPointsChangeListener
+import ku.olga.user_points.OnUserPointsChangeListener
 
 class UserPointsViewImpl(
     private val fragment: BaseFragment,

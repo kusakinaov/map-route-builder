@@ -16,6 +16,7 @@ import ku.olga.ui_core.utils.convertDpToPx
 import ku.olga.ui_core.utils.convertSpToPx
 import ku.olga.ui_core.utils.getBitmap
 import ku.olga.edit_point.EditPointFragment
+import ku.olga.user_points.map.UserPointsMapView
 import org.osmdroid.bonuspack.clustering.RadiusMarkerClusterer
 import org.osmdroid.events.MapListener
 import org.osmdroid.events.ScrollEvent

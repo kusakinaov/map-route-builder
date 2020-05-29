@@ -47,4 +47,6 @@ ext {
             'osmbonuspack': 'com.github.MKergall:osmbonuspack:6.6.0'
     ]
     material = 'com.google.android.material:material:1.1.0'
+
+    recyclerView = "androidx.recyclerview:recyclerview:1.1.0"
 }

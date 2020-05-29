@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import ku.olga.route_builder.R
-import ku.olga.route_builder.presentation.user_points.list.UserPointsListFragment
+import ku.olga.user_points.list.UserPointsListFragment
 import ku.olga.route_builder.presentation.user_points.map.UserPointsMapFragment
 import java.lang.IllegalArgumentException
 

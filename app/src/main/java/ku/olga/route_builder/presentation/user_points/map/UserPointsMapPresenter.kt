@@ -5,6 +5,7 @@ import ku.olga.core_api.dto.Coordinates
 import ku.olga.core_api.dto.UserPoint
 import ku.olga.ui_core.base.BasePresenter
 import ku.olga.ui_core.utils.getLastCoordinates
+import ku.olga.user_points.map.UserPointsMapView
 import javax.inject.Inject
 
 class UserPointsMapPresenter @Inject constructor(val preferences: SharedPreferences) :

@@ -3,8 +3,7 @@ package ku.olga.route_builder.presentation.dagger.component
 import dagger.Component
 import ku.olga.core_api.annotation.ActivityScope
 import ku.olga.edit_point.EditPointFragment
-import ku.olga.search.SearchAddressesFragment
-import ku.olga.route_builder.presentation.user_points.list.UserPointsListFragment
+import ku.olga.user_points.list.UserPointsListFragment
 import ku.olga.route_builder.presentation.user_points.map.UserPointsMapFragment
 import ku.olga.route_builder.presentation.user_points.root.UserPointsFragment
 
