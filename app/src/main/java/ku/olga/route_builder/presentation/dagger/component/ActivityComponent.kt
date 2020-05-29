@@ -4,7 +4,7 @@ import dagger.Component
 import ku.olga.core_api.annotation.ActivityScope
 import ku.olga.edit_point.EditPointFragment
 import ku.olga.user_points.list.UserPointsListFragment
-import ku.olga.route_builder.presentation.user_points.map.UserPointsMapFragment
+import ku.olga.user_points.map.UserPointsMapFragment
 import ku.olga.route_builder.presentation.user_points.root.UserPointsFragment
 
 @ActivityScope
