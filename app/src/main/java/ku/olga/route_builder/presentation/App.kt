@@ -1,15 +1,12 @@
 package ku.olga.route_builder.presentation
 
 import android.app.Application
-import ku.olga.route_builder.presentation.dagger.component.ApplicationComponent
-import android.content.SharedPreferences
+import ku.olga.route_builder.presentation.di.ApplicationComponent
 import ku.olga.core.CoreProvidersFactory
 import ku.olga.core_api.AppWithFacade
 import ku.olga.core_api.ProvidersFacade
-import ku.olga.route_builder.presentation.dagger.component.DaggerFacadeComponent
-import ku.olga.route_builder.presentation.dagger.component.FacadeComponent
-import org.osmdroid.config.Configuration
-import javax.inject.Inject
+import ku.olga.route_builder.presentation.di.DaggerFacadeComponent
+import ku.olga.route_builder.presentation.di.FacadeComponent
 
 class App : Application(), AppWithFacade {
     companion object {
@@ -17,9 +14,6 @@ class App : Application(), AppWithFacade {
     }
 
     lateinit var facadeComponent: FacadeComponent
-
-    @Inject
-    lateinit var preferences: SharedPreferences
 
     override fun onCreate() {
         super.onCreate()
@@ -33,9 +27,6 @@ class App : Application(), AppWithFacade {
                 CoreProvidersFactory
                     .buildUserPointRepositoryProvider(ApplicationComponent.get(this))
             ).build()
-        facadeComponent.inject(this)
-
-        Configuration.getInstance().load(this, preferences)
     }
 
     override fun getFacade(): ProvidersFacade = facadeComponent

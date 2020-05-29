@@ -1,5 +1,7 @@
 package ku.olga.user_points.map
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +13,7 @@ import ku.olga.core_api.mediator.EditPointMediator
 import ku.olga.ui_core.base.BaseFragment
 import ku.olga.user_points.OnUserPointsChangeListener
 import ku.olga.user_points.R
+import org.osmdroid.config.Configuration
 import javax.inject.Inject
 
 class UserPointsMapFragment : BaseFragment(),
@@ -21,7 +24,15 @@ class UserPointsMapFragment : BaseFragment(),
     @Inject
     lateinit var editPointMediator: EditPointMediator
 
+    @Inject
+    lateinit var preferences: SharedPreferences
+
     private lateinit var mapView: UserPointsMapView
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        Configuration.getInstance().load(context, preferences)
+    }
 
     override fun inject(activity: FragmentActivity) {
         activity.application?.let {

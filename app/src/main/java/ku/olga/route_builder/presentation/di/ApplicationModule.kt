@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.dagger.module
+package ku.olga.route_builder.presentation.di
 
 import android.content.Context
 import android.content.SharedPreferences

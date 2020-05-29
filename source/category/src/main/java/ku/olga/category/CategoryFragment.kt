@@ -1,6 +1,7 @@
 package ku.olga.category
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import ku.olga.core_api.AppWithFacade
 import ku.olga.core_api.dto.Category
 import ku.olga.core_api.mediator.EditPointMediator
 import ku.olga.ui_core.base.BaseFragment
+import org.osmdroid.config.Configuration
 import javax.inject.Inject
 
 class CategoryFragment : BaseFragment() {
@@ -24,8 +26,12 @@ class CategoryFragment : BaseFragment() {
     @Inject
     lateinit var editPointMediator: EditPointMediator
 
+    @Inject
+    lateinit var preferences: SharedPreferences
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        Configuration.getInstance().load(context, preferences)
         categoryPresenter.apply {
             category = arguments?.getSerializable(CATEGORY) as Category?
             locationClient = LocationServices.getFusedLocationProviderClient(context)
