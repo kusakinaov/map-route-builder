@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.user_points.root
+package ku.olga.user_points.root
 
 import android.content.Context
 import android.content.res.Resources
@@ -7,10 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
+import ku.olga.core_api.AppWithFacade
 import ku.olga.core_api.mediator.SearchMediator
-import ku.olga.route_builder.R
-import ku.olga.route_builder.presentation.MainActivity
 import ku.olga.ui_core.base.BaseFragment
+import ku.olga.user_points.R
 import ku.olga.user_points.map.UserPointsMapFragment
 import javax.inject.Inject
 
@@ -28,13 +28,14 @@ class UserPointsFragment : BaseFragment(), UserPointsMapFragment.BottomSheetCall
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        userPointsAdapter = UserPointsAdapter(childFragmentManager, resources)
+        userPointsAdapter = UserPointsAdapter(
+            childFragmentManager,
+            resources
+        )
     }
 
     override fun inject(activity: FragmentActivity) {
-        if (activity is MainActivity) {
-            activity.getActivityComponent()?.inject(this)
-        }
+        UserPointsComponent.build((activity.application as AppWithFacade).getFacade()).inject(this)
     }
 
     override fun onCreateView(

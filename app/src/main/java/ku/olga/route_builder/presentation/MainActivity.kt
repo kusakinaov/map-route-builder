@@ -3,30 +3,30 @@ package ku.olga.route_builder.presentation
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
-import kotlinx.android.synthetic.main.activity_main.*
+import ku.olga.core_api.AppWithFacade
+import ku.olga.core_api.mediator.UserPointsMediator
 import ku.olga.route_builder.R
 import ku.olga.ui_core.base.BaseFragment
 import ku.olga.route_builder.presentation.dagger.component.ActivityComponent
 import ku.olga.route_builder.presentation.dagger.component.DaggerActivityComponent
-import ku.olga.route_builder.presentation.user_points.root.UserPointsFragment
+import ku.olga.user_points.root.UserPointsFragment
 import ku.olga.ui_core.FragmentContainer
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), FragmentContainer {
-    private var activityComponent: ActivityComponent? = null
+    @Inject
+    lateinit var userPointsMediator: UserPointsMediator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
+//        setSupportActionBar(layoutAppBar.toolbar)
 
-        activityComponent = DaggerActivityComponent.builder()
-            .facadeComponent(App.application.facadeComponent)
-            .build()
+        ActivityComponent.build((application as AppWithFacade).getFacade()).inject(this)
 
         supportFragmentManager.addOnBackStackChangedListener { bindBackStack() }
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(getFragmentContainerId(), UserPointsFragment.newInstance()).commit()
+            userPointsMediator.openUserPoints(supportFragmentManager, getFragmentContainerId())
         }
     }
 
@@ -64,13 +64,6 @@ class MainActivity : AppCompatActivity(), FragmentContainer {
                 super.onBackPressed()
             }
         }
-    }
-
-    fun getActivityComponent() = activityComponent
-
-    override fun onDestroy() {
-        super.onDestroy()
-        activityComponent = null
     }
 
     override fun getFragmentContainerId(): Int = R.id.layoutFragment

@@ -2,4 +2,8 @@
 <resources>
     <string name="ttl_edit">Редактирование</string>
     <string name="question_confirm_delete_point">Удалить точку %s?</string>
+    <string name="action_save">Сохранить</string>
+    <string name="hint_input_title">Введите название</string>
+    <string name="hint_input_description">Введите описание</string>
+    <string name="button_delete">УДАЛИТЬ</string>
 </resources>

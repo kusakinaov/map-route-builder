@@ -55,11 +55,7 @@ class SearchAddressesFragment : BaseFragment() {
     }
 
     override fun inject(activity: FragmentActivity) {
-        activity.application?.let {
-            if (it is AppWithFacade) {
-                SearchComponent.build(it.getFacade()).inject(this)
-            }
-        }
+        SearchComponent.build((activity.application as AppWithFacade).getFacade()).inject(this)
     }
 
     override fun onCreateView(

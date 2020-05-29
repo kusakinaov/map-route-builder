@@ -33,11 +33,7 @@ class CategoryFragment : BaseFragment() {
     }
 
     override fun inject(activity: FragmentActivity) {
-        activity.application?.let {
-            if (it is AppWithFacade) {
-                CategoryComponent.build(it.getFacade()).inject(this)
-            }
-        }
+        CategoryComponent.build((activity.application as AppWithFacade).getFacade()).inject(this)
     }
 
     override fun getTitle(resources: Resources) = categoryPresenter.getTitle()

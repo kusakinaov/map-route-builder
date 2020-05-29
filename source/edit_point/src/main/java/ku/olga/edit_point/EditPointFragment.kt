@@ -24,11 +24,7 @@ class EditPointFragment : BaseFragment() {
     private var editPointView: EditPointView? = null
 
     override fun inject(activity: FragmentActivity) {
-        activity.application?.let {
-            if (it is AppWithFacade) {
-                EditPointComponent.build(it.getFacade()).inject(this)
-            }
-        }
+        EditPointComponent.build((activity.application as AppWithFacade).getFacade()).inject(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
