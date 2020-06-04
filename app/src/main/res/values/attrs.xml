@@ -8,4 +8,10 @@
         <attr name="layout_vertical_position_percent" format="integer" />
         <attr name="layout_horizontal_position_percent" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="SplashView">
+        <attr name="path_color" format="color" />
+        <attr name="icon_color" format="color" />
+        <attr name="android:src" />
+    </declare-styleable>
 </resources>

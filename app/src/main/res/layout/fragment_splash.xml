@@ -4,13 +4,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <View
+    <ku.olga.route_builder.presentation.view.SplashView
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="?colorAccent" />
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_navigation"
+        app:icon_color="@android:color/holo_red_dark"
+        app:layout_horizontal_position_percent="50"
+        app:layout_vertical_position_percent="50"
+        app:path_color="@android:color/holo_blue_dark" />
 
     <View
-        android:layout_width="match_parent"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:background="?colorAccent"
+        app:layout_horizontal_position_percent="25"
+        app:layout_vertical_position_percent="50" />
+
+    <View
+        android:layout_width="8dp"
         android:layout_height="8dp"
         android:background="?colorAccent"
         app:layout_horizontal_position_percent="50"
@@ -18,14 +29,7 @@
 
     <View
         android:layout_width="16dp"
-        android:layout_height="match_parent"
-        android:background="?colorAccent"
-        app:layout_horizontal_position_percent="25"
-        app:layout_vertical_position_percent="50" />
-
-    <View
-        android:layout_width="16dp"
-        android:layout_height="match_parent"
+        android:layout_height="16dp"
         android:background="?colorAccent"
         app:layout_horizontal_position_percent="75"
         app:layout_vertical_position_percent="50" />
@@ -43,4 +47,5 @@
         android:background="?colorAccent"
         app:layout_horizontal_position_percent="0"
         app:layout_vertical_position_percent="50" />
+
 </ku.olga.route_builder.presentation.view.PercentPositionLayout>
