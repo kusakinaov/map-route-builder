@@ -4,14 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ku.olga.route_builder.presentation.view.SplashView
+    <ku.olga.route_builder.presentation.view.UnlockView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_navigation"
-        app:icon_color="@android:color/holo_red_dark"
+        android:src="@drawable/ic_outline_lock"
+        app:button_color="@color/secondaryColor"
+        app:button_radius="32dp"
+        app:icon_color="@color/secondaryTextColor"
         app:layout_horizontal_position_percent="50"
-        app:layout_vertical_position_percent="50"
-        app:path_color="@android:color/holo_blue_dark" />
+        app:layout_vertical_position_percent="50" />
 
     <View
         android:layout_width="16dp"
@@ -23,6 +24,7 @@
     <View
         android:layout_width="8dp"
         android:layout_height="8dp"
+        android:visibility="gone"
         android:background="?colorAccent"
         app:layout_horizontal_position_percent="50"
         app:layout_vertical_position_percent="50" />
