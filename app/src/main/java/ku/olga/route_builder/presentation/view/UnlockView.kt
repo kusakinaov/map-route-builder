@@ -57,9 +57,8 @@ class UnlockView(context: Context, attrs: AttributeSet) : View(context, attrs) {
             ): Boolean {
                 fling.apply {
                     setStartVelocity(-velocityY)
-                    setMinValue(0f)
-                    setMaxValue(height.toFloat())
-                    friction = 8f
+                    setMinValue(if (velocityY > 0) (buttonRect.bottom - bottom).toFloat() else 0f)
+                    setMaxValue(if (velocityY > 0) 0f else (buttonRect.top).toFloat())
 
                     addUpdateListener { _, value, _ ->
                         buttonRect.apply {
