@@ -12,7 +12,15 @@
     <declare-styleable name="UnlockView">
         <attr name="icon_color" format="color" />
         <attr name="button_color" format="color" />
-        <attr name="button_radius" format="dimension"/>
+        <attr name="button_radius" format="dimension" />
         <attr name="android:src" />
+    </declare-styleable>
+
+    <declare-styleable name="ProgressView">
+        <attr name="progress_background_track_color" format="color" />
+        <attr name="progress_track_color" format="color" />
+        <attr name="progress_track_height" format="dimension" />
+        <attr name="progress_shadow_width" format="dimension" />
+        <attr name="android:progress" format="integer" />
     </declare-styleable>
 </resources>

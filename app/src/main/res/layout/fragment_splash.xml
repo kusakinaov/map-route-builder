@@ -5,6 +5,7 @@
     android:layout_height="match_parent">
 
     <ku.olga.route_builder.presentation.view.UnlockView
+        android:id="@+id/viewButton"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/ic_outline_lock"
@@ -14,40 +15,16 @@
         app:layout_horizontal_position_percent="50"
         app:layout_vertical_position_percent="50" />
 
-    <View
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:background="?colorAccent"
-        app:layout_horizontal_position_percent="25"
-        app:layout_vertical_position_percent="50" />
-
-    <View
-        android:layout_width="8dp"
-        android:layout_height="8dp"
-        android:visibility="gone"
-        android:background="?colorAccent"
+    <ku.olga.route_builder.presentation.view.ProgressView
+        android:id="@+id/viewProgress"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         app:layout_horizontal_position_percent="50"
-        app:layout_vertical_position_percent="50" />
-
-    <View
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:background="?colorAccent"
-        app:layout_horizontal_position_percent="75"
-        app:layout_vertical_position_percent="50" />
-
-    <View
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:background="?colorAccent"
-        app:layout_horizontal_position_percent="100"
-        app:layout_vertical_position_percent="50" />
-
-    <View
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:background="?colorAccent"
-        app:layout_horizontal_position_percent="0"
-        app:layout_vertical_position_percent="50" />
-
+        app:layout_vertical_position_percent="95"
+        app:progress_background_track_color="@color/secondaryColor12"
+        app:progress_shadow_width="8dp"
+        app:progress_track_color="@color/secondaryColor"
+        app:progress_track_height="16dp" />
 </ku.olga.route_builder.presentation.view.PercentPositionLayout>
