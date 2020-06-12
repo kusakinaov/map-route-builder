@@ -12,8 +12,12 @@ import ku.olga.route_builder.presentation.base.BaseFragment
 import ku.olga.route_builder.presentation.user_points.root.UserPointsFragment
 
 class SplashFragment : BaseFragment() {
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-            inflater.inflate(R.layout.fragment_splash, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View =
+        inflater.inflate(R.layout.fragment_splash, container, false)
 
     override fun inject(activity: FragmentActivity) {
         if (activity is MainActivity) {
@@ -23,12 +27,7 @@ class SplashFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.postDelayed({
 //            replaceFragment(UserPointsFragment.newInstance(), false)
-
-            viewProgress.setProgress(100)
-        }, 1000)
-
     }
 
     companion object {

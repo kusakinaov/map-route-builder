@@ -23,4 +23,8 @@
         <attr name="progress_shadow_width" format="dimension" />
         <attr name="android:progress" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="CompassView">
+        <attr name="compass_direction" format="float" />
+    </declare-styleable>
 </resources>
