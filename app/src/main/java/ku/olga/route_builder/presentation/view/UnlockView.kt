@@ -11,9 +11,11 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import androidx.dynamicanimation.animation.FlingAnimation
-import androidx.dynamicanimation.animation.FloatPropertyCompat
+import androidx.dynamicanimation.animation.FloatValueHolder
 import ku.olga.route_builder.R
 import ku.olga.route_builder.presentation.convertDpToPx
+import kotlin.math.max
+import kotlin.math.min
 
 class UnlockView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private val shadowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -35,17 +37,8 @@ class UnlockView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     private val centerPoint = Point()
     private val touchPoint = PointF()
-    private val movePoint = Point()
 
-    private val fling =
-        FlingAnimation(this, object : FloatPropertyCompat<UnlockView>("translation") {
-            var translation: Float = 0f
-            override fun setValue(view: UnlockView?, value: Float) {
-                translation = value
-            }
-
-            override fun getValue(view: UnlockView?): Float = translation
-        })
+    private var fling: FlingAnimation? = null
 
     private val gestureDetector =
         GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
@@ -55,15 +48,28 @@ class UnlockView(context: Context, attrs: AttributeSet) : View(context, attrs) {
                 velocityX: Float,
                 velocityY: Float
             ): Boolean {
-                fling.apply {
+                fling?.cancel()
+                fling = FlingAnimation(FloatValueHolder())
+                fling?.apply {
                     setStartVelocity(-velocityY)
-                    setMinValue(if (velocityY > 0) (buttonRect.bottom - bottom).toFloat() else 0f)
-                    setMaxValue(if (velocityY > 0) 0f else (buttonRect.top).toFloat())
+
+                    val minValue = if (velocityY > 0)
+                        top - (centerPoint.y - buttonRadius)
+                    else
+                        0f
+                    setMinValue(minValue)
+                    setMaxValue(if (velocityY > 0) 0f else bottom - (centerPoint.y + buttonRadius))
 
                     addUpdateListener { _, value, _ ->
                         buttonRect.apply {
-                            top = (top - value).toInt()
-                            bottom = (bottom - value).toInt()
+                            top = max(
+                                this@UnlockView.top,
+                                (centerPoint.y - buttonRadius - value).toInt()
+                            )
+                            bottom = min(
+                                this@UnlockView.bottom,
+                                (centerPoint.y + buttonRadius - value).toInt()
+                            )
                         }
                         setupIconRect()
                         invalidate()
