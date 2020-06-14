@@ -28,12 +28,16 @@ class CompassView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         color = Color.GRAY
         maskFilter = BlurMaskFilter(shadowWidth, BlurMaskFilter.Blur.OUTER)
     }
+    private val internalPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.FILL_AND_STROKE
+        isDither = true
+    }
     private val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.WHITE
         style = Paint.Style.FILL_AND_STROKE
     }
     private val divisionPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.DKGRAY
+        color = Color.GRAY
         strokeWidth = convertDpToPx(resources, 1f)
         style = Paint.Style.STROKE
     }
@@ -110,12 +114,30 @@ class CompassView(context: Context, attrs: AttributeSet) : View(context, attrs) 
             x = width / 2f
             y = height / 2f
         }
+        internalPaint.shader = buildBackgroundGradient()
+        strokePaint.shader = buildShadowGradient()
+    }
+
+    private fun buildBackgroundGradient() = LinearGradient(
+        centerPoint.x, centerPoint.y - radius,
+        centerPoint.x, centerPoint.y,
+        Color.LTGRAY, Color.WHITE, Shader.TileMode.CLAMP
+    ).also {
+        it.setLocalMatrix(Matrix().apply { setRotate(-45.0f, centerPoint.x, centerPoint.y) })
+    }
+
+    private fun buildShadowGradient() = LinearGradient(
+        centerPoint.x, centerPoint.y - radius - strokeWidth,
+        centerPoint.x, centerPoint.y,
+        Color.GRAY, Color.LTGRAY, Shader.TileMode.CLAMP
+    ).also {
+        it.setLocalMatrix(Matrix().apply { setRotate(-45.0f, centerPoint.x, centerPoint.y) })
     }
 
     override fun onDraw(canvas: Canvas) {
         canvas.drawCircle(centerPoint.x, centerPoint.y, radius + strokeWidth, shadowPaint)
         canvas.drawCircle(centerPoint.x, centerPoint.y, radius + strokeWidth / 2, strokePaint)
-        canvas.drawCircle(centerPoint.x, centerPoint.y, radius, backgroundPaint)
+        canvas.drawCircle(centerPoint.x, centerPoint.y, radius, internalPaint)
 
         for (i in 0 until 24) {
             if (i % 6 == 0) {
