@@ -23,14 +23,20 @@ class SplashFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewCompass.onAngleChangeListener = object : CompassView.OnAngleChangeListener {
             override fun onAngleChanged(angle: Double) {
-                if (abs(angle) < 3 || abs(360 - angle) < 3) {
+                if (abs(angle) < DEFLECTION_ANGLE || abs(MAX_ANGLE - angle) < DEFLECTION_ANGLE) {
                     viewCompass.onAngleChangeListener = null
-                    activity?.let {
-                        it.finish()
-                        it.startActivity(Intent(it, MainActivity::class.java))
+                    activity?.apply {
+                        finish()
+                        startActivity(Intent(this, MainActivity::class.java))
+                        overridePendingTransition(R.anim.activity_slide_in, R.anim.activity_slide_out)
                     }
                 }
             }
         }
+    }
+
+    companion object {
+        private const val DEFLECTION_ANGLE = 3
+        private const val MAX_ANGLE = 360
     }
 }
