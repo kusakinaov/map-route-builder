@@ -25,6 +25,5 @@
     </declare-styleable>
 
     <declare-styleable name="CompassView">
-        <attr name="compass_direction" format="float" />
     </declare-styleable>
 </resources>

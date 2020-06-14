@@ -3,6 +3,10 @@ package ku.olga.route_builder.presentation.view
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
@@ -10,7 +14,8 @@ import ku.olga.route_builder.R
 import kotlin.math.min
 
 class CompassView(context: Context, attrs: AttributeSet) : View(context, attrs) {
-    private var direction: Float = 0f
+    var onAngleChangeListener: OnAngleChangeListener? = null
+
     private var radius: Float = 0f
     private var centerPoint = PointF()
     private val shadowWidth = convertDpToPx(resources, 4f)
@@ -19,7 +24,7 @@ class CompassView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     private val arrowHalfWidth = convertDpToPx(resources, 10f)
 
     private val shadowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        style = Paint.Style.FILL
+        style = Paint.Style.FILL_AND_STROKE
         color = Color.GRAY
         maskFilter = BlurMaskFilter(shadowWidth, BlurMaskFilter.Blur.OUTER)
     }
@@ -53,18 +58,37 @@ class CompassView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     }.height()
     private val arrowPath = Path()
 
+    private val sensorManager: SensorManager
+    private val sensorMagnetic: Sensor?
+    private val sensorGravity: Sensor?
+
+    private val rotation = FloatArray(9)
+    private val gravity = FloatArray(3)
+    private val geomagnetic = FloatArray(3)
+    private val orientation = FloatArray(3)
+
+    private val sensorEventListener = object : SensorEventListener {
+        override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        }
+
+        override fun onSensorChanged(event: SensorEvent?) {
+            processSensorEvent(event)
+            startedListenToSensor = true
+        }
+    }
+    private var angle: Double = 0.0
+    private var startedListenToSensor = false
+
     init {
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.CompassView)
         try {
-            setDirection(typedArray.getFloat(R.styleable.CompassView_compass_direction, 0f))
         } finally {
             typedArray.recycle()
         }
-    }
 
-    fun setDirection(direction: Float) {
-        this.direction = direction
-        invalidate()
+        sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        sensorMagnetic = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
+        sensorGravity = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -145,7 +169,7 @@ class CompassView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         )
         canvas.save()
 
-        canvas.rotate(45f, centerPoint.x, centerPoint.y)
+        canvas.rotate(-angle.toFloat(), centerPoint.x, centerPoint.y)
         arrowPath.moveTo(centerPoint.x - arrowHalfWidth, centerPoint.y)
         arrowPath.lineTo(centerPoint.x + arrowHalfWidth, centerPoint.y)
         arrowPath.lineTo(
@@ -155,18 +179,68 @@ class CompassView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         arrowPath.lineTo(centerPoint.x - arrowHalfWidth, centerPoint.y)
         arrowPath.close()
 
-        arrowPaint.color = Color.BLUE
+        arrowPaint.color = Color.RED
         canvas.drawPath(arrowPath, shadowPaint)
         canvas.drawPath(arrowPath, arrowPaint)
         canvas.save()
 
         canvas.rotate(180f, centerPoint.x, centerPoint.y)
-        arrowPaint.color = Color.RED
+        arrowPaint.color = Color.WHITE
         canvas.drawPath(arrowPath, shadowPaint)
         canvas.drawPath(arrowPath, arrowPaint)
 
         canvas.drawCircle(centerPoint.x, centerPoint.y, arrowHalfWidth / 2, shadowPaint)
         canvas.drawCircle(centerPoint.x, centerPoint.y, arrowHalfWidth / 2, backgroundPaint)
+    }
+
+    override fun onWindowFocusChanged(hasWindowFocus: Boolean) {
+        super.onWindowFocusChanged(hasWindowFocus)
+        if (hasWindowFocus) {
+            registerSensorListeners()
+        } else {
+            unregisterSensorListeners()
+        }
+    }
+
+    private fun registerSensorListeners() {
+        sensorMagnetic?.let {
+            sensorManager.registerListener(sensorEventListener, it, SensorManager.SENSOR_DELAY_NORMAL)
+        }
+        sensorGravity?.let {
+            sensorManager.registerListener(sensorEventListener, it, SensorManager.SENSOR_DELAY_NORMAL)
+        }
+    }
+
+    private fun unregisterSensorListeners() {
+        startedListenToSensor = false
+        sensorMagnetic?.let {
+            sensorManager.unregisterListener(sensorEventListener)
+        }
+        sensorGravity?.let {
+            sensorManager.unregisterListener(sensorEventListener)
+        }
+    }
+
+    private fun processSensorEvent(event: SensorEvent?) {
+        event?.let {
+            if (it.sensor.type == Sensor.TYPE_GRAVITY) it.values.copyInto(gravity)
+            if (it.sensor.type == Sensor.TYPE_MAGNETIC_FIELD) it.values.copyInto(geomagnetic)
+            SensorManager.getRotationMatrix(rotation, null, gravity, geomagnetic)
+            SensorManager.getOrientation(rotation, orientation)
+            setAngle(orientation[0].toDouble())
+            invalidate()
+        }
+    }
+
+    private fun setAngle(radians: Double) {
+        angle = Math.toDegrees(radians)
+        if (startedListenToSensor) {
+            onAngleChangeListener?.onAngleChanged(angle)
+        }
+    }
+
+    interface OnAngleChangeListener {
+        fun onAngleChanged(angle: Double)
     }
 
     companion object {

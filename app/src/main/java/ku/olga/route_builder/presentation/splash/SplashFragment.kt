@@ -10,6 +10,8 @@ import ku.olga.route_builder.R
 import ku.olga.route_builder.presentation.MainActivity
 import ku.olga.route_builder.presentation.base.BaseFragment
 import ku.olga.route_builder.presentation.user_points.root.UserPointsFragment
+import ku.olga.route_builder.presentation.view.CompassView
+import kotlin.math.abs
 
 class SplashFragment : BaseFragment() {
     override fun onCreateView(
@@ -27,7 +29,13 @@ class SplashFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//            replaceFragment(UserPointsFragment.newInstance(), false)
+        viewCompass.onAngleChangeListener = object : CompassView.OnAngleChangeListener {
+            override fun onAngleChanged(angle: Double) {
+                if (abs(angle) < 3 || abs(360 - angle) < 3) {
+                    replaceFragment(UserPointsFragment.newInstance(), false)
+                }
+            }
+        }
     }
 
     companion object {

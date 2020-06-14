@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ku.olga.route_builder.presentation.view.PercentPositionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/black12"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/secondaryColor">
 
     <ku.olga.route_builder.presentation.view.UnlockView
         android:id="@+id/viewButton"
@@ -26,12 +27,14 @@
         android:visibility="gone"
         app:layout_horizontal_position_percent="50"
         app:layout_vertical_position_percent="95"
-        app:progress_background_track_color="@color/secondaryColor12"
+        app:progress_background_track_color="@color/white"
         app:progress_shadow_width="8dp"
         app:progress_track_color="@color/secondaryColor"
-        app:progress_track_height="16dp" />
+        app:progress_track_height="16dp"
+        tools:visibility="visible" />
 
     <ku.olga.route_builder.presentation.view.CompassView
+        android:id="@+id/viewCompass"
         android:layout_width="240dp"
         android:layout_height="240dp"
         app:layout_horizontal_position_percent="50"
