@@ -14,39 +14,43 @@ class CompassView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     private var radius: Float = 0f
     private var centerPoint = PointF()
     private val shadowWidth = convertDpToPx(resources, 4f)
+    private val strokeWidth = convertDpToPx(resources, 8f)
     private val divisionHeight = convertDpToPx(resources, 8f)
     private val arrowHalfWidth = convertDpToPx(resources, 10f)
 
-    private val shadowPaint =
-        Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            style = Paint.Style.FILL
-            color = Color.GRAY
-            maskFilter = BlurMaskFilter(shadowWidth, BlurMaskFilter.Blur.OUTER)
-        }
-
+    private val shadowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.FILL
+        color = Color.GRAY
+        maskFilter = BlurMaskFilter(shadowWidth, BlurMaskFilter.Blur.OUTER)
+    }
     private val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.WHITE
         style = Paint.Style.FILL_AND_STROKE
     }
-    private val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val divisionPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.DKGRAY
         strokeWidth = convertDpToPx(resources, 1f)
+        style = Paint.Style.STROKE
+    }
+    private val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.LTGRAY
+        strokeWidth = this@CompassView.strokeWidth
         style = Paint.Style.STROKE
     }
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.DKGRAY
         style = Paint.Style.FILL_AND_STROKE
-        textSize = convertDpToPx(resources, 16f)
+        textSize = convertDpToPx(resources, 20f)
         typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
     }
-    private val textHeight = Rect().apply {
-        textPaint.getTextBounds("N", 0, 1, this)
-    }.height()
-
     private val arrowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.DKGRAY
         style = Paint.Style.FILL_AND_STROKE
     }
+
+    private val textHeight = Rect().apply {
+        textPaint.getTextBounds("N", 0, 1, this)
+    }.height()
     private val arrowPath = Path()
 
     init {
@@ -67,7 +71,7 @@ class CompassView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         val size = min(measure(widthMeasureSpec), measure(heightMeasureSpec))
         setMeasuredDimension(size, size)
 
-        radius = size / 2f - shadowWidth
+        radius = size / 2f - shadowWidth - strokeWidth
     }
 
     private fun measure(measureSpec: Int): Int =
@@ -85,26 +89,26 @@ class CompassView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     }
 
     override fun onDraw(canvas: Canvas) {
-        canvas.drawCircle(centerPoint.x, centerPoint.y, radius, shadowPaint)
+        canvas.drawCircle(centerPoint.x, centerPoint.y, radius + strokeWidth, shadowPaint)
+        canvas.drawCircle(centerPoint.x, centerPoint.y, radius + strokeWidth / 2, strokePaint)
         canvas.drawCircle(centerPoint.x, centerPoint.y, radius, backgroundPaint)
-        canvas.drawCircle(centerPoint.x, centerPoint.y, radius, strokePaint)
 
         for (i in 0 until 24) {
             if (i % 6 == 0) {
                 canvas.drawLine(
                     centerPoint.x,
-                    shadowWidth,
+                    shadowWidth + strokeWidth,
                     centerPoint.x,
-                    2 * divisionHeight + shadowWidth,
-                    strokePaint
+                    2 * divisionHeight + shadowWidth + strokeWidth,
+                    divisionPaint
                 )
             } else {
                 canvas.drawLine(
                     centerPoint.x,
-                    shadowWidth,
+                    shadowWidth + strokeWidth,
                     centerPoint.x,
-                    divisionHeight + shadowWidth,
-                    strokePaint
+                    divisionHeight + shadowWidth + strokeWidth,
+                    divisionPaint
                 )
             }
             canvas.rotate(15f, centerPoint.x, centerPoint.y)
