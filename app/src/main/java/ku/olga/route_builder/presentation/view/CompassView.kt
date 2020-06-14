@@ -15,6 +15,7 @@ class CompassView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     private var centerPoint = PointF()
     private val shadowWidth = convertDpToPx(resources, 4f)
     private val divisionHeight = convertDpToPx(resources, 8f)
+    private val arrowHalfWidth = convertDpToPx(resources, 10f)
 
     private val shadowPaint =
         Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -41,6 +42,12 @@ class CompassView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     private val textHeight = Rect().apply {
         textPaint.getTextBounds("N", 0, 1, this)
     }.height()
+
+    private val arrowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.DKGRAY
+        style = Paint.Style.FILL_AND_STROKE
+    }
+    private val arrowPath = Path()
 
     init {
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.CompassView)
@@ -83,13 +90,23 @@ class CompassView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         canvas.drawCircle(centerPoint.x, centerPoint.y, radius, strokePaint)
 
         for (i in 0 until 24) {
-            canvas.drawLine(
-                centerPoint.x,
-                shadowWidth,
-                centerPoint.x,
-                divisionHeight + shadowWidth,
-                strokePaint
-            )
+            if (i % 6 == 0) {
+                canvas.drawLine(
+                    centerPoint.x,
+                    shadowWidth,
+                    centerPoint.x,
+                    2 * divisionHeight + shadowWidth,
+                    strokePaint
+                )
+            } else {
+                canvas.drawLine(
+                    centerPoint.x,
+                    shadowWidth,
+                    centerPoint.x,
+                    divisionHeight + shadowWidth,
+                    strokePaint
+                )
+            }
             canvas.rotate(15f, centerPoint.x, centerPoint.y)
         }
         canvas.save()
@@ -99,7 +116,7 @@ class CompassView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         canvas.drawText(
             "N",
             centerPoint.x - textPaint.measureText("N") / 2,
-            centerPoint.y - radius + divisionHeight + textHeight + padding,
+            centerPoint.y - radius + 2 * divisionHeight + textHeight + padding,
             textPaint
         )
 
@@ -107,21 +124,45 @@ class CompassView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         canvas.drawText(
             "S",
             centerPoint.x - textPaint.measureText("S") / 2,
-            centerPoint.y + radius - divisionHeight - padding,
+            centerPoint.y + radius - 2 * divisionHeight - padding,
             textPaint
         )
         canvas.drawText(
             "W",
-            centerPoint.x - radius + divisionHeight + padding,
+            centerPoint.x - radius + 2 * divisionHeight + padding,
             centerPoint.y + textHeight / 2,
             textPaint
         )
         canvas.drawText(
             "E",
-            centerPoint.x + radius - divisionHeight - padding - textPaint.measureText("E"),
+            centerPoint.x + radius - 2 * divisionHeight - padding - textPaint.measureText("E"),
             centerPoint.y + textHeight / 2,
             textPaint
         )
+        canvas.save()
+
+        canvas.rotate(45f, centerPoint.x, centerPoint.y)
+        arrowPath.moveTo(centerPoint.x - arrowHalfWidth, centerPoint.y)
+        arrowPath.lineTo(centerPoint.x + arrowHalfWidth, centerPoint.y)
+        arrowPath.lineTo(
+            centerPoint.x,
+            centerPoint.y - radius + 2 * divisionHeight + textHeight + 2 * padding
+        )
+        arrowPath.lineTo(centerPoint.x - arrowHalfWidth, centerPoint.y)
+        arrowPath.close()
+
+        arrowPaint.color = Color.BLUE
+        canvas.drawPath(arrowPath, shadowPaint)
+        canvas.drawPath(arrowPath, arrowPaint)
+        canvas.save()
+
+        canvas.rotate(180f, centerPoint.x, centerPoint.y)
+        arrowPaint.color = Color.RED
+        canvas.drawPath(arrowPath, shadowPaint)
+        canvas.drawPath(arrowPath, arrowPaint)
+
+        canvas.drawCircle(centerPoint.x, centerPoint.y, arrowHalfWidth / 2, shadowPaint)
+        canvas.drawCircle(centerPoint.x, centerPoint.y, arrowHalfWidth / 2, backgroundPaint)
     }
 
     companion object {
