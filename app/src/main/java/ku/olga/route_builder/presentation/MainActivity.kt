@@ -9,7 +9,6 @@ import ku.olga.route_builder.R
 import ku.olga.route_builder.presentation.base.BaseFragment
 import ku.olga.route_builder.presentation.dagger.component.ActivityComponent
 import ku.olga.route_builder.presentation.dagger.component.DaggerActivityComponent
-import ku.olga.route_builder.presentation.splash.SplashFragment
 import ku.olga.route_builder.presentation.user_points.root.UserPointsFragment
 
 class MainActivity : AppCompatActivity() {
@@ -26,7 +25,7 @@ class MainActivity : AppCompatActivity() {
 
         supportFragmentManager.addOnBackStackChangedListener { bindBackStack() }
         if (savedInstanceState == null) {
-            replaceFragment(SplashFragment.newInstance(), false)
+            replaceFragment(UserPointsFragment.newInstance(), false)
         }
     }
 
