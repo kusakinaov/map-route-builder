@@ -20,4 +20,5 @@
     <string name="error_search_pois">Не удалось выполнить запрос</string>
     <string name="tab_user_points_list">Список</string>
     <string name="tab_user_points_map">Карта</string>
+    <string name="error_build_directions">Не удалось построить маршрут.</string>
 </resources>

@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.fragment_user_points_map.*
 import kotlinx.android.synthetic.main.fragment_user_points_map.view.*
 import ku.olga.route_builder.R
 import ku.olga.route_builder.REQ_CODE_EDIT_POINT
+import ku.olga.route_builder.domain.model.Coordinates
 import ku.olga.route_builder.domain.model.UserPoint
 import ku.olga.route_builder.presentation.base.BaseFragment
 import ku.olga.route_builder.presentation.convertDpToPx
@@ -26,13 +27,15 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
+import org.osmdroid.views.overlay.Polyline
 
 class UserPointsMapViewImpl(
-        private val fragment: Fragment,
+        private val fragment: UserPointsMapFragment,
         private val presenter: UserPointsMapPresenter
 ) : UserPointsMapView {
     private var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>? = null
     private lateinit var markerOverlay: RadiusMarkerClusterer
+    private val directionsPolyline: Polyline = Polyline()
 
     init {
         fragment.view?.let {
@@ -57,6 +60,7 @@ class UserPointsMapViewImpl(
                 setMultiTouchControls(true)
                 addMapListener(buildMapListener())
                 overlays.add(markerOverlay)
+                overlayManager.add(directionsPolyline)
             }
             it.buttonEdit.setOnClickListener {
                 if (it.tag is UserPoint) {
@@ -156,6 +160,15 @@ class UserPointsMapViewImpl(
         }
     }
 
+    override fun showDirectionsError() {
+        showError(fragment.getString(R.string.error_build_directions))
+    }
+
+    override fun showDirections(coordinates: List<Coordinates>) {
+        directionsPolyline.setPoints(coordinates.map { GeoPoint(it.latitude, it.longitude) })
+        fragment.mapView?.invalidate()
+    }
+
     override fun onDetach() {
         presenter.detachView()
     }
@@ -198,6 +211,10 @@ class UserPointsMapViewImpl(
 
     private fun buildBoundingBox(userPoints: List<UserPoint>) =
             BoundingBox.fromGeoPointsSafe(userPoints.map { GeoPoint(it.lat, it.lon) })
+
+    override fun showError(error: CharSequence) {
+        fragment.showSnackbar(error)
+    }
 
     companion object {
         private const val NONE_MOVE_SPEED = 0L

@@ -1,12 +1,17 @@
 package ku.olga.route_builder.presentation.user_points.map
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ku.olga.route_builder.domain.model.Coordinates
 import ku.olga.route_builder.domain.model.UserPoint
+import ku.olga.route_builder.domain.repository.DirectionsRepository
 import ku.olga.route_builder.presentation.App
 import ku.olga.route_builder.presentation.base.BasePresenter
 import javax.inject.Inject
 
-class UserPointsMapPresenter @Inject constructor(): BasePresenter<UserPointsMapView>() {
+class UserPointsMapPresenter @Inject constructor(private val directionsRepository: DirectionsRepository) : BasePresenter<UserPointsMapView>() {
     private val userPoints = mutableListOf<UserPoint>()
     private var center: Coordinates? = null
     private var zoomLevel: Double = DEFAULT_ZOOM_LEVEL
@@ -37,6 +42,17 @@ class UserPointsMapPresenter @Inject constructor(): BasePresenter<UserPointsMapV
         this.userPoints.addAll(userPoints)
 
         bindUserPoints()
+        buildDirections(userPoints)
+    }
+
+    private fun buildDirections(userPoints: List<UserPoint>) = CoroutineScope(Dispatchers.IO).launch {
+        try {
+            val coordinates = directionsRepository.getDirections(userPoints.map { Coordinates(it.lat, it.lon) })
+            withContext(Dispatchers.Main) { view?.showDirections(coordinates) }
+        } catch (exc: Exception) {
+            exc.printStackTrace()
+            withContext(Dispatchers.Main) { view?.showDirectionsError() }
+        }
     }
 
     private fun bindUserPoints() {
