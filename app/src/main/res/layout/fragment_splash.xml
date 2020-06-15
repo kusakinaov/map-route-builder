@@ -5,32 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ku.olga.route_builder.presentation.view.UnlockView
-        android:id="@+id/viewButton"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/ic_outline_lock"
-        android:visibility="gone"
-        app:button_color="@color/secondaryColor"
-        app:button_radius="32dp"
-        app:icon_color="@color/secondaryTextColor"
-        app:layout_horizontal_position_percent="50"
-        app:layout_vertical_position_percent="50" />
-
     <ku.olga.route_builder.presentation.view.ProgressView
         android:id="@+id/viewProgress"
         android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:visibility="gone"
         app:layout_horizontal_position_percent="50"
         app:layout_vertical_position_percent="95"
         app:progress_background_track_color="@color/white"
         app:progress_shadow_width="8dp"
-        app:progress_track_color="@color/secondaryColor"
-        app:progress_track_height="16dp"
-        tools:visibility="visible" />
+        app:progress_track_color="@android:color/holo_red_dark"
+        app:progress_track_height="16dp" />
 
     <ku.olga.route_builder.presentation.view.CompassView
         android:id="@+id/viewCompass"

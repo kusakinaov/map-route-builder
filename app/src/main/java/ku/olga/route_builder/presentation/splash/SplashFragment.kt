@@ -12,6 +12,7 @@ import ku.olga.route_builder.presentation.MainActivity
 import ku.olga.route_builder.presentation.base.BaseFragment
 import ku.olga.route_builder.presentation.view.CompassView
 import kotlin.math.abs
+import kotlin.math.min
 
 class SplashFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
@@ -23,7 +24,10 @@ class SplashFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewCompass.onAngleChangeListener = object : CompassView.OnAngleChangeListener {
             override fun onAngleChanged(angle: Double) {
-                if (abs(angle) < DEFLECTION_ANGLE || abs(MAX_ANGLE - angle) < DEFLECTION_ANGLE) {
+                val progress = (MAX_ANGLE - min(abs(MAX_ANGLE - angle), abs(angle))) / MAX_ANGLE * 100
+                viewProgress.setProgress(progress.toInt())
+
+                if (progress >= PERMISSIBLE_VARIATION) {
                     viewCompass.onAngleChangeListener = null
                     activity?.apply {
                         finish()
@@ -36,7 +40,7 @@ class SplashFragment : BaseFragment() {
     }
 
     companion object {
-        private const val DEFLECTION_ANGLE = 3
         private const val MAX_ANGLE = 360
+        private const val PERMISSIBLE_VARIATION = 95
     }
 }

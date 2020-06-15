@@ -27,7 +27,6 @@ class ProgressView(context: Context, attrs: AttributeSet) : View(context, attrs)
     private var corners: Float = 0f
 
     private var progress: Int = 0
-    private var progressAnimator: ValueAnimator? = null
     private var progressPercentPx: Float = 0f
 
     init {
@@ -91,20 +90,18 @@ class ProgressView(context: Context, attrs: AttributeSet) : View(context, attrs)
         if (progressPercentPx == 0f) {
             this.progress = progress
         } else {
-            progressAnimator?.cancel()
-            progressAnimator = buildAnimator(this.progress, progress, progressPercentPx)
-                .apply { start() }
+            setProgressWidth((progress * progressPercentPx).toInt())
         }
     }
 
-    private fun buildAnimator(from: Int, to: Int, step: Float) = ValueAnimator.ofInt(
-        (step * from).toInt(),
-        (step * to).toInt()
-    ).setDuration((abs(from - to) * 40).toLong()).apply {
-        addUpdateListener {
-            setProgressWidth(it.animatedValue as Int)
-        }
-    }
+//    private fun buildAnimator(from: Int, to: Int, step: Float) = ValueAnimator.ofInt(
+//        (step * from).toInt(),
+//        (step * to).toInt()
+//    ).setDuration((abs(from - to) * 40).toLong()).apply {
+//        addUpdateListener {
+//            setProgressWidth(it.animatedValue as Int)
+//        }
+//    }
 
     private fun calculateProgressRight(newWidth: Float) = min(
         backgroundRect.right,
