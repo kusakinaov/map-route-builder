@@ -8,6 +8,7 @@ import dagger.Provides
 import dagger.Reusable
 import ku.olga.route_builder.R
 import ku.olga.route_builder.data.repository.GoogleDirectionsRepository
+import ku.olga.route_builder.data.repository.OSRMDirectionsRepository
 import ku.olga.route_builder.domain.repository.DirectionsRepository
 import ku.olga.route_builder.presentation.dagger.annotation.ActivityScope
 import ku.olga.route_builder.presentation.dagger.annotation.ApplicationContext
@@ -24,6 +25,6 @@ class DirectionsModule {
     interface BindsModule {
         @ActivityScope
         @Binds
-        fun bindsDirectionsRepository(repository: GoogleDirectionsRepository): DirectionsRepository
+        fun bindsDirectionsRepository(repository: OSRMDirectionsRepository): DirectionsRepository
     }
 }
