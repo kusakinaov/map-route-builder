@@ -1,10 +1,11 @@
 package ku.olga.route_builder.presentation.user_points.map
 
+import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.fragment_user_points_map.*
 import kotlinx.android.synthetic.main.fragment_user_points_map.view.*
@@ -30,12 +31,12 @@ import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
 
 class UserPointsMapViewImpl(
-        private val fragment: UserPointsMapFragment,
-        private val presenter: UserPointsMapPresenter
+    private val fragment: UserPointsMapFragment,
+    private val presenter: UserPointsMapPresenter
 ) : UserPointsMapView {
     private var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>? = null
     private lateinit var markerOverlay: RadiusMarkerClusterer
-    private val directionsPolyline: Polyline = Polyline()
+    private lateinit var directionsPolyline: Polyline
 
     init {
         fragment.view?.let {
@@ -60,7 +61,17 @@ class UserPointsMapViewImpl(
                 setMultiTouchControls(true)
                 addMapListener(buildMapListener())
                 overlays.add(markerOverlay)
-                overlayManager.add(directionsPolyline)
+
+                directionsPolyline = Polyline().apply {
+                    outlinePaint.apply {
+                        isAntiAlias = true
+                        color = Color.RED
+                        strokeWidth = convertDpToPx(resources, 2f)
+                        style = Paint.Style.STROKE
+                    }
+                    isGeodesic = true
+                }
+                overlays.add(directionsPolyline)
             }
             it.buttonEdit.setOnClickListener {
                 if (it.tag is UserPoint) {
@@ -134,8 +145,8 @@ class UserPointsMapViewImpl(
         val parent = fragment.parentFragment
         if (parent is BaseFragment) {
             parent.replaceFragment(
-                    EditPointFragment
-                            .newInstance(parent, REQ_CODE_EDIT_POINT, userPoint), true
+                EditPointFragment
+                    .newInstance(parent, REQ_CODE_EDIT_POINT, userPoint), true
             )
         }
     }
@@ -186,19 +197,19 @@ class UserPointsMapViewImpl(
 
     override fun moveTo(latitude: Double, longitude: Double, zoomLevel: Double, animated: Boolean) {
         fragment.mapView?.controller?.animateTo(
-                GeoPoint(latitude, longitude),
-                zoomLevel, if (animated) DEFAULT_MOVE_SPEED else NONE_MOVE_SPEED
+            GeoPoint(latitude, longitude),
+            zoomLevel, if (animated) DEFAULT_MOVE_SPEED else NONE_MOVE_SPEED
         )
     }
 
     private fun buildMarker(point: UserPoint, poiIcon: Drawable?): Marker =
-            Marker(fragment.view?.mapView).apply {
-                title = point.title
-                snippet = point.description
-                position = GeoPoint(point.lat, point.lon)
-                icon = poiIcon
-                setOnMarkerClickListener { _, _ -> presenter.onClickMarker(point) }
-            }
+        Marker(fragment.view?.mapView).apply {
+            title = point.title
+            snippet = point.description
+            position = GeoPoint(point.lat, point.lon)
+            icon = poiIcon
+            setOnMarkerClickListener { _, _ -> presenter.onClickMarker(point) }
+        }
 
     override fun moveTo(userPoints: List<UserPoint>, animated: Boolean) {
         val boundingBox = buildBoundingBox(userPoints)
@@ -210,7 +221,7 @@ class UserPointsMapViewImpl(
     }
 
     private fun buildBoundingBox(userPoints: List<UserPoint>) =
-            BoundingBox.fromGeoPointsSafe(userPoints.map { GeoPoint(it.lat, it.lon) })
+        BoundingBox.fromGeoPointsSafe(userPoints.map { GeoPoint(it.lat, it.lon) })
 
     override fun showError(error: CharSequence) {
         fragment.showSnackbar(error)
