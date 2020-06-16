@@ -1,6 +1,7 @@
 package ku.olga.route_builder.data.repository
 
 import com.google.gson.GsonBuilder
+import ku.olga.route_builder.data.repository.osrm.TripResponse
 import ku.olga.route_builder.domain.model.Coordinates
 import ku.olga.route_builder.domain.repository.DirectionsRepository
 import java.net.URL
@@ -11,6 +12,7 @@ class OSRMDirectionsRepository @Inject constructor() : DirectionsRepository {
 
     override suspend fun getDirections(points: List<Coordinates>): List<Coordinates> {
         val text = URL(buildServerUrl(SERVER, Service.trip, Profile.foot, VERSION, points)).readText()
+        val response = gson.fromJson(text, TripResponse::class.java)
 
         return emptyList()
     }
@@ -24,7 +26,7 @@ class OSRMDirectionsRepository @Inject constructor() : DirectionsRepository {
     ) =
         "$server/${service.name}/$version/${profile.name}/${coordinates.joinToString(
             separator = ";",
-            transform = { "${it.latitude},${it.longitude}" })}"
+            transform = { "${it.latitude},${it.longitude}" })}?steps=true"
 
     companion object {
         private const val SERVER = "http://router.project-osrm.org"
