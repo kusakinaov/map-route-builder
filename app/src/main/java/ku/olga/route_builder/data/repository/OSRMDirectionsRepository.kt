@@ -2,13 +2,15 @@ package ku.olga.route_builder.data.repository
 
 import com.google.gson.GsonBuilder
 import ku.olga.route_builder.data.repository.osrm.TripResponse
+import ku.olga.route_builder.data.repository.osrm.gson.LocationTypeAdapter
 import ku.olga.route_builder.domain.model.Coordinates
 import ku.olga.route_builder.domain.repository.DirectionsRepository
 import java.net.URL
 import javax.inject.Inject
 
 class OSRMDirectionsRepository @Inject constructor() : DirectionsRepository {
-    private val gson = GsonBuilder().create()
+    private val gson = GsonBuilder()
+        .registerTypeAdapter(Coordinates::class.java, LocationTypeAdapter()).create()
 
     override suspend fun getDirections(points: List<Coordinates>): List<Coordinates> {
         val url = buildServerUrl(SERVER, Service.trip, Profile.foot, VERSION, points)
@@ -19,9 +21,7 @@ class OSRMDirectionsRepository @Inject constructor() : DirectionsRepository {
                 for (leg in it[0].legs) {
                     for (step in leg.steps) {
                         for (intersection in step.intersections) {
-                            intersection.location.let {
-                                coordinates.add(Coordinates(it[1], it[0]))
-                            }
+                            coordinates.add(intersection.location)
                         }
                     }
                 }
