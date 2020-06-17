@@ -1,6 +1,5 @@
 package ku.olga.route_builder.presentation.user_points.map
 
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.view.View
@@ -65,8 +64,8 @@ class UserPointsMapViewImpl(
                 directionsPolyline = Polyline().apply {
                     outlinePaint.apply {
                         isAntiAlias = true
-                        color = Color.RED
-                        strokeWidth = convertDpToPx(resources, 2f)
+                        color = ContextCompat.getColor(context, R.color.map_route)
+                        strokeWidth = convertDpToPx(resources, 4f)
                         style = Paint.Style.STROKE
                     }
                     isGeodesic = true

@@ -11,7 +11,8 @@ class OSRMDirectionsRepository @Inject constructor() : DirectionsRepository {
     private val gson = GsonBuilder().create()
 
     override suspend fun getDirections(points: List<Coordinates>): List<Coordinates> {
-        val text = URL(buildServerUrl(SERVER, Service.trip, Profile.foot, VERSION, points)).readText()
+        val url = buildServerUrl(SERVER, Service.trip, Profile.foot, VERSION, points)
+        val text = URL(url).readText()
         val coordinates = mutableListOf<Coordinates>()
         gson.fromJson(text, TripResponse::class.java).trips.let {
             if (it.isNotEmpty()) {
@@ -19,7 +20,7 @@ class OSRMDirectionsRepository @Inject constructor() : DirectionsRepository {
                     for (step in leg.steps) {
                         for (intersection in step.intersections) {
                             intersection.location.let {
-                                coordinates.add(Coordinates(it[0], it[1]))
+                                coordinates.add(Coordinates(it[1], it[0]))
                             }
                         }
                     }
@@ -38,7 +39,7 @@ class OSRMDirectionsRepository @Inject constructor() : DirectionsRepository {
     ) =
         "$server/${service.name}/$version/${profile.name}/${coordinates.joinToString(
             separator = ";",
-            transform = { "${it.latitude},${it.longitude}" })}?steps=true"//&geometries=geojson"
+            transform = { "${it.longitude},${it.latitude}" })}?steps=true"//&geometries=geojson"
 
     companion object {
         private const val SERVER = "http://router.project-osrm.org"
