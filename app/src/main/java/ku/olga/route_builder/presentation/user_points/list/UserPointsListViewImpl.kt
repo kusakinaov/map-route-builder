@@ -2,12 +2,14 @@ package ku.olga.route_builder.presentation.user_points.list
 
 import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_user_points_list.view.*
 import ku.olga.route_builder.REQ_CODE_EDIT_POINT
 import ku.olga.route_builder.domain.model.UserPoint
 import ku.olga.route_builder.presentation.base.BaseFragment
 import ku.olga.route_builder.presentation.point.EditPointFragment
+import ku.olga.route_builder.presentation.view.MoveItemCallback
 
 class UserPointsListViewImpl(
         private val fragment: BaseFragment,
@@ -22,6 +24,7 @@ class UserPointsListViewImpl(
             }
         }
     }
+    private val itemTouchHelper = ItemTouchHelper(MoveItemCallback(pointsAdapter))
 
     init {
         fragment.view?.apply {
@@ -29,6 +32,7 @@ class UserPointsListViewImpl(
                 layoutManager = LinearLayoutManager(context)
                 adapter = pointsAdapter
                 addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+                itemTouchHelper.attachToRecyclerView(this)
             }
         }
     }
