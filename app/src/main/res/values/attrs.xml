@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="PercentPositionLayout"/>
+
+    <declare-styleable name="PercentPositionLayout_Layout">
+        <attr name="layout_vertical_position_percent" format="integer" />
+        <attr name="layout_horizontal_position_percent" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="ProgressView">
+        <attr name="progress_background_track_color" format="color" />
+        <attr name="progress_track_color" format="color" />
+        <attr name="progress_track_height" format="dimension" />
+        <attr name="progress_shadow_width" format="dimension" />
+        <attr name="android:progress" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="CompassView"/>
+</resources>
