@@ -7,4 +7,5 @@
     <string name="hint_empty_points">Список пуст</string>
     <string name="hint_no_title">Нет заголовка</string>
     <string name="hint_no_description">Нет описания</string>
+    <string name="error_build_directions">Не удалось построить маршрут.</string>
 </resources>

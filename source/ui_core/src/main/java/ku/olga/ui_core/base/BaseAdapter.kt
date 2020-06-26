@@ -3,7 +3,7 @@ package ku.olga.ui_core.base
 import androidx.recyclerview.widget.RecyclerView
 
 abstract class BaseAdapter<T, VH : RecyclerView.ViewHolder> : RecyclerView.Adapter<VH>() {
-    private val items = mutableListOf<T>()
+    protected val items = mutableListOf<T>()
 
     fun clear() {
         items.clear()

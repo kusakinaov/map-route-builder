@@ -7,11 +7,12 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_user_point.view.*
 import ku.olga.core_api.dto.UserPoint
 import ku.olga.ui_core.base.BaseAdapter
+import ku.olga.user_points.MoveItemHelperAdapter
 import ku.olga.user_points.R
 import javax.inject.Inject
 
 class UserPointsAdapter @Inject constructor() :
-    BaseAdapter<UserPoint, UserPointsAdapter.PointHolder>() {
+    BaseAdapter<UserPoint, UserPointsAdapter.PointHolder>(), MoveItemHelperAdapter {
     var onPointClickListener: ((UserPoint) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -38,10 +39,24 @@ class UserPointsAdapter @Inject constructor() :
             point?.let {
                 itemView.textViewTitle.text = it.title
                 itemView.textViewDescription.apply {
-                    text = if (it.description?.isNotEmpty() == true) it.description else it.postalAddress
+                    text = if (it.description?.isNotEmpty() == true)
+                        it.description
+                    else
+                        it.postalAddress
                     visibility = if (text.isNullOrEmpty()) View.GONE else View.VISIBLE
                 }
             }
         }
+    }
+
+    override fun onItemMove(from: Int, to: Int): Boolean {
+        val source = getItem(from)
+        items[from] = items[to]
+        items[to] = source
+        notifyItemMoved(from, to)
+        return true
+    }
+
+    override fun onItemMoveFinished() {
     }
 }

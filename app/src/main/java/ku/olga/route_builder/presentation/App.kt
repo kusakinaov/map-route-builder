@@ -22,7 +22,12 @@ class App : Application(), AppWithFacade {
         facadeComponent = DaggerFacadeComponent.builder()
             .applicationProvider(ApplicationComponent.get(this))
             .addressRepositoryProvider(CoreProvidersFactory.buildAddressRepositoryProvider())
-            .pOIRepositoryProvider(CoreProvidersFactory.buildPOIRepositoryProvider(ApplicationComponent.get(this)))
+            .pOIRepositoryProvider(
+                CoreProvidersFactory.buildPOIRepositoryProvider(
+                    ApplicationComponent.get(this)
+                )
+            )
+            .directionsProvider(CoreProvidersFactory.buildDirectionsProvider())
             .userPointsRepositoryProvider(
                 CoreProvidersFactory
                     .buildUserPointRepositoryProvider(ApplicationComponent.get(this))

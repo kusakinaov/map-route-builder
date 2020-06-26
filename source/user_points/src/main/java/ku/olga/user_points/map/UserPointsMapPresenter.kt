@@ -5,9 +5,16 @@ import ku.olga.core_api.dto.Coordinates
 import ku.olga.core_api.dto.UserPoint
 import ku.olga.ui_core.base.BasePresenter
 import ku.olga.ui_core.utils.getLastCoordinates
+
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import ku.olga.core_api.repository.DirectionsRepository
 import javax.inject.Inject
 
-class UserPointsMapPresenter @Inject constructor(val preferences: SharedPreferences) :
+class UserPointsMapPresenter @Inject constructor(private val directionsRepository: DirectionsRepository,
+                                                 private val preferences: SharedPreferences) :
     BasePresenter<UserPointsMapView>() {
     private val userPoints = mutableListOf<UserPoint>()
     private var center: Coordinates? = null
@@ -40,7 +47,24 @@ class UserPointsMapPresenter @Inject constructor(val preferences: SharedPreferen
         this.userPoints.addAll(userPoints)
 
         bindUserPoints()
+        buildDirections(userPoints)
     }
+
+    private fun buildDirections(userPoints: List<UserPoint>) =
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val coordinates = directionsRepository.getDirections(userPoints.map {
+                    Coordinates(
+                        it.lat,
+                        it.lon
+                    )
+                })
+                withContext(Dispatchers.Main) { view?.showDirections(coordinates) }
+            } catch (exc: Exception) {
+                exc.printStackTrace()
+                withContext(Dispatchers.Main) { view?.showDirectionsError() }
+            }
+        }
 
     private fun bindUserPoints() {
         view?.apply {

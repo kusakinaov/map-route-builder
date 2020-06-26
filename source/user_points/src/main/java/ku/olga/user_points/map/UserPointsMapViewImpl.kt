@@ -1,13 +1,14 @@
 package ku.olga.user_points.map
 
+import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.fragment_user_points_map.*
 import kotlinx.android.synthetic.main.fragment_user_points_map.view.*
+import ku.olga.core_api.dto.Coordinates
 import ku.olga.ui_core.REQ_CODE_EDIT_POINT
 import ku.olga.core_api.dto.UserPoint
 import ku.olga.core_api.mediator.EditPointMediator
@@ -26,14 +27,16 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
+import org.osmdroid.views.overlay.Polyline
 
 class UserPointsMapViewImpl(
-    private val fragment: Fragment,
+    private val fragment: UserPointsMapFragment,
     private val presenter: UserPointsMapPresenter,
     private val editPointMediator: EditPointMediator
 ) : UserPointsMapView {
     private var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>? = null
     private lateinit var markerOverlay: RadiusMarkerClusterer
+    private lateinit var directionsPolyline: Polyline
 
     init {
         fragment.view?.let {
@@ -66,6 +69,17 @@ class UserPointsMapViewImpl(
                 setMultiTouchControls(true)
                 addMapListener(buildMapListener())
                 overlays.add(markerOverlay)
+
+                directionsPolyline = Polyline().apply {
+                    outlinePaint.apply {
+                        isAntiAlias = true
+                        color = ContextCompat.getColor(context, R.color.map_route)
+                        strokeWidth = convertDpToPx(resources, 4f)
+                        style = Paint.Style.STROKE
+                    }
+                    isGeodesic = true
+                }
+                overlays.add(directionsPolyline)
             }
             it.buttonEdit.setOnClickListener {
                 if (it.tag is UserPoint) {
@@ -165,6 +179,15 @@ class UserPointsMapViewImpl(
         }
     }
 
+    override fun showDirectionsError() {
+        showError(fragment.getString(R.string.error_build_directions))
+    }
+
+    override fun showDirections(coordinates: List<Coordinates>) {
+        directionsPolyline.setPoints(coordinates.map { GeoPoint(it.latitude, it.longitude) })
+        fragment.mapView?.invalidate()
+    }
+
     override fun onDetach() {
         presenter.detachView()
     }
@@ -212,6 +235,10 @@ class UserPointsMapViewImpl(
 
     private fun buildBoundingBox(userPoints: List<UserPoint>) =
         BoundingBox.fromGeoPointsSafe(userPoints.map { GeoPoint(it.lat, it.lon) })
+
+    override fun showError(error: CharSequence) {
+        fragment.showSnackbar(error)
+    }
 
     companion object {
         private const val NONE_MOVE_SPEED = 0L

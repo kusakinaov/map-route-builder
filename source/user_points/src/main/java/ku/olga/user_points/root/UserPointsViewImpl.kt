@@ -41,7 +41,7 @@ class UserPointsViewImpl(
             viewPager.apply {
                 adapter = userPointsAdapter
                 addOnPageChangeListener(pageChangeListener)
-                setOnTouchListener { _, _ -> true }
+                setOnTouchListener { _, _ -> false }
             }
             buttonAdd.apply {
                 setOnClickListener {
