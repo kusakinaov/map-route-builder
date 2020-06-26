@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="PercentPositionLayout"/>
+    <declare-styleable name="PercentPositionLayout" />
 
     <declare-styleable name="PercentPositionLayout_Layout">
         <attr name="layout_vertical_position_percent" format="integer" />
@@ -15,5 +15,5 @@
         <attr name="android:progress" format="integer" />
     </declare-styleable>
 
-    <declare-styleable name="CompassView"/>
+    <declare-styleable name="CompassView" />
 </resources>

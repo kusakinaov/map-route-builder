@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.view
+package ku.olga.ui_core.view
 
 import android.content.Context
 import android.content.res.Resources
@@ -10,7 +10,7 @@ import android.hardware.SensorManager
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
-import ku.olga.route_builder.R
+import ku.olga.ui_core.R
 import kotlin.math.min
 
 class CompassView(context: Context, attrs: AttributeSet) : View(context, attrs) {
@@ -18,10 +18,14 @@ class CompassView(context: Context, attrs: AttributeSet) : View(context, attrs) 
 
     private var radius: Float = 0f
     private var centerPoint = PointF()
-    private val shadowWidth = convertDpToPx(resources, 4f)
-    private val strokeWidth = convertDpToPx(resources, 8f)
-    private val divisionHeight = convertDpToPx(resources, 8f)
-    private val arrowHalfWidth = convertDpToPx(resources, 10f)
+    private val shadowWidth =
+        convertDpToPx(resources, 4f)
+    private val strokeWidth =
+        convertDpToPx(resources, 8f)
+    private val divisionHeight =
+        convertDpToPx(resources, 8f)
+    private val arrowHalfWidth =
+        convertDpToPx(resources, 10f)
 
     private val shadowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL_AND_STROKE
@@ -38,7 +42,10 @@ class CompassView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     }
     private val divisionPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.GRAY
-        strokeWidth = convertDpToPx(resources, 1f)
+        strokeWidth = convertDpToPx(
+            resources,
+            1f
+        )
         style = Paint.Style.STROKE
     }
     private val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -49,7 +56,10 @@ class CompassView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.DKGRAY
         style = Paint.Style.FILL_AND_STROKE
-        textSize = convertDpToPx(resources, 20f)
+        textSize = convertDpToPx(
+            resources,
+            20f
+        )
         typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
     }
     private val arrowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -104,7 +114,10 @@ class CompassView(context: Context, attrs: AttributeSet) : View(context, attrs) 
 
     private fun measure(measureSpec: Int): Int =
         if (MeasureSpec.getMode(measureSpec) == MeasureSpec.UNSPECIFIED) {
-            convertDpToPx(resources, DEFAULT_SIZE).toInt()
+            convertDpToPx(
+                resources,
+                DEFAULT_SIZE
+            ).toInt()
         } else {
             MeasureSpec.getSize(measureSpec)
         }
@@ -161,7 +174,10 @@ class CompassView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         }
         canvas.save()
 
-        val padding = convertDpToPx(resources, 4f)
+        val padding = convertDpToPx(
+            resources,
+            4f
+        )
         textPaint.color = Color.RED
         canvas.drawText(
             "N",

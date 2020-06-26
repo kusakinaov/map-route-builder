@@ -1,4 +1,4 @@
-package ku.olga.route_builder.presentation.view
+package ku.olga.ui_core.view
 
 import android.content.Context
 import android.content.res.Resources
@@ -6,7 +6,7 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
-import ku.olga.route_builder.R
+import ku.olga.ui_core.R
 import kotlin.math.max
 import kotlin.math.min
 
@@ -40,7 +40,10 @@ class ProgressView(context: Context, attrs: AttributeSet) : View(context, attrs)
             setTrackHeight(
                 typedArray.getDimension(
                     R.styleable.ProgressView_progress_track_height,
-                    convertDpToPx(context.resources, DEFAULT_TRACK_HEIGHT)
+                    convertDpToPx(
+                        context.resources,
+                        DEFAULT_TRACK_HEIGHT
+                    )
                 )
             )
             setTrackColor(
@@ -52,7 +55,10 @@ class ProgressView(context: Context, attrs: AttributeSet) : View(context, attrs)
             setShadowWidth(
                 typedArray.getDimension(
                     R.styleable.ProgressView_progress_shadow_width,
-                    convertDpToPx(resources, DEFAULT_SHADOW_HEIGHT)
+                    convertDpToPx(
+                        resources,
+                        DEFAULT_SHADOW_HEIGHT
+                    )
                 )
             )
             setProgress(typedArray.getInt(R.styleable.ProgressView_android_progress, 0))

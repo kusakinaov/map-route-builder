@@ -1,11 +1,11 @@
-package ku.olga.route_builder.presentation.view
+package ku.olga.ui_core.view
 
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
 import android.view.ViewGroup
 import androidx.core.view.children
-import ku.olga.route_builder.R
+import ku.olga.ui_core.R
 
 class PercentPositionLayout(context: Context?, attrs: AttributeSet?) : ViewGroup(context, attrs) {
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -50,11 +50,19 @@ class PercentPositionLayout(context: Context?, attrs: AttributeSet?) : ViewGroup
     override fun checkLayoutParams(p: LayoutParams?): Boolean = p is LayoutParams
 
     override fun generateDefaultLayoutParams(): LayoutParams =
-            PercentLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+        PercentLayoutParams(
+            LayoutParams.MATCH_PARENT,
+            LayoutParams.MATCH_PARENT
+        )
 
-    override fun generateLayoutParams(attrs: AttributeSet): LayoutParams = PercentLayoutParams(context, attrs)
+    override fun generateLayoutParams(attrs: AttributeSet): LayoutParams =
+        PercentLayoutParams(
+            context,
+            attrs
+        )
 
-    override fun generateLayoutParams(p: LayoutParams): LayoutParams = PercentLayoutParams(p)
+    override fun generateLayoutParams(p: LayoutParams): LayoutParams =
+        PercentLayoutParams(p)
 
     class PercentLayoutParams : LayoutParams {
         var verticalPositionPercent: Int = 0

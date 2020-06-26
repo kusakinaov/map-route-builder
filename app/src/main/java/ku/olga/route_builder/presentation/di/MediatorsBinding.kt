@@ -6,6 +6,7 @@ import ku.olga.category.CategoryMediatorImpl
 import ku.olga.confirmation.ConfirmationMediatorImpl
 import ku.olga.core_api.mediator.*
 import ku.olga.edit_point.EditPointMediatorImpl
+import ku.olga.main.MainMediatorImpl
 import ku.olga.search.SearchMediatorImpl
 import ku.olga.user_points.root.UserPointsMediatorImpl
 
@@ -25,4 +26,7 @@ interface MediatorsBinding {
 
     @Binds
     fun bindUserPointsMediator(userPointsMediatorImpl: UserPointsMediatorImpl): UserPointsMediator
+
+    @Binds
+    fun bindMainMediator(mainMediatorImpl: MainMediatorImpl): MainMediator
 }

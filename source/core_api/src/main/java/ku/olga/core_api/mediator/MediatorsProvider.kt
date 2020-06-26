@@ -6,4 +6,5 @@ interface MediatorsProvider {
     fun providesSearchMediator(): SearchMediator
     fun providesConfirmationMediator(): ConfirmationMediator
     fun providesUserPointsMediator(): UserPointsMediator
+    fun providesMainMediator(): MainMediator
 }
