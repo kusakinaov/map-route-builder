@@ -11,8 +11,7 @@ import ku.olga.user_points.OnUserPointsChangeListener
 import ku.olga.user_points.R
 import javax.inject.Inject
 
-class UserPointsListFragment : BaseFragment(),
-    OnUserPointsChangeListener {
+class UserPointsListFragment : BaseFragment(), OnUserPointsChangeListener {
     @Inject
     lateinit var userPointsPresenter: UserPointsListPresenter
 
@@ -57,5 +56,9 @@ class UserPointsListFragment : BaseFragment(),
 
     override fun onUserPointsChanged(userPoints: List<UserPoint>) {
         userPointsPresenter.setUserPoints(userPoints)
+    }
+
+    interface OnOrderChangeCallback {
+        fun onOrderChanged()
     }
 }

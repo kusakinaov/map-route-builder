@@ -7,7 +7,6 @@ import kotlinx.coroutines.withContext
 import ku.olga.core_api.dto.UserPoint
 import ku.olga.core_api.repository.PointsCacheRepository
 import ku.olga.ui_core.base.BasePresenter
-import ku.olga.user_points.root.UserPointsView
 import javax.inject.Inject
 
 class UserPointsPresenter @Inject constructor(private val pointsRepository: PointsCacheRepository) :
@@ -30,5 +29,9 @@ class UserPointsPresenter @Inject constructor(private val pointsRepository: Poin
 
     fun bindUserPoints() {
         view?.bindUserPoints(userPoints)
+    }
+
+    fun invalidateUserPoints() {
+        getUserPoints()
     }
 }

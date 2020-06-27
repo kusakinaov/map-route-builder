@@ -11,10 +11,11 @@ import ku.olga.core_api.AppWithFacade
 import ku.olga.core_api.mediator.SearchMediator
 import ku.olga.ui_core.base.BaseFragment
 import ku.olga.user_points.R
+import ku.olga.user_points.list.UserPointsListFragment
 import ku.olga.user_points.map.UserPointsMapFragment
 import javax.inject.Inject
 
-class UserPointsFragment : BaseFragment(), UserPointsMapFragment.BottomSheetCallback {
+class UserPointsFragment : BaseFragment(), UserPointsMapFragment.BottomSheetCallback, UserPointsListFragment.OnOrderChangeCallback {
     @Inject
     lateinit var presenter: UserPointsPresenter
 
@@ -68,5 +69,9 @@ class UserPointsFragment : BaseFragment(), UserPointsMapFragment.BottomSheetCall
 
     override fun onHide() {
         userPointsView?.onHide()
+    }
+
+    override fun onOrderChanged() {
+        presenter.invalidateUserPoints()
     }
 }

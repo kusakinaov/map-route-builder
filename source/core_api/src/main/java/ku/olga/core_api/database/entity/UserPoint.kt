@@ -13,5 +13,6 @@ data class UserPoint(
     @ColumnInfo(name = "lat") val lat: Double,
     @ColumnInfo(name = "lon") val lon: Double,
     @ColumnInfo(name = "description") var description: String? = null,
-    @ColumnInfo(name = "type") val type: UserPointType
+    @ColumnInfo(name = "type") val type: UserPointType,
+    @ColumnInfo(name = "order") val order: Int
 )

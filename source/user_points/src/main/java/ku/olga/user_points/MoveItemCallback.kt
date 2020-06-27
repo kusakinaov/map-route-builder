@@ -31,6 +31,7 @@ class MoveItemCallback(private val adapter: MoveItemHelperAdapter) :
             ItemTouchHelper.ACTION_STATE_IDLE -> {
                 if (startDrag) {
                     startDrag = false
+                    adapter.onItemMoveFinished()
                 }
             }
         }

@@ -21,8 +21,12 @@ class PointsDbCacheRepository @Inject constructor(private val appDatabase: AppDa
     override suspend fun deleteUserPoint(userPoint: UserPoint) =
         appDatabase.userPointDao().delete(userPoint.toRoomUserPoint())
 
+    override suspend fun saveOrder(points: List<UserPoint>) {
+        appDatabase.userPointDao().updateOrders(points.map { it.toRoomUserPoint() })
+    }
+
     private fun UserPoint.toRoomUserPoint() =
-        RoomUserPoint(id, title, postalAddress, lat, lon, description, type)
+        RoomUserPoint(id, title, postalAddress, lat, lon, description, type, order)
 
     private fun RoomUserPoint.toUserPoint() =
         UserPoint(
@@ -32,6 +36,7 @@ class PointsDbCacheRepository @Inject constructor(private val appDatabase: AppDa
             lat,
             lon,
             description,
-            type
+            type,
+            order
         )
 }

@@ -9,7 +9,8 @@ data class UserPoint(
         val lat: Double,
         val lon: Double,
         var description: String? = null,
-        val type: UserPointType
+        val type: UserPointType,
+        var order: Int = 0
 ) : Serializable {
     val isNew: Boolean
         get() = id == null

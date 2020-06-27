@@ -14,6 +14,7 @@ import javax.inject.Inject
 class UserPointsAdapter @Inject constructor() :
     BaseAdapter<UserPoint, UserPointsAdapter.PointHolder>(), MoveItemHelperAdapter {
     var onPointClickListener: ((UserPoint) -> Unit)? = null
+    var onOrderChangeListener: ((List<UserPoint>) -> (Unit))? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         PointHolder(
@@ -58,5 +59,6 @@ class UserPointsAdapter @Inject constructor() :
     }
 
     override fun onItemMoveFinished() {
+        onOrderChangeListener?.invoke(items)
     }
 }

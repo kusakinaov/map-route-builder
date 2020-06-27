@@ -7,4 +7,5 @@ interface UserPointsListView : BaseView {
     fun setUserPoints(userPoints: List<UserPoint>)
     fun showEmpty()
     fun showUserPoints()
+    fun invalidateUserPoints()
 }

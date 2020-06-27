@@ -13,8 +13,10 @@ import kotlinx.coroutines.withContext
 import ku.olga.core_api.repository.DirectionsRepository
 import javax.inject.Inject
 
-class UserPointsMapPresenter @Inject constructor(private val directionsRepository: DirectionsRepository,
-                                                 private val preferences: SharedPreferences) :
+class UserPointsMapPresenter @Inject constructor(
+    private val directionsRepository: DirectionsRepository,
+    private val preferences: SharedPreferences
+) :
     BasePresenter<UserPointsMapView>() {
     private val userPoints = mutableListOf<UserPoint>()
     private var center: Coordinates? = null
@@ -47,7 +49,7 @@ class UserPointsMapPresenter @Inject constructor(private val directionsRepositor
         this.userPoints.addAll(userPoints)
 
         bindUserPoints()
-        buildDirections(userPoints)
+        if (userPoints.size >= 2) buildDirections(userPoints)
     }
 
     private fun buildDirections(userPoints: List<UserPoint>) =

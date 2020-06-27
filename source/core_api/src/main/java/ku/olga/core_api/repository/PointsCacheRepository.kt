@@ -6,4 +6,5 @@ interface PointsCacheRepository {
     suspend fun saveUserPoint(userPoint: UserPoint): Long
     suspend fun getUserPoints(): List<UserPoint>
     suspend fun deleteUserPoint(userPoint: UserPoint): Int
+    suspend fun saveOrder(points: List<UserPoint>)
 }

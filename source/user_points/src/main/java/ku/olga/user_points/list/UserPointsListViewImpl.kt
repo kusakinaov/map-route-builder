@@ -23,6 +23,9 @@ class UserPointsListViewImpl(
                 editPointMediator.editPoint(parent, REQ_CODE_EDIT_POINT, it)
             }
         }
+        onOrderChangeListener = {
+            presenter.onOrderChanged(it)
+        }
     }
     private val itemTouchHelper = ItemTouchHelper(MoveItemCallback(pointsAdapter))
 
@@ -57,6 +60,14 @@ class UserPointsListViewImpl(
         fragment.view?.apply {
             textViewEmpty.visibility = View.GONE
             recyclerView.visibility = View.VISIBLE
+        }
+    }
+
+    override fun invalidateUserPoints() {
+        fragment.parentFragment?.let {
+            if (it is UserPointsListFragment.OnOrderChangeCallback) {
+                it.onOrderChanged()
+            }
         }
     }
 
