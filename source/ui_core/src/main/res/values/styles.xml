@@ -15,9 +15,9 @@
     </style>
 
     <style name="AppTheme.Fullscreen" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">@color/secondaryColor</item>
-        <item name="colorPrimaryDark">@color/secondaryDarkColor</item>
-        <item name="android:windowBackground">@color/secondaryColor</item>
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="android:windowBackground">@color/white</item>
     </style>
 
     <style name="List.Item" parent="AppTheme">

@@ -13,7 +13,7 @@
         android:layout_marginRight="16dp"
         app:layout_horizontal_position_percent="50"
         app:layout_vertical_position_percent="95"
-        app:progress_background_track_color="@color/white"
+        app:progress_background_track_color="@color/black12"
         app:progress_shadow_width="8dp"
         app:progress_track_color="@android:color/holo_red_dark"
         app:progress_track_height="16dp" />
