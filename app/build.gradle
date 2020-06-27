@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.firebase.appdistribution'
 
 repositories {
     mavenCentral()
@@ -27,6 +28,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            firebaseAppDistribution {
+                serviceCredentialsFile = "../firebase_app_distribution_config.json"
+                testers = "kusakinaov@gmail.com"
+            }
         }
     }
     compileOptions {
