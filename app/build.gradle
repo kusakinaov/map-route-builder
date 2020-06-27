@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.firebase.appdistribution'
+apply plugin: 'com.google.firebase.crashlytics'
 
 repositories {
     mavenCentral()
@@ -46,6 +47,9 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation ktx
     implementation "androidx.preference:preference-ktx:1.1.1"
+
+    implementation 'com.google.firebase:firebase-analytics:17.4.3'
+    implementation 'com.google.firebase:firebase-crashlytics:17.1.0'
 
     implementation dagger
     kapt daggerCompiler
