@@ -29,14 +29,5 @@ class PointsDbCacheRepository @Inject constructor(private val appDatabase: AppDa
         RoomUserPoint(id, title, postalAddress, lat, lon, description, type, order)
 
     private fun RoomUserPoint.toUserPoint() =
-        UserPoint(
-            id,
-            title,
-            postalAddress,
-            lat,
-            lon,
-            description,
-            type,
-            order
-        )
+        UserPoint(id, title, postalAddress, lat, lon, description, type, order)
 }

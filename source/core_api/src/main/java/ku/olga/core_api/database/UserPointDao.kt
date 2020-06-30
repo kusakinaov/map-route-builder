@@ -23,7 +23,9 @@ interface UserPointDao {
     @Transaction
     suspend fun updateOrders(orders: List<UserPoint>) {
         for ((index, value) in orders.withIndex()) {
-            value.id?.let { updateOrder(it, index) }
+            value.id?.let {
+                updateOrder(it, index)
+            }
         }
     }
 }

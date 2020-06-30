@@ -6,6 +6,6 @@ import androidx.room.TypeConverters
 import ku.olga.core_api.database.AppDatabaseContract
 import ku.olga.core_api.database.entity.UserPoint
 
-@Database(entities = arrayOf(UserPoint::class), version = 3, exportSchema = false)
+@Database(entities = arrayOf(UserPoint::class), version = 4, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase(), AppDatabaseContract
