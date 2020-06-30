@@ -43,6 +43,7 @@ dependencies {
     implementation osmDependencies.get('osmbonuspack')
 
     api project(':source:core_api')
+    implementation project(':nominatim')
 
     implementation roomDependencies.values()
     kapt roomCompiler
