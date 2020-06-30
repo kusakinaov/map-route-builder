@@ -9,6 +9,9 @@ import org.osmdroid.bonuspack.location.NominatimPOIProvider
 import org.osmdroid.bonuspack.location.POI
 import ku.olga.core_api.dto.POI as AppPOI
 import ku.olga.core_api.dto.BoundingBox
+import ku.olga.core_impl.repository.model.Operator
+import ku.olga.core_impl.repository.model.Plural
+import ku.olga.core_impl.repository.model.Tag
 import java.io.InputStreamReader
 import java.util.*
 import kotlin.Comparator
@@ -23,14 +26,15 @@ class NominatimPOIRepository(
 
     private fun initCategories() {
         categories.clear()
-        val reader = InputStreamReader(assetManager.open("nominatin_poi_tags.json"))
+        val reader = InputStreamReader(assetManager.open("ru_nominatim_poi_tags.json"))
         try {
-            val map: Map<String, Map<String, String>> = gson.fromJson(reader,
-                object : TypeToken<Map<String, Map<String, String>>>() {}.type
+            val list: List<Tag> = gson.fromJson(reader, object : TypeToken<List<Tag>>() {}.type)
+            categories.addAll(
+                list
+                    .filter { it.operator == Operator.`-` }
+                    .filter { it.plural == Plural.N }
+                    .map { Category(it.key, it.value, it.word) }
             )
-            for ((k, v) in map[AMENITY] ?: emptyMap()) {
-                categories.add(Category(k, v))
-            }
         } finally {
             reader.close()
         }
@@ -71,7 +75,7 @@ class NominatimPOIRepository(
     )
 
     companion object {
-        private const val AMENITY = "amenity"
+//        private const val AMENITY = "amenity"
 
         fun BoundingBox.toApiBoundingBox() =
             ApiBoundingBox(latNorth, lonEast, latSouth, lonWest)
