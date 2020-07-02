@@ -17,9 +17,9 @@ object SearchService {
     private const val TAG: String = "nominatim_search_service"
 
     fun search(
-        query: String,
-        boundingBox: BoundingBox?,
-        amenityTag: String?,
+        query: String? = null,
+        boundingBox: BoundingBox? = null,
+        amenityTag: String? = null,
         language: String = Locale.getDefault().language,
         limit: Int = MAX_LIMIT,
         debug: Boolean = false
@@ -54,10 +54,18 @@ object SearchService {
     ): String = StringBuilder().apply {
         append("?").append("$ACCEPT_LANGUAGE=$language")
         append("&").append("$DEBUG=${if (debug) 1 else 0}")
-        if (query?.isNotEmpty() == true) {
-            append("&").append("$QUERY=${URLEncoder.encode(query)}")
-        } else if (amenityTag?.isNotEmpty() == true) {
-            append("&").append("$QUERY=${URLEncoder.encode(amenityTag)}")
+
+        if (query?.isNotEmpty() == true || amenityTag?.isNotEmpty() == true) {
+            append("&").append("$QUERY=")
+            if (query?.isNotEmpty() == true) {
+                append(URLEncoder.encode(query))
+                if (amenityTag?.isNotEmpty() == true) {
+                    append("+")
+                }
+            }
+            if (amenityTag?.isNotEmpty() == true) {
+                append(URLEncoder.encode(amenityTag))
+            }
         }
         append("&").append("$ADDRESS_DETAILS=1")
         append("&").append("$EXTRA_TAGS=1")
@@ -67,7 +75,6 @@ object SearchService {
         boundingBox?.let {
             append("&").append("$VIEWBOX=${it.southWest.longitude},${it.northEast.latitude},${it.northEast.longitude},${it.southWest.latitude}")
             append("&").append("$BOUNDED=${if (bound) 1 else 0}")
-//            amenityTag?.let { append("&").append("[$amenityTag]") }
         }
     }.toString()
 }

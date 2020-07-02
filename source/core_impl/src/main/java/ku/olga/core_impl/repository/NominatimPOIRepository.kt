@@ -64,9 +64,8 @@ class NominatimPOIRepository(
 
     override suspend fun getPOIs(boundingBox: BoundingBox, category: Category): List<AppPOI> =
         SearchService.search(
-            "",
-            boundingBox.toNominatimBoundingBox(),
-            category.value
+            boundingBox = boundingBox.toNominatimBoundingBox(),
+            amenityTag = category.value
         ).map { it.toPOI() }.toList()
 //        poiProvider.getPOIInside(boundingBox.toApiBoundingBox(), category.key, 100)
 //            ?.map { it.toAppPOI() }?.toList() ?: emptyList()
