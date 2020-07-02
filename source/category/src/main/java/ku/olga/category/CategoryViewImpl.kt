@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.view.View
+import androidx.appcompat.widget.SearchView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -38,6 +39,7 @@ class CategoryViewImpl(
     private var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>? = null
 
     private lateinit var markerOverlay: RadiusMarkerClusterer
+    private var searchView: SearchView? = null
 
     init {
         fragment.view?.let {
@@ -77,6 +79,25 @@ class CategoryViewImpl(
                     if (it is POI) presenter.onClickAddPOI(it)
                 }
             }
+        }
+    }
+
+    override fun setSearchView(searchView: SearchView?) {
+        this.searchView = searchView
+        presenter.bindQuery()
+        searchView?.apply {
+//            queryHint = context.getString(R.string.hint_search_address)
+            setOnQueryTextListener(buildOnQueryTextListener())
+        }
+    }
+
+    private fun buildOnQueryTextListener() = object : SearchView.OnQueryTextListener {
+        override fun onQueryTextSubmit(query: String?) = true
+
+        override fun onQueryTextChange(newText: String?): Boolean {
+            presenter.onQueryChanged(newText)
+//            addressesAdapter.setQuery(newText)
+            return true
         }
     }
 
@@ -201,6 +222,10 @@ class CategoryViewImpl(
 
     override fun openEditPOI(userPoint: UserPoint) {
         editPointMediator.editPoint(fragment, REQ_CODE_EDIT_POINT, userPoint)
+    }
+
+    override fun bindQuery(query: String?) {
+        searchView?.setQuery(query, false)
     }
 
     override fun hasLocationPermission(): Boolean {

@@ -12,7 +12,7 @@ import ku.olga.core_api.dto.BoundingBox
 import ku.olga.core_impl.repository.model.Operator
 import ku.olga.core_impl.repository.model.Plural
 import ku.olga.core_impl.repository.model.Tag
-import ku.olga.nominatim.SearchService
+import ku.olga.nominatim.NominatimHelper
 import ku.olga.nominatim.model.Coordinates
 import ku.olga.nominatim.model.Place
 import java.io.InputStreamReader
@@ -22,9 +22,9 @@ import org.osmdroid.util.BoundingBox as ApiBoundingBox
 import ku.olga.nominatim.model.BoundingBox as NominatimBoundingBox
 
 class NominatimPOIRepository(
-    private val assetManager: AssetManager,
-    private val gson: Gson,
-    private val poiProvider: NominatimPOIProvider
+        private val assetManager: AssetManager,
+        private val gson: Gson,
+        private val poiProvider: NominatimPOIProvider
 ) : POIRepository {
     private val categories = mutableListOf<Category>()
 
@@ -34,11 +34,11 @@ class NominatimPOIRepository(
         try {
             val list: List<Tag> = gson.fromJson(reader, object : TypeToken<List<Tag>>() {}.type)
             categories.addAll(
-                list
-                    .filter { it.key == "amenity" }
-                    .filter { it.operator == Operator.`-` }
-                    .filter { it.plural == Plural.N }
-                    .map { Category(it.key, it.value, it.word) }
+                    list
+                            .filter { it.key == "amenity" }
+                            .filter { it.operator == Operator.`-` }
+                            .filter { it.plural == Plural.N }
+                            .map { Category(it.key, it.value, it.word) }
             )
         } finally {
             reader.close()
@@ -62,47 +62,46 @@ class NominatimPOIRepository(
         return filtered
     }
 
-    override suspend fun getPOIs(boundingBox: BoundingBox, category: Category): List<AppPOI> =
-        SearchService.search(
-            boundingBox = boundingBox.toNominatimBoundingBox(),
-            amenityTag = category.value
-        ).map { it.toPOI() }.toList()
+    override suspend fun getPOIs(query: String?, boundingBox: BoundingBox, category: Category): List<AppPOI> =
+            NominatimHelper.searchPOI(query = query,
+                    boundingBox = boundingBox.toNominatimBoundingBox(),
+                    amenityTag = category.value).map { it.toPOI() }.toList()
 //        poiProvider.getPOIInside(boundingBox.toApiBoundingBox(), category.key, 100)
 //            ?.map { it.toAppPOI() }?.toList() ?: emptyList()
 
     private fun POI.toAppPOI() = AppPOI(
-        mId,
-        mLocation.latitude,
-        mLocation.longitude,
-        "",
-        mDescription,
-        mThumbnailPath,
-        mUrl,
-        mRank,
-        mCategory,
-        mType
+            mId,
+            mLocation.latitude,
+            mLocation.longitude,
+            "",
+            mDescription,
+            mThumbnailPath,
+            mUrl,
+            mRank,
+            mCategory,
+            mType
     )
 
     private fun Place.toPOI() = AppPOI(
-        place_id,
-        lat,
-        lon,
-        display_name,
-        licence,
-        icon,
-        "",
-        1,
-        type,
-        type
+            place_id,
+            lat,
+            lon,
+            display_name,
+            licence,
+            icon,
+            "",
+            1,
+            type,
+            type
     )
 
     companion object {
 //        private const val AMENITY = "amenity"
 
         fun BoundingBox.toApiBoundingBox() =
-            ApiBoundingBox(latNorth, lonEast, latSouth, lonWest)
+                ApiBoundingBox(latNorth, lonEast, latSouth, lonWest)
 
         fun BoundingBox.toNominatimBoundingBox() =
-            NominatimBoundingBox(Coordinates(latSouth, lonWest), Coordinates(latNorth, lonEast))
+                NominatimBoundingBox(Coordinates(latSouth, lonWest), Coordinates(latNorth, lonEast))
     }
 }

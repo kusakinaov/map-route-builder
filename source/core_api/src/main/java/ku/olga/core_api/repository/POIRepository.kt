@@ -6,5 +6,5 @@ import ku.olga.core_api.dto.POI
 
 interface POIRepository {
     suspend fun getCategories(query: String?): List<Category>
-    suspend fun getPOIs(boundingBox: BoundingBox, category: Category): List<POI>
+    suspend fun getPOIs(query: String?, boundingBox: BoundingBox, category: Category): List<POI>
 }
