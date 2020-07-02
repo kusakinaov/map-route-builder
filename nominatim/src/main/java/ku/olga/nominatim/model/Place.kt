@@ -7,7 +7,7 @@ data class Place(
     val licence: String,
     val osm_type: String, //enum
     val osm_id: Long,
-    val boundingbox: List<Double>,
+    val boundingbox: BoundingBox?,
     val lat: Double,
     val lon: Double,
     val display_name: String,
