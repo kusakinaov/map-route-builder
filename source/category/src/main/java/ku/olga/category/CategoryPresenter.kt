@@ -63,6 +63,7 @@ class CategoryPresenter @Inject constructor(
                 pois.addAll(poiRepository.getPOIs(boundingBox, it))
             }
         } catch (e: Exception) {
+            e.printStackTrace()
             withContext(Dispatchers.Main) { view?.showDefaultError() }
         }
         withContext(Dispatchers.Main) { bindPOIs(false) }
