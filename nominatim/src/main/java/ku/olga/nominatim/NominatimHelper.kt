@@ -22,4 +22,10 @@ object NominatimHelper {
         language: String = Locale.getDefault().language,
         debug: Boolean = false
     ): List<Place> = ReverseSearchService.reverseSearch(latitude, longitude, zoom, language, debug)
+
+    fun addressLookupSearch(
+        places: List<Place>,
+        language: String = Locale.getDefault().language,
+        debug: Boolean = false
+    ): List<Place> = AddressLookupService.addressLookupSearch(places, language, debug)
 }

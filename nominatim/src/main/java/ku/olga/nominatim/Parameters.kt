@@ -12,6 +12,7 @@ const val ACCEPT_LANGUAGE = "accept-language"
 const val LATITUDE = "lat"
 const val LONGITUDE = "lon"
 const val ZOOM = "zoom"
+const val OSM_IDS = "osm_ids"
 
 /**
  * <x1>,<y1>,<x2>,<y2> The preferred area to find search results. Any two corner points of the box are accepted in any order as long as they span a real box. x is longitude, y is latitude.
