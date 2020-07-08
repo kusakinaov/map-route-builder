@@ -9,11 +9,15 @@ const val NAME_DETAILS = "namedetails"
 const val LIMIT = "limit"
 const val MAX_LIMIT = 50
 const val ACCEPT_LANGUAGE = "accept-language"
+const val LATITUDE = "lat"
+const val LONGITUDE = "lon"
+const val ZOOM = "zoom"
 
 /**
  * <x1>,<y1>,<x2>,<y2> The preferred area to find search results. Any two corner points of the box are accepted in any order as long as they span a real box. x is longitude, y is latitude.
  */
 const val VIEWBOX = "viewbox"
+
 /**
  * When viewbox and bounded=1 are given, an amenity only search is allowed. In this case, give the special keyword for the amenity in square brackets, e.g. [pub]. (Default: 0)
  */
