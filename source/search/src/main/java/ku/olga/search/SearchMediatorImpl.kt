@@ -11,4 +11,10 @@ class SearchMediatorImpl @Inject constructor(): SearchMediator {
             target.replaceFragment(SearchAddressesFragment.newInstance(target, requestCode), true)
         }
     }
+
+    override fun openSearchMap(target: Fragment, requestCode: Int) {
+        if (target is BaseFragment) {
+            target.replaceFragment(SearchMapFragment.newInstance(target, requestCode), true)
+        }
+    }
 }

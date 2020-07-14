@@ -11,4 +11,6 @@ interface SearchComponent {
     }
 
     fun inject(fragment: SearchAddressesFragment)
+    fun inject(fragment: SearchMapFragment)
+
 }

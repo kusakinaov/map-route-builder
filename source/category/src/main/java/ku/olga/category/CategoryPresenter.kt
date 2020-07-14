@@ -6,6 +6,7 @@ import ku.olga.core_api.dto.*
 import ku.olga.core_api.repository.POIRepository
 import ku.olga.ui_core.base.BaseLocationPresenter
 import ku.olga.ui_core.utils.getLastCoordinates
+import org.osmdroid.util.GeoPoint
 import java.lang.Exception
 import javax.inject.Inject
 
@@ -88,7 +89,7 @@ class CategoryPresenter @Inject constructor(
                                 true
                         )
                     }
-                    pois.isNotEmpty() -> moveTo(pois, animated)
+                    pois.isNotEmpty() -> moveTo(pois.map { GeoPoint(it.latitude, it.longitude) }, animated)
                 }
             }
         }

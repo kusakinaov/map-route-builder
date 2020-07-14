@@ -2,14 +2,10 @@ package ku.olga.user_points.map
 
 import ku.olga.core_api.dto.Coordinates
 import ku.olga.core_api.dto.UserPoint
-import ku.olga.ui_core.base.BaseView
+import ku.olga.ui_core.base.BaseMapView
 
-interface UserPointsMapView : BaseView {
+interface UserPointsMapView : BaseMapView {
     fun setUserPoints(userPoints: List<UserPoint>)
-    fun moveTo(latitude: Double, longitude: Double, zoomLevel: Double, animated: Boolean)
-    fun moveTo(userPoints: List<UserPoint>, animated: Boolean)
-    fun onResume()
-    fun onPause()
     fun hideUserPoint(): Boolean
     fun editUserPoint(userPoint: UserPoint)
     fun showUserPoint(userPoint: UserPoint)

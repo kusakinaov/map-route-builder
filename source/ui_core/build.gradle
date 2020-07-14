@@ -33,4 +33,5 @@ dependencies {
     implementation recyclerView
     implementation material
     implementation project(':source:core_api')
+    implementation osmDependencies.values()
 }
