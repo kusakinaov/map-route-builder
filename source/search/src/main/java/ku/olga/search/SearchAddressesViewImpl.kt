@@ -64,21 +64,11 @@ class SearchAddressesViewImpl(
         }
     }
 
-    override fun hasLocationPermission(): Boolean {
-        fragment.context?.let {
-            return ContextCompat.checkSelfPermission(
-                it,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        }
-        return false
-    }
+    override fun hasLocationPermission(): Boolean =
+        ku.olga.ui_core.utils.hasLocationPermission(fragment.context)
 
     override fun requestLocationPermission() {
-        fragment.requestPermissions(
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-            REQ_CODE_LOCATION_PERMISSION
-        )
+        ku.olga.ui_core.utils.requestLocationPermission(fragment, REQ_CODE_LOCATION_PERMISSION)
     }
 
     override fun bindQuery(query: String?) {
