@@ -226,6 +226,5 @@ class CategoryViewImpl(
 
     companion object {
         private const val DELAY_LOAD_POI = 1000L
-        private const val BORDER_SIZE = 40f
     }
 }

@@ -70,7 +70,7 @@ open class BaseLocationPresenter<T : BaseLocationView>(val preferences: SharedPr
         priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
     }
 
-    fun onCoordinatesChanged(coordinates: Coordinates) {
+    open fun onCoordinatesChanged(coordinates: Coordinates) {
         this.coordinates = coordinates
         setLastCoordinates(preferences, coordinates)
     }
