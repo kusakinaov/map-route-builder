@@ -5,7 +5,5 @@
     style="@style/List.Item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?selectableItemBackground"
-    android:textAppearance="@style/TextAppearance.Primary"
-    android:textSize="18sp"
+    android:textAppearance="@style/TextAppearance.Primary.17"
     tools:text="@tools:sample/lorem" />

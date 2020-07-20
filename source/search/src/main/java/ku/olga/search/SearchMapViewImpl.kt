@@ -1,9 +1,12 @@
 package ku.olga.search
 
 import android.graphics.drawable.Drawable
+import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.fragment_search_map.view.*
 import ku.olga.core_api.dto.Category
 import ku.olga.core_api.dto.POI
 import ku.olga.core_api.dto.SearchAddress
@@ -28,14 +31,24 @@ class SearchMapViewImpl(
 ) : SearchMapView {
     override var searchView: SearchView? = null
     override var mapView: MapView? = null
+
     private lateinit var markerOverlay: RadiusMarkerClusterer
+
+    private val categoriesAdapter = CategoriesAdapter()
+    private val poisAdapter = POIAdapter()
 
     override fun bindQuery(query: String?) {
         searchView?.setQuery(query, false)
     }
 
     override fun bindCategory(category: Category?) {
-        //TODO("Not yet implemented")
+        val hasCategory = category != null
+        fragment.view?.apply {
+            textViewTitle.text = category?.title ?: context.getString(R.string.ttl_categories)
+            imageViewClear.visibility = if (hasCategory) View.VISIBLE else View.GONE
+            recyclerCategories.visibility = if (hasCategory) View.VISIBLE else View.GONE
+            recyclerItems.visibility = if (hasCategory) View.GONE else View.VISIBLE
+        }
     }
 
     override fun bindBoundingBox(boundingBox: AppBoundingBox) {
@@ -46,6 +59,13 @@ class SearchMapViewImpl(
                     GeoPoint(boundingBox.latNorth, boundingBox.lonWest)
                 ), false
             )
+        }
+    }
+
+    override fun showCategories(categories: List<Category>) {
+        categoriesAdapter.setItems(categories)
+        mapView?.let {
+
         }
     }
 
@@ -129,6 +149,17 @@ class SearchMapViewImpl(
             )
             initMapView(it, buildMapListener(), listOf(markerOverlay))
             it.controller.setZoom(MIN_ZOOM_LEVEL)
+        }
+        fragment.view?.apply {
+            imageViewClear.setOnClickListener { presenter.onClickClearCategory() }
+            recyclerCategories.apply {
+                layoutManager = LinearLayoutManager(context)
+                adapter = categoriesAdapter
+            }
+            recyclerItems.apply {
+                layoutManager = LinearLayoutManager(context)
+                adapter = poisAdapter
+            }
         }
         presenter.attachView(this)
     }

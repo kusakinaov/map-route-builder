@@ -34,6 +34,8 @@ dependencies {
 
     implementation location
     implementation recyclerView
+    implementation material
+    implementation constraintLayout
 
     implementation dagger
     kapt daggerCompiler

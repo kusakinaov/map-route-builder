@@ -17,6 +17,7 @@ interface SearchMapView : BaseMapView, BaseLocationView {
     fun bindCategory(category: Category?)
     fun bindBoundingBox(boundingBox: BoundingBox)
 
+    fun showCategories(categories: List<Category>)
     fun showAddresses(addresses: List<SearchAddress>)
     fun showPOIs(pois: List<POI>)
     fun hideAll()

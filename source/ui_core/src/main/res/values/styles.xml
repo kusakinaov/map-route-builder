@@ -30,6 +30,10 @@
 
     <style name="TextAppearance.Primary" parent="TextAppearance.MaterialComponents.Subtitle1" />
 
+    <style name="TextAppearance.Primary.17">
+        <item name="android:textSize">17sp</item>
+    </style>
+
     <style name="TextAppearance.Secondary" parent="TextAppearance.MaterialComponents.Caption" />
 
     <style name="TextAppearance.Secondary.14">

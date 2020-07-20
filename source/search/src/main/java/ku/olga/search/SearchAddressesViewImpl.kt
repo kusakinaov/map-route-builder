@@ -1,10 +1,7 @@
 package ku.olga.search
 
-import android.Manifest
-import android.content.pm.PackageManager
 import android.view.View
 import androidx.appcompat.widget.SearchView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager

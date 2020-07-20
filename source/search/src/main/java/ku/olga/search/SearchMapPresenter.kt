@@ -51,4 +51,9 @@ class SearchMapPresenter @Inject constructor(preferences: SharedPreferences) :
         super.onCoordinatesChanged(coordinates)
         view?.moveTo(coordinates.latitude, coordinates.longitude, MAX_ZOOM_LEVEL, true)
     }
+
+    fun onClickClearCategory() {
+        category = null
+        view?.bindCategory(category)
+    }
 }
