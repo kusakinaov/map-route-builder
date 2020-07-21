@@ -34,6 +34,11 @@ class SearchMapViewImpl(
     private val presenter: SearchMapPresenter
 ) : SearchMapView {
     override var searchView: SearchView? = null
+        set(value) {
+            field = value
+            value?.setOnQueryTextListener(buildQueryTextListener())
+            presenter.bindQuery()
+        }
     override var mapView: MapView? = null
 
     private lateinit var markerOverlay: RadiusMarkerClusterer
@@ -60,7 +65,7 @@ class SearchMapViewImpl(
             bottomSheetBehavior =
                 BottomSheetBehavior.from<ConstraintLayout>(layoutBottomSheet)
 
-            imageViewClear.setOnClickListener { presenter.onClickClearCategory() }
+            imageViewClear.setOnClickListener { presenter.onClickClear() }
             recyclerCategories.apply {
                 layoutManager = LinearLayoutManager(context)
                 adapter = categoriesAdapter
@@ -73,6 +78,9 @@ class SearchMapViewImpl(
                 layoutManager = LinearLayoutManager(context)
                 adapter = poisAdapter
             }
+            textViewTitle.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, _ ->
+                bottomSheetBehavior?.peekHeight = bottom
+            }
         }
         presenter.attachView(this)
     }
@@ -83,20 +91,6 @@ class SearchMapViewImpl(
 
     override fun bindQuery(query: String?) {
         searchView?.setQuery(query, false)
-    }
-
-    override fun bindCategory(category: Category?) {
-        val hasCategory = category != null
-        fragment.view?.apply {
-            textViewTitle.apply {
-                addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, _ ->
-                    bottomSheetBehavior?.peekHeight = bottom
-                }
-                text = category?.title ?: context.getString(R.string.ttl_categories)
-            }
-
-            imageViewClear.visibility = if (hasCategory) View.VISIBLE else View.GONE
-        }
     }
 
     override fun bindBoundingBox(boundingBox: AppBoundingBox) {
@@ -179,16 +173,23 @@ class SearchMapViewImpl(
         markerOverlay.invalidate()
     }
 
-    override fun showPOIs() {
+    override fun showPOIs(category: Category?) {
+        fragment.view?.textViewTitle?.text = category?.title ?: ""
         bindRecyclerViews(poisVisible = true)
     }
 
     override fun showAddresses() {
+        fragment.view?.textViewTitle?.setText(R.string.ttl_search_results)
         bindRecyclerViews(addressesVisible = true)
     }
 
     override fun showCategories() {
+        fragment.view?.textViewTitle?.setText(R.string.ttl_categories)
         bindRecyclerViews(categoriesVisible = true)
+    }
+
+    override fun bindClearButton(visible: Boolean) {
+        fragment.view?.imageViewClear?.visibility = if (visible) View.VISIBLE else View.GONE
     }
 
     override fun hasLocationPermission(): Boolean = hasLocationPermission(fragment.context)
@@ -236,7 +237,6 @@ class SearchMapViewImpl(
                 mapView.boundingBox.toAppBoundingBox(), mapView.zoomLevelDouble
             )
         }
-        searchView?.setOnQueryTextListener(buildQueryTextListener())
     }
 
     private fun buildQueryTextListener() = object : SearchView.OnQueryTextListener {

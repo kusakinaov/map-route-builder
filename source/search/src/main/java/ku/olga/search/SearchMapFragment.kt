@@ -2,9 +2,8 @@ package ku.olga.search
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.location.LocationServices
@@ -44,6 +43,17 @@ class SearchMapFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         searchMapView?.onResume()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        menu.clear()
+        inflater.inflate(R.menu.map_search, menu)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        searchMapView?.searchView = menu.findItem(R.id.actionSearch).actionView as SearchView
     }
 
     override fun onPause() {

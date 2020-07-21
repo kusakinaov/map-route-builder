@@ -14,7 +14,6 @@ interface SearchMapView : BaseMapView, BaseLocationView {
     var mapView: MapView?
 
     fun bindQuery(query: String?)
-    fun bindCategory(category: Category?)
     fun bindBoundingBox(boundingBox: BoundingBox)
 
     fun bindCategories(categories: List<Category>)
@@ -23,7 +22,8 @@ interface SearchMapView : BaseMapView, BaseLocationView {
 
     fun hideAll()
 
-    fun showPOIs()
+    fun showPOIs(category: Category?)
     fun showAddresses()
     fun showCategories()
+    fun bindClearButton(visible: Boolean)
 }

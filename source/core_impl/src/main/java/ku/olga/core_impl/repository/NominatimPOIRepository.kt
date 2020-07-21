@@ -66,8 +66,6 @@ class NominatimPOIRepository(
             NominatimHelper.searchPOI(query = query,
                     boundingBox = boundingBox.toNominatimBoundingBox(),
                     amenityTag = category.value).map { it.toPOI() }.toList()
-//        poiProvider.getPOIInside(boundingBox.toApiBoundingBox(), category.key, 100)
-//            ?.map { it.toAppPOI() }?.toList() ?: emptyList()
 
     private fun POI.toAppPOI() = AppPOI(
             mId,
@@ -96,8 +94,6 @@ class NominatimPOIRepository(
     )
 
     companion object {
-//        private const val AMENITY = "amenity"
-
         fun BoundingBox.toApiBoundingBox() =
                 ApiBoundingBox(latNorth, lonEast, latSouth, lonWest)
 
