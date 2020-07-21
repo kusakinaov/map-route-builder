@@ -26,8 +26,8 @@ import org.osmdroid.views.overlay.Marker
 import ku.olga.core_api.dto.BoundingBox as AppBoundingBox
 
 class SearchMapViewImpl(
-    private val fragment: Fragment,
-    private val presenter: SearchMapPresenter
+        private val fragment: Fragment,
+        private val presenter: SearchMapPresenter
 ) : SearchMapView {
     override var searchView: SearchView? = null
     override var mapView: MapView? = null
@@ -35,6 +35,7 @@ class SearchMapViewImpl(
     private lateinit var markerOverlay: RadiusMarkerClusterer
 
     private val categoriesAdapter = CategoriesAdapter()
+    private val addressesAdapter = AddressesAdapter()
     private val poisAdapter = POIAdapter()
 
     override fun bindQuery(query: String?) {
@@ -54,59 +55,64 @@ class SearchMapViewImpl(
     override fun bindBoundingBox(boundingBox: AppBoundingBox) {
         mapView?.let {
             ku.olga.ui_core.view.moveTo(
-                it, listOf(
+                    it, listOf(
                     GeoPoint(boundingBox.latSouth, boundingBox.lonEast),
                     GeoPoint(boundingBox.latNorth, boundingBox.lonWest)
-                ), false
+            ), false
             )
         }
     }
 
     override fun showCategories(categories: List<Category>) {
         categoriesAdapter.setItems(categories)
+        bindRecyclerViews(categoriesVisible = true)
         mapView?.let {
-
+            markerOverlay.items.clear()
+            markerOverlay.invalidate()
         }
     }
 
     override fun showAddresses(addresses: List<SearchAddress>) {
+        addressesAdapter.setItems(addresses)
+        bindRecyclerViews(addressesVisible = true)
         mapView?.let {
             val icon = ContextCompat.getDrawable(it.context, R.drawable.ic_place)
             markerOverlay.items.clear()
             for (address in addresses) {
-                markerOverlay.add(buildMarker(address, icon))
+                markerOverlay.add(buildMarker(address.postalAddress, address.lat, address.lon, icon))
             }
             markerOverlay.invalidate()
         }
     }
 
-    private fun buildMarker(address: SearchAddress, poiIcon: Drawable?): Marker =
-        Marker(mapView).apply {
-            title = address.postalAddress
-            position = GeoPoint(address.lat, address.lon)
-            icon = poiIcon
-            setOnMarkerClickListener { _, _ -> true }
-        }
-
     override fun showPOIs(pois: List<POI>) {
+        poisAdapter.setItems(pois)
+        bindRecyclerViews(poisVisible = true)
         mapView?.let {
             val icon = ContextCompat.getDrawable(it.context, R.drawable.ic_place)
             markerOverlay.items.clear()
             for (poi in pois) {
-                markerOverlay.add(buildMarker(poi, icon))
+                markerOverlay.add(buildMarker(poi.title, poi.latitude, poi.longitude, icon))
             }
             markerOverlay.invalidate()
         }
     }
 
-    private fun buildMarker(poi: POI, poiIcon: Drawable?): Marker =
-        Marker(mapView).apply {
-            title = poi.title
-            snippet = poi.description
-            position = GeoPoint(poi.latitude, poi.longitude)
-            icon = poiIcon
-            setOnMarkerClickListener { _, _ -> true }
+    private fun buildMarker(title: String, latitude: Double, longitude: Double, poiIcon: Drawable?): Marker =
+            Marker(mapView).apply {
+                this.title = title
+                position = GeoPoint(latitude, longitude)
+                icon = poiIcon
+                setOnMarkerClickListener { _, _ -> true }
+            }
+
+    private fun bindRecyclerViews(addressesVisible: Boolean = false, categoriesVisible: Boolean = false, poisVisible: Boolean = false) {
+        fragment.view?.apply {
+            recyclerAddresses.visibility = if (addressesVisible) View.VISIBLE else View.GONE
+            recyclerCategories.visibility = if (categoriesVisible) View.VISIBLE else View.GONE
+            recyclerItems.visibility = if (poisVisible) View.VISIBLE else View.GONE
         }
+    }
 
     override fun hideAll() {
         markerOverlay.items.clear()
@@ -114,7 +120,7 @@ class SearchMapViewImpl(
     }
 
     override fun hasLocationPermission(): Boolean =
-        ku.olga.ui_core.utils.hasLocationPermission(fragment.context)
+            ku.olga.ui_core.utils.hasLocationPermission(fragment.context)
 
     override fun requestLocationPermission() {
         ku.olga.ui_core.utils.requestLocationPermission(fragment, REQ_CODE_LOCATION_PERMISSION)
@@ -143,9 +149,9 @@ class SearchMapViewImpl(
     override fun onAttach() {
         mapView?.let {
             markerOverlay = buildRadiusMarkerClusterer(
-                it.context,
-                ContextCompat.getDrawable(it.context, R.drawable.cluster)!!,
-                ContextCompat.getColor(it.context, R.color.map_icon_text)
+                    it.context,
+                    ContextCompat.getDrawable(it.context, R.drawable.cluster)!!,
+                    ContextCompat.getColor(it.context, R.color.map_icon_text)
             )
             initMapView(it, buildMapListener(), listOf(markerOverlay))
             it.controller.setZoom(MIN_ZOOM_LEVEL)
@@ -155,6 +161,10 @@ class SearchMapViewImpl(
             recyclerCategories.apply {
                 layoutManager = LinearLayoutManager(context)
                 adapter = categoriesAdapter
+            }
+            recyclerAddresses.apply {
+                layoutManager = LinearLayoutManager(context)
+                adapter = addressesAdapter
             }
             recyclerItems.apply {
                 layoutManager = LinearLayoutManager(context)
@@ -183,8 +193,8 @@ class SearchMapViewImpl(
     private fun onMapChanged(mapView: MapView) {
         mapView.mapCenter.let {
             presenter.onBoundingBoxChanged(
-                it.latitude, it.longitude,
-                mapView.boundingBox.toAppBoundingBox(), mapView.zoomLevelDouble
+                    it.latitude, it.longitude,
+                    mapView.boundingBox.toAppBoundingBox(), mapView.zoomLevelDouble
             )
         }
         searchView?.setOnQueryTextListener(buildQueryTextListener())
@@ -200,7 +210,7 @@ class SearchMapViewImpl(
     }
 
     private fun BoundingBox.toAppBoundingBox() =
-        AppBoundingBox(latNorth, lonEast, latSouth, lonWest)
+            AppBoundingBox(latNorth, lonEast, latSouth, lonWest)
 
     companion object {
         private const val DELAY_LOAD_POI = 1000L

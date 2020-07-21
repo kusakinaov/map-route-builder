@@ -58,6 +58,15 @@
             tools:visibility="visible" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerAddresses"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/textViewTitle"
+            tools:visibility="visible" />
+
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerItems"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
