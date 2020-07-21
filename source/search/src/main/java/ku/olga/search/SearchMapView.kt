@@ -17,13 +17,13 @@ interface SearchMapView : BaseMapView, BaseLocationView {
     fun bindCategory(category: Category?)
     fun bindBoundingBox(boundingBox: BoundingBox)
 
-    fun showCategories(categories: List<Category>)
-    fun showAddresses(addresses: List<SearchAddress>)
-    fun showPOIs(pois: List<POI>)
+    fun bindCategories(categories: List<Category>)
+    fun bindAddresses(addresses: List<SearchAddress>)
+    fun bindPOIs(pois: List<POI>)
 
     fun hideAll()
 
-    fun showPOIsState()
-    fun showAddressesState()
-    fun showCategoriesState()
+    fun showPOIs()
+    fun showAddresses()
+    fun showCategories()
 }

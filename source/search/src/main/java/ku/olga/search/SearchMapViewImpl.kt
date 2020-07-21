@@ -110,7 +110,7 @@ class SearchMapViewImpl(
         }
     }
 
-    override fun showCategories(categories: List<Category>) {
+    override fun bindCategories(categories: List<Category>) {
         categoriesAdapter.setItems(categories)
         mapView?.let {
             markerOverlay.items.clear()
@@ -118,7 +118,7 @@ class SearchMapViewImpl(
         }
     }
 
-    override fun showAddresses(addresses: List<SearchAddress>) {
+    override fun bindAddresses(addresses: List<SearchAddress>) {
         addressesAdapter.setItems(addresses)
         mapView?.let {
             val icon = ContextCompat.getDrawable(it.context, R.drawable.ic_place)
@@ -137,7 +137,7 @@ class SearchMapViewImpl(
         }
     }
 
-    override fun showPOIs(pois: List<POI>) {
+    override fun bindPOIs(pois: List<POI>) {
         poisAdapter.setItems(pois)
         mapView?.let {
             val icon = ContextCompat.getDrawable(it.context, R.drawable.ic_place)
@@ -179,15 +179,15 @@ class SearchMapViewImpl(
         markerOverlay.invalidate()
     }
 
-    override fun showPOIsState() {
+    override fun showPOIs() {
         bindRecyclerViews(poisVisible = true)
     }
 
-    override fun showAddressesState() {
+    override fun showAddresses() {
         bindRecyclerViews(addressesVisible = true)
     }
 
-    override fun showCategoriesState() {
+    override fun showCategories() {
         bindRecyclerViews(categoriesVisible = true)
     }
 

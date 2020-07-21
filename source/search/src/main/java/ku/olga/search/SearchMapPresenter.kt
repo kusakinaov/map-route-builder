@@ -51,8 +51,8 @@ class SearchMapPresenter @Inject constructor(
             this.category = category
             this.query = ""
 
-            setupState()
             view?.bindCategory(category)
+            setupState()
         }
     }
 
@@ -63,6 +63,7 @@ class SearchMapPresenter @Inject constructor(
         zoomLevel: Double
     ) {
         this.boundingBox = boundingBox
+        bindState()
     }
 
     override fun onCoordinatesChanged(coordinates: Coordinates) {
@@ -85,36 +86,73 @@ class SearchMapPresenter @Inject constructor(
 
     private fun bindState() {
         when (state) {
-            State.POIS -> {
-                view?.showPOIsState()
-                view?.showPOIs(pois)
-            }
+            State.POIS -> setPOIsState()
             State.ADDRESSES -> {
-                view?.showAddressesState()
-                view?.showAddresses(addresses)
+                view?.showAddresses()
+                view?.bindAddresses(addresses)
             }
-            State.CATEGORIES -> {
-                view?.showCategoriesState()
-                bindCategoriesState()
-            }
+            State.CATEGORIES -> setCategoriesState()
         }
     }
 
     private fun loadCategories() = CoroutineScope(Dispatchers.IO).launch {
         try {
-            categories.clear()
-            categories.addAll(poiRepository.getCategories(null))
+            setCategories(poiRepository.getCategories(null))
         } catch (e: Exception) {
             withContext(Dispatchers.Main) { view?.showDefaultError() }
         }
-        withContext(Dispatchers.Main) { view?.showCategories(categories) }
+        withContext(Dispatchers.Main) { bindCategories() }
     }
 
-    private fun bindCategoriesState() {
-        view?.showCategories(categories)
-        if (categories.isEmpty()) {
-            loadCategories()
+    private fun setCategories(categories: List<Category>) {
+        this.categories.clear()
+        this.categories.addAll(categories)
+    }
+
+    private fun bindCategories() {
+        view?.bindCategories(categories)
+    }
+
+    private fun setCategoriesState() {
+        view?.showCategories()
+        bindCategories()
+        if (categories.isEmpty()) loadCategories()
+    }
+
+    private fun setAddresses(addresses: List<SearchAddress>) {
+        this.addresses.clear()
+        this.addresses.addAll(addresses)
+    }
+
+    private fun bindAddresses() {
+        view?.bindAddresses(addresses)
+    }
+
+    private fun setPOIsState() {
+        view?.showPOIs()
+        view?.bindPOIs(pois)
+        if (category != null && boundingBox != null) {
+            loadPOIs(boundingBox!!, category!!)
         }
+    }
+
+    private fun loadPOIs(boundingBox: BoundingBox, category: Category) =
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                setPOIs(poiRepository.getPOIs(query, boundingBox, category))
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) { view?.showDefaultError() }
+            }
+            withContext(Dispatchers.Main) { bindPOIs() }
+        }
+
+    private fun setPOIs(pois: List<POI>) {
+        this.pois.clear()
+        this.pois.addAll(pois)
+    }
+
+    private fun bindPOIs() {
+        view?.bindPOIs(pois)
     }
 
     enum class State {
