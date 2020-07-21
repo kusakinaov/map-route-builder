@@ -1,21 +1,32 @@
 package ku.olga.search
 
 import android.content.SharedPreferences
-import ku.olga.core_api.dto.BoundingBox
-import ku.olga.core_api.dto.Category
-import ku.olga.core_api.dto.Coordinates
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import ku.olga.core_api.dto.*
+import ku.olga.core_api.repository.POIRepository
 import ku.olga.ui_core.base.BaseLocationPresenter
 import ku.olga.ui_core.view.MAX_ZOOM_LEVEL
 import javax.inject.Inject
 
-class SearchMapPresenter @Inject constructor(preferences: SharedPreferences) :
-        BaseLocationPresenter<SearchMapView>(preferences) {
-    private var query: String? = null
-    private var category: Category? = null
+class SearchMapPresenter @Inject constructor(
+    private val poiRepository: POIRepository,
+    preferences: SharedPreferences
+) :
+    BaseLocationPresenter<SearchMapView>(preferences) {
     private var boundingBox: BoundingBox? = null
+    private var category: Category? = null
+    private var query: String? = null
     private val hasQuery: Boolean
         get() = query?.length ?: 0 > 2
+
     private var state: State = State.CATEGORIES
+
+    private val addresses = mutableListOf<SearchAddress>()
+    private val categories = mutableListOf<Category>()
+    private val pois = mutableListOf<POI>()
 
     override fun attachView(view: SearchMapView) {
         super.attachView(view)
@@ -30,6 +41,8 @@ class SearchMapPresenter @Inject constructor(preferences: SharedPreferences) :
     fun onQueryChanged(query: String?) {
         if (this.query != query) {
             this.query = query
+
+            setupState()
         }
     }
 
@@ -44,10 +57,10 @@ class SearchMapPresenter @Inject constructor(preferences: SharedPreferences) :
     }
 
     fun onBoundingBoxChanged(
-            latitude: Double,
-            longitude: Double,
-            boundingBox: BoundingBox,
-            zoomLevel: Double
+        latitude: Double,
+        longitude: Double,
+        boundingBox: BoundingBox,
+        zoomLevel: Double
     ) {
         this.boundingBox = boundingBox
     }
@@ -58,8 +71,7 @@ class SearchMapPresenter @Inject constructor(preferences: SharedPreferences) :
     }
 
     fun onClickClearCategory() {
-        category = null
-        view?.bindCategory(category)
+        onPickCategory(null)
     }
 
     private fun setupState() {
@@ -68,16 +80,40 @@ class SearchMapPresenter @Inject constructor(preferences: SharedPreferences) :
             hasQuery -> State.ADDRESSES
             else -> State.CATEGORIES
         }
+        bindState()
     }
 
     private fun bindState() {
         when (state) {
             State.POIS -> {
+                view?.showPOIsState()
+                view?.showPOIs(pois)
             }
             State.ADDRESSES -> {
+                view?.showAddressesState()
+                view?.showAddresses(addresses)
             }
-            else -> {
+            State.CATEGORIES -> {
+                view?.showCategoriesState()
+                bindCategoriesState()
             }
+        }
+    }
+
+    private fun loadCategories() = CoroutineScope(Dispatchers.IO).launch {
+        try {
+            categories.clear()
+            categories.addAll(poiRepository.getCategories(null))
+        } catch (e: Exception) {
+            withContext(Dispatchers.Main) { view?.showDefaultError() }
+        }
+        withContext(Dispatchers.Main) { view?.showCategories(categories) }
+    }
+
+    private fun bindCategoriesState() {
+        view?.showCategories(categories)
+        if (categories.isEmpty()) {
+            loadCategories()
         }
     }
 

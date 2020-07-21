@@ -20,5 +20,10 @@ interface SearchMapView : BaseMapView, BaseLocationView {
     fun showCategories(categories: List<Category>)
     fun showAddresses(addresses: List<SearchAddress>)
     fun showPOIs(pois: List<POI>)
+
     fun hideAll()
+
+    fun showPOIsState()
+    fun showAddressesState()
+    fun showCategoriesState()
 }
