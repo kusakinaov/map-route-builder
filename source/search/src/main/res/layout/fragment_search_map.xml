@@ -21,32 +21,38 @@
         app:behavior_hideable="true"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-        <ImageView
-            android:id="@+id/imageViewClear"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="?selectableItemBackgroundBorderless"
-            android:contentDescription="@string/desc_clear_category"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_clear"
-            android:tint="@color/black38"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@id/textViewTitle"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/textViewTitle"
-            tools:visibility="visible" />
-
-        <TextView
-            android:id="@+id/textViewTitle"
-            style="@style/List.Item"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/layoutHeader"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-medium"
-            android:textAppearance="@style/TextAppearance.Primary.17"
-            app:layout_constraintEnd_toStartOf="@id/imageViewClear"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Title" />
+            android:orientation="horizontal"
+            android:background="?selectableItemBackground"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/textViewTitle"
+                style="@style/List.Item"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif-medium"
+                android:textAppearance="@style/TextAppearance.Primary.17"
+                tools:text="Title" />
+
+            <ImageView
+                android:id="@+id/imageViewClear"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center_vertical"
+                android:background="?selectableItemBackgroundBorderless"
+                android:contentDescription="@string/desc_clear_category"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_clear"
+                android:tint="@color/black38"
+                android:visibility="gone"
+                tools:visibility="visible" />
+        </LinearLayout>
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerCategories"
@@ -55,7 +61,7 @@
             android:overScrollMode="never"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textViewTitle"
+            app:layout_constraintTop_toBottomOf="@id/layoutHeader"
             tools:visibility="visible" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -65,7 +71,7 @@
             android:overScrollMode="never"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textViewTitle"
+            app:layout_constraintTop_toBottomOf="@id/layoutHeader"
             tools:visibility="visible" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -75,7 +81,7 @@
             android:overScrollMode="never"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textViewTitle"
+            app:layout_constraintTop_toBottomOf="@id/layoutHeader"
             tools:visibility="visible" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

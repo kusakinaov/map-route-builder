@@ -44,7 +44,10 @@ class SearchMapViewImpl(
     private lateinit var markerOverlay: RadiusMarkerClusterer
 
     private val categoriesAdapter = CategoriesAdapter().apply {
-        categoryClickListener = { presenter.onPickCategory(it) }
+        categoryClickListener = {
+            presenter.onPickCategory(it)
+            closeBottomSheet()
+        }
     }
     private val addressesAdapter = AddressesAdapter()
     private val poisAdapter = POIAdapter()
@@ -63,7 +66,9 @@ class SearchMapViewImpl(
         }
         fragment.view?.apply {
             bottomSheetBehavior =
-                BottomSheetBehavior.from<ConstraintLayout>(layoutBottomSheet)
+                BottomSheetBehavior.from<ConstraintLayout>(layoutBottomSheet).apply {
+                    isHideable = false
+                }
 
             imageViewClear.setOnClickListener { presenter.onClickClear() }
             recyclerCategories.apply {
@@ -78,8 +83,11 @@ class SearchMapViewImpl(
                 layoutManager = LinearLayoutManager(context)
                 adapter = poisAdapter
             }
-            textViewTitle.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, _ ->
-                bottomSheetBehavior?.peekHeight = bottom
+            layoutHeader.apply {
+                addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, _ ->
+                    bottomSheetBehavior?.peekHeight = bottom
+                }
+                setOnClickListener { toggleBottomSheetState() }
             }
         }
         presenter.attachView(this)
@@ -250,6 +258,18 @@ class SearchMapViewImpl(
 
     private fun BoundingBox.toAppBoundingBox() =
         AppBoundingBox(latNorth, lonEast, latSouth, lonWest)
+
+    private fun toggleBottomSheetState() {
+        if (bottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED) {
+            closeBottomSheet()
+        } else {
+            bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+        }
+    }
+
+    private fun closeBottomSheet() {
+        bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+    }
 
     companion object {
         private const val DELAY_LOAD_POI = 1000L

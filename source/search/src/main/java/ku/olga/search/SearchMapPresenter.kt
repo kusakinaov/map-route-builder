@@ -1,6 +1,9 @@
 package ku.olga.search
 
 import android.content.SharedPreferences
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import kotlinx.coroutines.*
 import ku.olga.core_api.dto.*
 import ku.olga.core_api.repository.AddressRepository
@@ -9,17 +12,23 @@ import ku.olga.ui_core.base.BaseLocationPresenter
 import ku.olga.ui_core.view.MAX_ZOOM_LEVEL
 import javax.inject.Inject
 
-class SearchMapPresenter @Inject constructor(
-    private val poiRepository: POIRepository,
-    private val addressRepository: AddressRepository,
-    preferences: SharedPreferences
-) :
-    BaseLocationPresenter<SearchMapView>(preferences) {
+class SearchMapPresenter @Inject constructor(private val poiRepository: POIRepository,
+                                             private val addressRepository: AddressRepository,
+                                             preferences: SharedPreferences) : BaseLocationPresenter<SearchMapView>(preferences) {
     private var boundingBox: BoundingBox? = null
     private var category: Category? = null
+
     private var query: String? = null
     private val hasQuery: Boolean
         get() = query?.length ?: 0 > 2
+    private val queryHandler = object : Handler(Looper.getMainLooper()) {
+        override fun handleMessage(msg: Message) {
+            if (msg.what == WHAT_QUERY) {
+                query = msg.obj as String
+                setupState()
+            }
+        }
+    }
 
     private var state: State = State.CATEGORIES
 
@@ -41,9 +50,8 @@ class SearchMapPresenter @Inject constructor(
 
     fun onQueryChanged(query: String?) {
         if (this.query != query) {
-            this.query = query
-
-            setupState()
+            queryHandler.removeMessages(WHAT_QUERY)
+            queryHandler.sendMessageDelayed(queryHandler.obtainMessage(WHAT_QUERY, query), DELAY_QUERY)
         }
     }
 
@@ -57,10 +65,10 @@ class SearchMapPresenter @Inject constructor(
     }
 
     fun onBoundingBoxChanged(
-        latitude: Double,
-        longitude: Double,
-        boundingBox: BoundingBox,
-        zoomLevel: Double
+            latitude: Double,
+            longitude: Double,
+            boundingBox: BoundingBox,
+            zoomLevel: Double
     ) {
         this.boundingBox = boundingBox
         bindState()
@@ -134,6 +142,8 @@ class SearchMapPresenter @Inject constructor(
     }
 
     private fun setAddressesState() {
+        setPOIs(emptyList())
+
         view?.showAddresses()
         bindAddresses()
         view?.bindClearButton(true)
@@ -154,6 +164,8 @@ class SearchMapPresenter @Inject constructor(
     }
 
     private fun setPOIsState() {
+        setAddresses(emptyList())
+
         view?.showPOIs(category)
         bindPOIs()
         view?.bindClearButton(true)
@@ -164,14 +176,14 @@ class SearchMapPresenter @Inject constructor(
     }
 
     private fun loadPOIs(boundingBox: BoundingBox, category: Category) =
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                setPOIs(poiRepository.getPOIs(query, boundingBox, category))
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) { view?.showDefaultError() }
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    setPOIs(poiRepository.getPOIs(query, boundingBox, category))
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) { view?.showDefaultError() }
+                }
+                withContext(Dispatchers.Main) { bindPOIs() }
             }
-            withContext(Dispatchers.Main) { bindPOIs() }
-        }
 
     private fun setPOIs(pois: List<POI>) {
         this.pois.clear()
@@ -188,5 +200,10 @@ class SearchMapPresenter @Inject constructor(
 
     enum class State {
         CATEGORIES, ADDRESSES, POIS
+    }
+
+    companion object {
+        private const val WHAT_QUERY = 1001
+        private const val DELAY_QUERY = 1000L
     }
 }
