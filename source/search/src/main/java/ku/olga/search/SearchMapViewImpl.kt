@@ -12,8 +12,10 @@ import kotlinx.android.synthetic.main.fragment_search_map.view.*
 import ku.olga.core_api.dto.Category
 import ku.olga.core_api.dto.POI
 import ku.olga.core_api.dto.SearchAddress
+import ku.olga.core_api.dto.UserPoint
 import ku.olga.ui_core.REQ_CODE_LOCATION_PERMISSION
 import ku.olga.ui_core.utils.hasLocationPermission
+import ku.olga.ui_core.utils.hideKeyboard
 import ku.olga.ui_core.utils.requestLocationPermission
 import ku.olga.ui_core.view.MIN_ZOOM_LEVEL
 import ku.olga.ui_core.view.buildRadiusMarkerClusterer
@@ -44,31 +46,21 @@ class SearchMapViewImpl(
     private lateinit var markerOverlay: RadiusMarkerClusterer
 
     private val categoriesAdapter = CategoriesAdapter().apply {
-        categoryClickListener = {
-            presenter.onPickCategory(it)
-            closeBottomSheet()
-        }
+        categoryClickListener = { presenter.onPickCategory(it) }
     }
-    private val addressesAdapter = AddressesAdapter()
-    private val poisAdapter = POIAdapter()
+    private val addressesAdapter = AddressesAdapter().apply {
+        onClickAddressListener = { presenter.onClickAddress(it) }
+    }
+    private val poisAdapter = POIAdapter().apply {
+        onClickListener = { presenter.onClickPOI(it) }
+    }
 
     private var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>? = null
 
     override fun onAttach() {
-        mapView?.let {
-            markerOverlay = buildRadiusMarkerClusterer(
-                it.context,
-                ContextCompat.getDrawable(it.context, R.drawable.cluster)!!,
-                ContextCompat.getColor(it.context, R.color.map_icon_text)
-            )
-            initMapView(it, buildMapListener(), listOf(markerOverlay))
-            it.controller.setZoom(MIN_ZOOM_LEVEL)
-        }
+        setupMap()
         fragment.view?.apply {
-            bottomSheetBehavior =
-                BottomSheetBehavior.from<ConstraintLayout>(layoutBottomSheet).apply {
-                    isHideable = false
-                }
+            setupBottomSheet(layoutBottomSheet)
 
             imageViewClear.setOnClickListener { presenter.onClickClear() }
             recyclerCategories.apply {
@@ -91,6 +83,35 @@ class SearchMapViewImpl(
             }
         }
         presenter.attachView(this)
+    }
+
+    private fun setupMap() {
+        mapView?.let {
+            markerOverlay = buildRadiusMarkerClusterer(
+                it.context,
+                ContextCompat.getDrawable(it.context, R.drawable.cluster)!!,
+                ContextCompat.getColor(it.context, R.color.map_icon_text)
+            )
+            initMapView(it, buildMapListener(), listOf(markerOverlay))
+            it.controller.setZoom(MIN_ZOOM_LEVEL)
+        }
+    }
+
+    private fun setupBottomSheet(layoutBottomSheet: ConstraintLayout) {
+        bottomSheetBehavior =
+            BottomSheetBehavior.from(layoutBottomSheet).apply {
+                isHideable = false
+                addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+                    override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                        if (slideOffset == 0f || slideOffset == 1f) {
+                            fragment.hideKeyboard()
+                        }
+                    }
+
+                    override fun onStateChanged(bottomSheet: View, newState: Int) {
+                    }
+                })
+            }
     }
 
     override fun onDetach() {
@@ -131,8 +152,11 @@ class SearchMapViewImpl(
                         address.postalAddress,
                         address.lat,
                         address.lon,
-                        icon
-                    )
+                        icon,
+                        Marker.OnMarkerClickListener { _, _ ->
+                            presenter.onClickAddress(address)
+                            true
+                        })
                 )
             }
             markerOverlay.invalidate()
@@ -145,7 +169,17 @@ class SearchMapViewImpl(
             val icon = ContextCompat.getDrawable(it.context, R.drawable.ic_place)
             markerOverlay.items.clear()
             for (poi in pois) {
-                markerOverlay.add(buildMarker(poi.title, poi.latitude, poi.longitude, icon))
+                markerOverlay.add(
+                    buildMarker(
+                        poi.title,
+                        poi.latitude,
+                        poi.longitude,
+                        icon,
+                        Marker.OnMarkerClickListener { _, _ ->
+                            presenter.onClickPOI(poi)
+                            true
+                        })
+                )
             }
             markerOverlay.invalidate()
         }
@@ -155,13 +189,14 @@ class SearchMapViewImpl(
         title: String,
         latitude: Double,
         longitude: Double,
-        poiIcon: Drawable?
+        poiIcon: Drawable?,
+        markerClickListener: Marker.OnMarkerClickListener? = null
     ): Marker =
         Marker(mapView).apply {
             this.title = title
             position = GeoPoint(latitude, longitude)
             icon = poiIcon
-            setOnMarkerClickListener { _, _ -> true }
+            setOnMarkerClickListener(markerClickListener)
         }
 
     private fun bindRecyclerViews(
@@ -198,6 +233,12 @@ class SearchMapViewImpl(
 
     override fun bindClearButton(visible: Boolean) {
         fragment.view?.imageViewClear?.visibility = if (visible) View.VISIBLE else View.GONE
+    }
+
+    override fun isPressBackConsumed(): Boolean {
+        val expanded = isBottomSheetExpanded
+        if (expanded) closeBottomSheet()
+        return expanded
     }
 
     override fun hasLocationPermission(): Boolean = hasLocationPermission(fragment.context)
@@ -260,16 +301,22 @@ class SearchMapViewImpl(
         AppBoundingBox(latNorth, lonEast, latSouth, lonWest)
 
     private fun toggleBottomSheetState() {
-        if (bottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED) {
+        if (isBottomSheetExpanded) {
             closeBottomSheet()
         } else {
             bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
         }
     }
 
-    private fun closeBottomSheet() {
+    override fun closeBottomSheet() {
         bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
     }
+
+    override fun showEditDialog(userPoint: UserPoint) {
+    }
+
+    private val isBottomSheetExpanded: Boolean
+        get() = bottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED
 
     companion object {
         private const val DELAY_LOAD_POI = 1000L

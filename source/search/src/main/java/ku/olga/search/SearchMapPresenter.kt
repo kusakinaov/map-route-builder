@@ -12,9 +12,11 @@ import ku.olga.ui_core.base.BaseLocationPresenter
 import ku.olga.ui_core.view.MAX_ZOOM_LEVEL
 import javax.inject.Inject
 
-class SearchMapPresenter @Inject constructor(private val poiRepository: POIRepository,
-                                             private val addressRepository: AddressRepository,
-                                             preferences: SharedPreferences) : BaseLocationPresenter<SearchMapView>(preferences) {
+class SearchMapPresenter @Inject constructor(
+    private val poiRepository: POIRepository,
+    private val addressRepository: AddressRepository,
+    preferences: SharedPreferences
+) : BaseLocationPresenter<SearchMapView>(preferences) {
     private var boundingBox: BoundingBox? = null
     private var category: Category? = null
 
@@ -51,11 +53,15 @@ class SearchMapPresenter @Inject constructor(private val poiRepository: POIRepos
     fun onQueryChanged(query: String?) {
         if (this.query != query) {
             queryHandler.removeMessages(WHAT_QUERY)
-            queryHandler.sendMessageDelayed(queryHandler.obtainMessage(WHAT_QUERY, query), DELAY_QUERY)
+            queryHandler.sendMessageDelayed(
+                queryHandler.obtainMessage(WHAT_QUERY, query),
+                DELAY_QUERY
+            )
         }
     }
 
     fun onPickCategory(category: Category?) {
+        if (category != null) view?.closeBottomSheet()
         if (this.category != category) {
             this.category = category
             this.query = ""
@@ -65,13 +71,15 @@ class SearchMapPresenter @Inject constructor(private val poiRepository: POIRepos
     }
 
     fun onBoundingBoxChanged(
-            latitude: Double,
-            longitude: Double,
-            boundingBox: BoundingBox,
-            zoomLevel: Double
+        latitude: Double,
+        longitude: Double,
+        boundingBox: BoundingBox,
+        zoomLevel: Double
     ) {
         this.boundingBox = boundingBox
-        bindState()
+        if (state == State.POIS && category != null) {
+            loadPOIs(boundingBox, category!!)
+        }
     }
 
     override fun onCoordinatesChanged(coordinates: Coordinates) {
@@ -176,14 +184,14 @@ class SearchMapPresenter @Inject constructor(private val poiRepository: POIRepos
     }
 
     private fun loadPOIs(boundingBox: BoundingBox, category: Category) =
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    setPOIs(poiRepository.getPOIs(query, boundingBox, category))
-                } catch (e: Exception) {
-                    withContext(Dispatchers.Main) { view?.showDefaultError() }
-                }
-                withContext(Dispatchers.Main) { bindPOIs() }
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                setPOIs(poiRepository.getPOIs(query, boundingBox, category))
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) { view?.showDefaultError() }
             }
+            withContext(Dispatchers.Main) { bindPOIs() }
+        }
 
     private fun setPOIs(pois: List<POI>) {
         this.pois.clear()
@@ -198,12 +206,41 @@ class SearchMapPresenter @Inject constructor(private val poiRepository: POIRepos
         view?.bindQuery(query)
     }
 
+    fun onClickPOI(poi: POI) {
+        view?.closeBottomSheet()
+        view?.moveTo(poi.latitude, poi.longitude, PLACE_ZOOM_LEVEL, true)
+        view?.showEditDialog(poi.toUserPoint())
+    }
+
+    fun onClickAddress(searchAddress: SearchAddress) {
+        view?.closeBottomSheet()
+        view?.moveTo(searchAddress.lat, searchAddress.lon, PLACE_ZOOM_LEVEL, true)
+        view?.showEditDialog(searchAddress.toUserPoint())
+    }
+
     enum class State {
         CATEGORIES, ADDRESSES, POIS
     }
 
+    private fun POI.toUserPoint() = UserPoint(
+        title = title,
+        lat = latitude,
+        lon = longitude,
+        description = description,
+        type = UserPointType.POI
+    )
+
+    private fun SearchAddress.toUserPoint() = UserPoint(
+        title = postalAddress,
+        lat = lat,
+        lon = lon,
+        postalAddress = postalAddress,
+        type = UserPointType.ADDRESS
+    )
+
     companion object {
         private const val WHAT_QUERY = 1001
         private const val DELAY_QUERY = 1000L
+        private const val PLACE_ZOOM_LEVEL = 18.0
     }
 }

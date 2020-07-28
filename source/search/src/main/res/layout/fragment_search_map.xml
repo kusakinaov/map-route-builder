@@ -53,7 +53,6 @@
                 tools:visibility="visible" />
         </LinearLayout>
 
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerCategories"
             android:layout_width="match_parent"

@@ -66,6 +66,8 @@ class SearchMapFragment : BaseFragment() {
         searchMapView?.onDetach()
     }
 
+    override fun isPressBackConsumed(): Boolean = searchMapView?.isPressBackConsumed() ?: false
+
     companion object {
         fun newInstance(target: Fragment, requestCode: Int) = SearchMapFragment().apply {
             setTargetFragment(target, requestCode)
