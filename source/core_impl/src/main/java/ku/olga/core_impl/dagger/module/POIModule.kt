@@ -20,12 +20,8 @@ class POIModule {
 
     @Provides
     @Singleton
-    fun providesPOIRepository(
-        assetManager: AssetManager,
-        gson: Gson,
-        nominatimPOIProvider: NominatimPOIProvider
-    ): POIRepository =
-        NominatimPOIRepository(assetManager, gson, nominatimPOIProvider)
+    fun providesPOIRepository(assetManager: AssetManager, gson: Gson): POIRepository =
+        NominatimPOIRepository(assetManager, gson)
 
     companion object {
         private const val USER_AGENT = "MapRouteBuilderUserAgent"

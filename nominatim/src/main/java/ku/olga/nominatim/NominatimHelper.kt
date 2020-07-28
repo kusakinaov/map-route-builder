@@ -3,7 +3,7 @@ package ku.olga.nominatim
 import ku.olga.nominatim.model.BoundingBox
 import ku.olga.nominatim.model.Place
 import ku.olga.nominatim.model.ZoomLevel
-import java.util.*
+import java.util.Locale
 
 object NominatimHelper {
     fun searchPOI(

@@ -5,7 +5,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import ku.olga.core_api.dto.Category
 import ku.olga.core_api.repository.POIRepository
-import org.osmdroid.bonuspack.location.NominatimPOIProvider
 import org.osmdroid.bonuspack.location.POI
 import ku.olga.core_api.dto.POI as AppPOI
 import ku.olga.core_api.dto.BoundingBox
@@ -23,16 +22,14 @@ import ku.olga.nominatim.model.BoundingBox as NominatimBoundingBox
 
 class NominatimPOIRepository(
         private val assetManager: AssetManager,
-        private val gson: Gson,
-        private val poiProvider: NominatimPOIProvider
-) : POIRepository {
+        private val gson: Gson) : POIRepository {
     private val categories = mutableListOf<Category>()
 
     private fun initCategories() {
-        categories.clear()
         val reader = InputStreamReader(assetManager.open("ru_nominatim_poi_tags.json"))
         try {
             val list: List<Tag> = gson.fromJson(reader, object : TypeToken<List<Tag>>() {}.type)
+            categories.clear()
             categories.addAll(
                     list
                             .filter { it.key == "amenity" }
