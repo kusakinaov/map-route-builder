@@ -13,6 +13,8 @@ import ku.olga.core_api.dto.Category
 import ku.olga.core_api.dto.POI
 import ku.olga.core_api.dto.SearchAddress
 import ku.olga.core_api.dto.UserPoint
+import ku.olga.core_api.mediator.EditPointMediator
+import ku.olga.ui_core.REQ_CODE_EDIT_POINT
 import ku.olga.ui_core.REQ_CODE_LOCATION_PERMISSION
 import ku.olga.ui_core.utils.hasLocationPermission
 import ku.olga.ui_core.utils.hideKeyboard
@@ -33,6 +35,7 @@ import ku.olga.core_api.dto.BoundingBox as AppBoundingBox
 
 class SearchMapViewImpl(
     private val fragment: Fragment,
+    private val editPointMediator: EditPointMediator,
     private val presenter: SearchMapPresenter
 ) : SearchMapView {
     override var searchView: SearchView? = null
@@ -302,6 +305,7 @@ class SearchMapViewImpl(
     }
 
     override fun showEditDialog(userPoint: UserPoint) {
+        editPointMediator.editPoint(fragment, REQ_CODE_EDIT_POINT, userPoint)
     }
 
     private val isBottomSheetExpanded: Boolean

@@ -9,12 +9,17 @@ import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.location.LocationServices
 import kotlinx.android.synthetic.main.fragment_search_map.view.*
 import ku.olga.core_api.AppWithFacade
+import ku.olga.core_api.mediator.EditPointMediator
 import ku.olga.ui_core.base.BaseFragment
 import javax.inject.Inject
 
 class SearchMapFragment : BaseFragment() {
     @Inject
     lateinit var presenter: SearchMapPresenter
+
+    @Inject
+    lateinit var editPointMediator: EditPointMediator
+
     private var searchMapView: SearchMapView? = null
 
     override fun inject(activity: FragmentActivity) {
@@ -34,7 +39,7 @@ class SearchMapFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        searchMapView = SearchMapViewImpl(this, presenter).apply {
+        searchMapView = SearchMapViewImpl(this, editPointMediator, presenter).apply {
             mapView = view.mapView
             onAttach()
         }
