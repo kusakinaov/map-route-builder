@@ -10,6 +10,7 @@ import ku.olga.core_api.repository.AddressRepository
 import ku.olga.core_api.repository.POIRepository
 import ku.olga.ui_core.base.BaseLocationPresenter
 import ku.olga.ui_core.view.MAX_ZOOM_LEVEL
+import org.osmdroid.util.GeoPoint
 import javax.inject.Inject
 
 class SearchMapPresenter @Inject constructor(
@@ -169,6 +170,7 @@ class SearchMapPresenter @Inject constructor(
 
     private fun bindAddresses() {
         view?.bindAddresses(addresses)
+        view?.moveTo(addresses.map { GeoPoint(it.lat, it.lon) }, true)
     }
 
     private fun setPOIsState() {
@@ -207,15 +209,19 @@ class SearchMapPresenter @Inject constructor(
     }
 
     fun onClickPOI(poi: POI) {
-        view?.closeBottomSheet()
-        view?.moveTo(poi.latitude, poi.longitude, PLACE_ZOOM_LEVEL, true)
-        view?.showEditDialog(poi.toUserPoint())
+        view?.apply {
+            closeBottomSheet()
+            moveTo(poi.latitude, poi.longitude, PLACE_ZOOM_LEVEL, true)
+            showEditDialog(poi.toUserPoint())
+        }
     }
 
     fun onClickAddress(searchAddress: SearchAddress) {
-        view?.closeBottomSheet()
-        view?.moveTo(searchAddress.lat, searchAddress.lon, PLACE_ZOOM_LEVEL, true)
-        view?.showEditDialog(searchAddress.toUserPoint())
+        view?.apply {
+            closeBottomSheet()
+            moveTo(searchAddress.lat, searchAddress.lon, PLACE_ZOOM_LEVEL, true)
+            showEditDialog(searchAddress.toUserPoint())
+        }
     }
 
     enum class State {

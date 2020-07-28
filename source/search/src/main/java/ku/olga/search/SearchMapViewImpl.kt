@@ -63,17 +63,8 @@ class SearchMapViewImpl(
             setupBottomSheet(layoutBottomSheet)
 
             imageViewClear.setOnClickListener { presenter.onClickClear() }
-            recyclerCategories.apply {
-                layoutManager = LinearLayoutManager(context)
-                adapter = categoriesAdapter
-            }
-            recyclerAddresses.apply {
-                layoutManager = LinearLayoutManager(context)
-                adapter = addressesAdapter
-            }
             recyclerItems.apply {
                 layoutManager = LinearLayoutManager(context)
-                adapter = poisAdapter
             }
             layoutHeader.apply {
                 addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, _ ->
@@ -138,6 +129,7 @@ class SearchMapViewImpl(
         mapView?.let {
             markerOverlay.items.clear()
             markerOverlay.invalidate()
+            it.invalidate()
         }
     }
 
@@ -160,6 +152,7 @@ class SearchMapViewImpl(
                 )
             }
             markerOverlay.invalidate()
+            it.invalidate()
         }
     }
 
@@ -182,6 +175,7 @@ class SearchMapViewImpl(
                 )
             }
             markerOverlay.invalidate()
+            it.invalidate()
         }
     }
 
@@ -199,36 +193,31 @@ class SearchMapViewImpl(
             setOnMarkerClickListener(markerClickListener)
         }
 
-    private fun bindRecyclerViews(
-        addressesVisible: Boolean = false,
-        categoriesVisible: Boolean = false,
-        poisVisible: Boolean = false
-    ) {
-        fragment.view?.apply {
-            recyclerAddresses.visibility = if (addressesVisible) View.VISIBLE else View.GONE
-            recyclerCategories.visibility = if (categoriesVisible) View.VISIBLE else View.GONE
-            recyclerItems.visibility = if (poisVisible) View.VISIBLE else View.GONE
-        }
-    }
-
     override fun hideAll() {
         markerOverlay.items.clear()
         markerOverlay.invalidate()
+        mapView?.invalidate()
     }
 
     override fun showPOIs(category: Category?) {
-        fragment.view?.textViewTitle?.text = category?.title ?: ""
-        bindRecyclerViews(poisVisible = true)
+        fragment.view?.apply {
+            textViewTitle.text = category?.title ?: ""
+            recyclerItems.adapter = poisAdapter
+        }
     }
 
     override fun showAddresses() {
-        fragment.view?.textViewTitle?.setText(R.string.ttl_search_results)
-        bindRecyclerViews(addressesVisible = true)
+        fragment.view?.apply {
+            textViewTitle.setText(R.string.ttl_search_results)
+            recyclerItems.adapter = addressesAdapter
+        }
     }
 
     override fun showCategories() {
-        fragment.view?.textViewTitle?.setText(R.string.ttl_categories)
-        bindRecyclerViews(categoriesVisible = true)
+        fragment.view?.apply {
+            textViewTitle.setText(R.string.ttl_categories)
+            recyclerItems.adapter = categoriesAdapter
+        }
     }
 
     override fun bindClearButton(visible: Boolean) {
