@@ -212,7 +212,7 @@ class SearchMapPresenter @Inject constructor(
         view?.apply {
             closeBottomSheet()
             moveTo(poi.latitude, poi.longitude, PLACE_ZOOM_LEVEL, true)
-            showEditDialog(poi.toUserPoint())
+//            showEditDialog(poi.toUserPoint())
         }
     }
 
@@ -220,7 +220,7 @@ class SearchMapPresenter @Inject constructor(
         view?.apply {
             closeBottomSheet()
             moveTo(searchAddress.lat, searchAddress.lon, PLACE_ZOOM_LEVEL, true)
-            showEditDialog(searchAddress.toUserPoint())
+//            showEditDialog(searchAddress.toUserPoint())
         }
     }
 

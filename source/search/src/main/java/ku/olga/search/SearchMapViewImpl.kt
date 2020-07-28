@@ -301,6 +301,7 @@ class SearchMapViewImpl(
     }
 
     override fun closeBottomSheet() {
+        fragment.hideKeyboard()
         bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
