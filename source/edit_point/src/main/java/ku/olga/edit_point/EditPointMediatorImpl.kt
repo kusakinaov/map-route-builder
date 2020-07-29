@@ -15,4 +15,8 @@ class EditPointMediatorImpl @Inject constructor() : EditPointMediator {
             )
         }
     }
+
+    override fun showEditPointDialog(target: Fragment, requestCode: Int, userPoint: UserPoint) {
+
+    }
 }

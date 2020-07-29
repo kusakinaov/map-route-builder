@@ -6,4 +6,6 @@
     <string name="hint_input_title">Введите название</string>
     <string name="hint_input_description">Введите описание</string>
     <string name="button_delete">УДАЛИТЬ</string>
+    <string name="button_save">СОХРАНИТЬ</string>
+    <string name="button_cancel">ОТМЕНИТЬ</string>
 </resources>

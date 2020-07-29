@@ -32,6 +32,8 @@ dependencies {
     implementation ktx
 
     implementation coroutinesDependencies.values()
+    implementation constraintLayout
+    implementation material
 
     implementation dagger
     kapt daggerCompiler
