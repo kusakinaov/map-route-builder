@@ -1,3 +1,3 @@
-package ku.olga.route_builder.data.repository.osrm
+package ku.olga.osrm.model
 
 data class AnnotationMetadata(val datasource_names: List<String>)

@@ -1,3 +1,3 @@
-package ku.olga.route_builder.data.repository.osrm
+package ku.olga.osrm.model
 
 data class Lane(val indications: List<LaneIndication>, val valid: Boolean)

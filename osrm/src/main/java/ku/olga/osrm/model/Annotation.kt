@@ -1,4 +1,4 @@
-package ku.olga.route_builder.data.repository.osrm
+package ku.olga.osrm.model
 
 data class Annotation(
     val distance: List<Int>,

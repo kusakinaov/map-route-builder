@@ -1,6 +1,4 @@
-package ku.olga.route_builder.data.repository.osrm
-
-import ku.olga.core_api.dto.Coordinates
+package ku.olga.osrm.model
 
 data class Intersection(
     val location: Coordinates,

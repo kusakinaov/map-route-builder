@@ -1,9 +1,9 @@
-package ku.olga.core_impl.repository.osrm.gson
+package ku.olga.osrm.gson
 
 import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
-import ku.olga.core_api.dto.Coordinates
+import ku.olga.osrm.model.Coordinates
 
 class LocationTypeAdapter : TypeAdapter<Coordinates>() {
     override fun write(out: JsonWriter?, value: Coordinates?) {

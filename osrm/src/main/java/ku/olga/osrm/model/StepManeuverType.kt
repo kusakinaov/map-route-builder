@@ -1,4 +1,4 @@
-package ku.olga.route_builder.data.repository.osrm
+package ku.olga.osrm.model
 
 enum class StepManeuverType(val text: String) {
     turn("turn"),

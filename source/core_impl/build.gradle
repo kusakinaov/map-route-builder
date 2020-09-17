@@ -32,7 +32,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation appCompat
     implementation ktx
 
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
@@ -44,6 +44,7 @@ dependencies {
 
     api project(':source:core_api')
     implementation project(':nominatim')
+    implementation project(':osrm')
 
     implementation roomDependencies.values()
     kapt roomCompiler
