@@ -1,5 +1,6 @@
 package ku.olga.category
 
+import android.Manifest
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Resources
@@ -11,7 +12,10 @@ import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.location.LocationServices
 import ku.olga.core_api.AppWithFacade
 import ku.olga.core_api.dto.Category
+import ku.olga.core_api.dto.UserPoint
 import ku.olga.core_api.mediator.EditPointMediator
+import ku.olga.ui_core.REQ_CODE_EDIT_POINT
+import ku.olga.ui_core.REQ_CODE_LOCATION_PERMISSION
 import ku.olga.ui_core.base.BaseFragment
 import org.osmdroid.config.Configuration
 import javax.inject.Inject
@@ -52,7 +56,15 @@ class CategoryFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        categoryView = CategoryViewImpl(this, categoryPresenter, editPointMediator)
+        categoryView = object : CategoryViewImpl(view, categoryPresenter) {
+            override fun openEditPOI(userPoint: UserPoint) {
+                editPoint(userPoint)
+            }
+
+            override fun requestLocationPermission() {
+                this@CategoryFragment.requestLocationPermission()
+            }
+        }
         categoryView?.onAttach()
     }
 
@@ -94,6 +106,17 @@ class CategoryFragment : BaseFragment() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         categoryPresenter.checkLocationPermission()
+    }
+
+    private fun requestLocationPermission() {
+        requestPermissions(
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            REQ_CODE_LOCATION_PERMISSION
+        )
+    }
+
+    private fun editPoint(userPoint: UserPoint) {
+        editPointMediator.editPoint(this, REQ_CODE_EDIT_POINT, userPoint)
     }
 
     companion object {

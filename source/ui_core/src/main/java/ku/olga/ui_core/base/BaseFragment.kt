@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import com.google.android.material.snackbar.Snackbar
 import ku.olga.ui_core.FragmentContainer
 import ku.olga.ui_core.R
@@ -61,4 +62,15 @@ abstract class BaseFragment : Fragment() {
     open fun getBackButtonRes() = R.drawable.ic_back
 
     open fun isPressBackConsumed() = false
+
+    fun popBackStack() {
+        fragmentManager?.apply {
+            if (!isStateSaved)
+                popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        }
+    }
+
+    fun invalidateOptionsMenu() {
+        activity?.invalidateOptionsMenu()
+    }
 }
