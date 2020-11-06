@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentActivity
 import ku.olga.core_api.AppWithFacade
 import ku.olga.core_api.dto.UserPoint
 import ku.olga.core_api.mediator.EditPointMediator
+import ku.olga.ui_core.REQ_CODE_EDIT_POINT
 import ku.olga.ui_core.base.BaseFragment
 import ku.olga.user_points.OnUserPointsChangeListener
 import ku.olga.user_points.R
@@ -52,8 +53,24 @@ class UserPointsMapFragment : BaseFragment(R.layout.fragment_user_points_map),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mapView = UserPointsMapViewImpl(this, presenter, editPointMediator)
+        mapView = buildUserPointsMapView(view)
         mapView.onAttach()
+    }
+
+    private fun buildUserPointsMapView(view: View) =
+        object : UserPointsMapViewImpl(view, presenter, bottomSheetCallback) {
+            override fun editUserPoint(userPoint: UserPoint) {
+                this@UserPointsMapFragment.editUserPoint(userPoint)
+            }
+        }
+
+    val bottomSheetCallback: BottomSheetCallback?
+        get() = if (parentFragment is BottomSheetCallback) parentFragment as BottomSheetCallback else null
+
+    private fun editUserPoint(userPoint: UserPoint) {
+        parentFragment?.let {
+            editPointMediator.editPoint(it, REQ_CODE_EDIT_POINT, userPoint)
+        }
     }
 
     override fun onResume() {

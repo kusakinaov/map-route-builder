@@ -5,13 +5,10 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import kotlinx.android.synthetic.main.fragment_user_points_map.*
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_user_points_map.view.*
 import ku.olga.core_api.dto.Coordinates
-import ku.olga.ui_core.REQ_CODE_EDIT_POINT
 import ku.olga.core_api.dto.UserPoint
-import ku.olga.core_api.mediator.EditPointMediator
-import ku.olga.ui_core.base.BaseFragment
 import ku.olga.ui_core.view.buildDirectionsPolyline
 import ku.olga.ui_core.view.buildRadiusMarkerClusterer
 import ku.olga.ui_core.view.initMapView
@@ -25,17 +22,17 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
 
-class UserPointsMapViewImpl(
-    private val fragment: UserPointsMapFragment,
+abstract class UserPointsMapViewImpl(
+    private val view: View,
     private val presenter: UserPointsMapPresenter,
-    private val editPointMediator: EditPointMediator
+    private val bottomSheetCallback: UserPointsMapFragment.BottomSheetCallback?
 ) : UserPointsMapView {
     private var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>? = null
-    private lateinit var markerOverlay: RadiusMarkerClusterer
-    private lateinit var directionsPolyline: Polyline
+    private var markerOverlay: RadiusMarkerClusterer
+    private var directionsPolyline: Polyline
 
     init {
-        fragment.view?.let {
+        view.let {
             bottomSheetBehavior = BottomSheetBehavior.from(it.layoutContent).apply {
                 addBottomSheetCallback(buildBottomSheetCallback())
                 state = BottomSheetBehavior.STATE_HIDDEN
@@ -93,49 +90,36 @@ class UserPointsMapViewImpl(
         override fun onStateChanged(bottomSheet: View, newState: Int) {
             when (newState) {
                 BottomSheetBehavior.STATE_EXPANDED -> {
-                    fragment.buttonEdit?.visibility = View.VISIBLE
+                    view.buttonEdit?.visibility = View.VISIBLE
                 }
                 BottomSheetBehavior.STATE_HIDDEN,
                 BottomSheetBehavior.STATE_COLLAPSED -> {
-                    fragment.buttonEdit?.visibility = View.GONE
-                    val parent = fragment.parentFragment
-                    if (parent is UserPointsMapFragment.BottomSheetCallback) {
-                        parent.onHide()
-                    }
+                    view.buttonEdit?.visibility = View.GONE
+                    bottomSheetCallback?.onHide()
                 }
             }
         }
     }
 
     override fun onResume() {
-        fragment.mapView?.onResume()
+        view.mapView?.onResume()
     }
 
     override fun onPause() {
-        fragment.mapView?.onPause()
+        view.mapView?.onPause()
     }
 
     override fun hideUserPoint(): Boolean {
         val expanded = bottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED
         if (expanded) {
             bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
-            fragment.buttonEdit?.visibility = View.GONE
+            view.buttonEdit?.visibility = View.GONE
         }
         return expanded
     }
 
-    override fun editUserPoint(userPoint: UserPoint) {
-        val parent = fragment.parentFragment
-        if (parent is BaseFragment) {
-            editPointMediator.editPoint(
-                parent,
-                REQ_CODE_EDIT_POINT, userPoint
-            )
-        }
-    }
-
     override fun showUserPoint(userPoint: UserPoint) {
-        fragment.view?.apply {
+        view.apply {
             textViewTitle.text = userPoint.title
             textViewDescription.apply {
                 text = userPoint.description
@@ -148,19 +132,16 @@ class UserPointsMapViewImpl(
             }
         }
         bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
-        val parent = fragment.parentFragment
-        if (parent is UserPointsMapFragment.BottomSheetCallback) {
-            parent.onShown()
-        }
+        bottomSheetCallback?.onShown()
     }
 
     override fun showDirectionsError() {
-        showError(fragment.getString(R.string.error_build_directions))
+        showError(view.resources.getString(R.string.error_build_directions))
     }
 
     override fun showDirections(coordinates: List<Coordinates>) {
         directionsPolyline.setPoints(coordinates.map { GeoPoint(it.latitude, it.longitude) })
-        fragment.mapView?.invalidate()
+        view.mapView?.invalidate()
     }
 
     override fun onDetach() {
@@ -169,7 +150,7 @@ class UserPointsMapViewImpl(
 
     override fun setUserPoints(userPoints: List<UserPoint>) {
         markerOverlay.items.clear()
-        fragment.context?.let {
+        view.context?.let {
             val poiIcon = ContextCompat.getDrawable(it, R.drawable.ic_place)
             for (poi in userPoints) {
                 markerOverlay.add(buildMarker(poi, poiIcon))
@@ -179,17 +160,17 @@ class UserPointsMapViewImpl(
     }
 
     override fun moveTo(latitude: Double, longitude: Double, zoomLevel: Double, animated: Boolean) {
-        fragment.mapView?.let {
+        view.mapView?.let {
             ku.olga.ui_core.view.moveTo(it, latitude, longitude, zoomLevel, animated)
         }
     }
 
     override fun moveTo(geoPoints: List<GeoPoint>, animated: Boolean) {
-        fragment.mapView?.let { ku.olga.ui_core.view.moveTo(it, geoPoints, animated) }
+        view.mapView?.let { ku.olga.ui_core.view.moveTo(it, geoPoints, animated) }
     }
 
     private fun buildMarker(point: UserPoint, poiIcon: Drawable?): Marker =
-        Marker(fragment.view?.mapView).apply {
+        Marker(view.mapView).apply {
             title = point.title
             snippet = point.description
             position = GeoPoint(point.lat, point.lon)
@@ -198,6 +179,6 @@ class UserPointsMapViewImpl(
         }
 
     override fun showError(error: CharSequence) {
-        fragment.showSnackbar(error)
+        Snackbar.make(view, error, Snackbar.LENGTH_SHORT).show()
     }
 }
