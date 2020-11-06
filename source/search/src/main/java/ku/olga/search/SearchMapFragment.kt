@@ -13,7 +13,7 @@ import ku.olga.core_api.mediator.EditPointMediator
 import ku.olga.ui_core.base.BaseFragment
 import javax.inject.Inject
 
-class SearchMapFragment : BaseFragment() {
+class SearchMapFragment : BaseFragment(R.layout.fragment_search_map) {
     @Inject
     lateinit var presenter: SearchMapPresenter
 
@@ -30,12 +30,6 @@ class SearchMapFragment : BaseFragment() {
         super.onAttach(context)
         presenter.locationClient = LocationServices.getFusedLocationProviderClient(context)
     }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_search_map, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

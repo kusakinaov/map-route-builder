@@ -14,7 +14,7 @@ import ku.olga.core_api.mediator.ConfirmationMediator
 import ku.olga.ui_core.base.BaseFragment
 import javax.inject.Inject
 
-class EditPointFragment : BaseFragment() {
+class EditPointFragment : BaseFragment(R.layout.fragment_edit_point) {
     @Inject
     lateinit var presenter: EditPointPresenter
 
@@ -35,13 +35,6 @@ class EditPointFragment : BaseFragment() {
     }
 
     override fun getTitle(resources: Resources) = resources.getString(R.string.ttl_edit)
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View =
-        inflater.inflate(R.layout.fragment_edit_point, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

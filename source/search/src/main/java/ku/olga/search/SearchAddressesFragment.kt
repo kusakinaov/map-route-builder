@@ -22,7 +22,7 @@ import ku.olga.ui_core.base.BaseFragment
 import ku.olga.ui_core.utils.hideKeyboard
 import javax.inject.Inject
 
-class SearchAddressesFragment : BaseFragment() {
+class SearchAddressesFragment : BaseFragment(R.layout.fragment_search) {
     @Inject
     lateinit var searchPresenter: SearchAddressesPresenter
 
@@ -57,13 +57,6 @@ class SearchAddressesFragment : BaseFragment() {
     override fun inject(activity: FragmentActivity) {
         SearchComponent.build((activity.application as AppWithFacade).getFacade()).inject(this)
     }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View =
-        inflater.inflate(R.layout.fragment_search, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

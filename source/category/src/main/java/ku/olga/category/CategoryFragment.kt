@@ -20,7 +20,7 @@ import ku.olga.ui_core.base.BaseFragment
 import org.osmdroid.config.Configuration
 import javax.inject.Inject
 
-class CategoryFragment : BaseFragment() {
+class CategoryFragment : BaseFragment(R.layout.fragment_category) {
     private var categoryView: CategoryView? = null
 
     @Inject
@@ -46,13 +46,6 @@ class CategoryFragment : BaseFragment() {
     }
 
     override fun getTitle(resources: Resources) = categoryPresenter.getTitle()
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View =
-        inflater.inflate(R.layout.fragment_category, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

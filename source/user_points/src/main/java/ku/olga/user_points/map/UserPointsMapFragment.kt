@@ -3,9 +3,7 @@ package ku.olga.user_points.map
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import ku.olga.core_api.AppWithFacade
 import ku.olga.core_api.dto.UserPoint
@@ -16,7 +14,7 @@ import ku.olga.user_points.R
 import org.osmdroid.config.Configuration
 import javax.inject.Inject
 
-class UserPointsMapFragment : BaseFragment(),
+class UserPointsMapFragment : BaseFragment(R.layout.fragment_user_points_map),
     OnUserPointsChangeListener {
     @Inject
     lateinit var presenter: UserPointsMapPresenter
@@ -41,13 +39,6 @@ class UserPointsMapFragment : BaseFragment(),
             }
         }
     }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View =
-        inflater.inflate(R.layout.fragment_user_points_map, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

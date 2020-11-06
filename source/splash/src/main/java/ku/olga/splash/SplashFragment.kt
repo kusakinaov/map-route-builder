@@ -1,10 +1,7 @@
 package ku.olga.splash
 
-import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import kotlinx.android.synthetic.main.fragment_splash.*
 import ku.olga.core_api.AppWithFacade
@@ -12,15 +9,10 @@ import ku.olga.core_api.mediator.MainMediator
 import ku.olga.ui_core.view.CompassView
 import ku.olga.ui_core.base.BaseFragment
 import javax.inject.Inject
-import kotlin.math.abs
-import kotlin.math.min
 
-class SplashFragment : BaseFragment() {
+class SplashFragment : BaseFragment(R.layout.fragment_splash) {
     @Inject
     lateinit var mainMediator: MainMediator
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-            inflater.inflate(R.layout.fragment_splash, container, false)
 
     override fun inject(activity: FragmentActivity) {
         activity.application?.let {

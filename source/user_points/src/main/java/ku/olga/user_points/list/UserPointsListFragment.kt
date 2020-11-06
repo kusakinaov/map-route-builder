@@ -11,7 +11,7 @@ import ku.olga.user_points.OnUserPointsChangeListener
 import ku.olga.user_points.R
 import javax.inject.Inject
 
-class UserPointsListFragment : BaseFragment(), OnUserPointsChangeListener {
+class UserPointsListFragment : BaseFragment(R.layout.fragment_user_points_list), OnUserPointsChangeListener {
     @Inject
     lateinit var userPointsPresenter: UserPointsListPresenter
 
@@ -19,13 +19,6 @@ class UserPointsListFragment : BaseFragment(), OnUserPointsChangeListener {
     lateinit var editPointMediator: EditPointMediator
 
     private var userPointsView: UserPointsListView? = null
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View =
-        inflater.inflate(R.layout.fragment_user_points_list, container, false)
 
     override fun inject(activity: FragmentActivity) {
         activity.application?.let {

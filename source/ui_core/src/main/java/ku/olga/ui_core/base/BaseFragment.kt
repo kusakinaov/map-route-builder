@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -11,7 +12,7 @@ import com.google.android.material.snackbar.Snackbar
 import ku.olga.ui_core.FragmentContainer
 import ku.olga.ui_core.R
 
-abstract class BaseFragment : Fragment() {
+abstract class BaseFragment(@LayoutRes layoutId: Int) : Fragment(layoutId) {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         activity?.let { inject(it) }
