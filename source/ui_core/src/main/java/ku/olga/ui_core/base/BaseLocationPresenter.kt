@@ -1,5 +1,6 @@
 package ku.olga.ui_core.base
 
+import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.os.Looper
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -47,6 +48,7 @@ open class BaseLocationPresenter<T : BaseLocationView>(val preferences: SharedPr
         }
     }
 
+    @SuppressLint("MissingPermission")
     private fun startLocationUpdates() {
         requestingLocationUpdates = true
         locationClient?.requestLocationUpdates(
@@ -68,7 +70,7 @@ open class BaseLocationPresenter<T : BaseLocationView>(val preferences: SharedPr
         priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
     }
 
-    fun onCoordinatesChanged(coordinates: Coordinates) {
+    open fun onCoordinatesChanged(coordinates: Coordinates) {
         this.coordinates = coordinates
         setLastCoordinates(preferences, coordinates)
     }

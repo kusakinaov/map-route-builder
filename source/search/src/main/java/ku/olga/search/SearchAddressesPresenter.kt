@@ -14,13 +14,13 @@ class SearchAddressesPresenter @Inject constructor(
     private val addressRepository: AddressRepository,
     private val poiRepository: POIRepository,
     preferences: SharedPreferences
-) : BaseLocationPresenter<ku.olga.search.SearchAddressesView>(preferences) {
+) : BaseLocationPresenter<SearchAddressesView>(preferences) {
     private var query: String? = null
     private var job: Job? = null
     private val addresses = mutableListOf<SearchAddress>()
     private val categories = mutableListOf<Category>()
 
-    override fun attachView(view: ku.olga.search.SearchAddressesView) {
+    override fun attachView(view: SearchAddressesView) {
         super.attachView(view)
         bindQuery()
         bindData()

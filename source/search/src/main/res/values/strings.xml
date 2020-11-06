@@ -6,4 +6,7 @@
     <string name="button_retry">Повторить</string>
     <string name="hint_search_address">Введите адрес</string>
     <string name="action_search">Поиск</string>
+    <string name="desc_clear_category">Очистить</string>
+    <string name="ttl_categories">Категории</string>
+    <string name="ttl_search_results">Результаты поиска</string>
 </resources>

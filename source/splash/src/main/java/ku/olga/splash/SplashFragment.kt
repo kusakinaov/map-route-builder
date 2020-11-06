@@ -34,17 +34,17 @@ class SplashFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewCompass.onAngleChangeListener = object : CompassView.OnAngleChangeListener {
             override fun onAngleChanged(angle: Double) {
-                val progress = (MAX_ANGLE - min(abs(
-                    MAX_ANGLE - angle), abs(angle))) / MAX_ANGLE * 100
-                viewProgress.setProgress(progress.toInt())
-
-                if (progress >= PERMISSIBLE_VARIATION) {
+//                val progress = (MAX_ANGLE - min(abs(
+//                    MAX_ANGLE - angle), abs(angle))) / MAX_ANGLE * 100
+//                viewProgress.setProgress(progress.toInt())
+//
+//                if (progress >= PERMISSIBLE_VARIATION) {
                     viewCompass.onAngleChangeListener = null
                     activity?.apply {
                         finish()
                         mainMediator.openMainActivity(this)
                     }
-                }
+//                }
             }
         }
     }

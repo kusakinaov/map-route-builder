@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ku.olga.core_api.repository.DirectionsRepository
+import org.osmdroid.util.GeoPoint
 import javax.inject.Inject
 
 class UserPointsMapPresenter @Inject constructor(
@@ -80,7 +81,7 @@ class UserPointsMapPresenter @Inject constructor(
                         false
                     )
                 }
-                userPoints.isNotEmpty() -> moveTo(userPoints, false)
+                userPoints.isNotEmpty() -> moveTo(userPoints.map { GeoPoint(it.lat, it.lon) }, false)
             }
         }
     }

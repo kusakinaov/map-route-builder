@@ -4,9 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Resources
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.location.LocationServices
@@ -60,6 +59,20 @@ class CategoryFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         categoryView?.onResume()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        menu.clear()
+        inflater.inflate(R.menu.categories, menu)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        val view = menu.findItem(R.id.actionSearch)?.actionView
+        if (view is SearchView) {
+            categoryView?.setSearchView(view)
+        }
     }
 
     override fun onPause() {

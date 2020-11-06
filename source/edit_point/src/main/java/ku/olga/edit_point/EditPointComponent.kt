@@ -8,6 +8,7 @@ import ku.olga.core_api.ProvidersFacade
 )
 interface EditPointComponent {
     fun inject(fragment: EditPointFragment)
+    fun inject(fragment: EditPointDialog)
 
     companion object {
         fun build(providersFacade: ProvidersFacade): EditPointComponent =

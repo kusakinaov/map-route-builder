@@ -1,6 +1,5 @@
 package ku.olga.user_points.map
 
-import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.LinearLayout
@@ -13,18 +12,15 @@ import ku.olga.ui_core.REQ_CODE_EDIT_POINT
 import ku.olga.core_api.dto.UserPoint
 import ku.olga.core_api.mediator.EditPointMediator
 import ku.olga.ui_core.base.BaseFragment
-import ku.olga.ui_core.utils.convertDpToPx
-import ku.olga.ui_core.utils.convertSpToPx
-import ku.olga.ui_core.utils.getBitmap
+import ku.olga.ui_core.view.buildDirectionsPolyline
+import ku.olga.ui_core.view.buildRadiusMarkerClusterer
+import ku.olga.ui_core.view.initMapView
 import ku.olga.user_points.R
 import org.osmdroid.bonuspack.clustering.RadiusMarkerClusterer
 import org.osmdroid.events.MapListener
 import org.osmdroid.events.ScrollEvent
 import org.osmdroid.events.ZoomEvent
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
-import org.osmdroid.util.BoundingBox
 import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
@@ -44,43 +40,22 @@ class UserPointsMapViewImpl(
                 addBottomSheetCallback(buildBottomSheetCallback())
                 state = BottomSheetBehavior.STATE_HIDDEN
             }
-            markerOverlay = RadiusMarkerClusterer(it.context).apply {
-                setIcon(
-                    getBitmap(
-                        ContextCompat.getDrawable(
-                            it.context,
-                            R.drawable.cluster
-                        )!!
-                    )
-                )
-                textPaint.apply {
-                    color = ContextCompat.getColor(it.context, R.color.map_icon_text)
-                    textSize =
-                        convertSpToPx(it.resources, 16f)
-                }
-            }
-            it.mapView.apply {
-                setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
-                zoomController.apply {
-                    setVisibility(CustomZoomButtonsController.Visibility.ALWAYS)
-                    minZoomLevel = 3.0
-                    maxZoomLevel = 20.0
-                }
-                setMultiTouchControls(true)
-                addMapListener(buildMapListener())
-                overlays.add(markerOverlay)
+            markerOverlay = buildRadiusMarkerClusterer(
+                it.context,
+                ContextCompat.getDrawable(it.context, R.drawable.cluster)!!,
+                ContextCompat.getColor(it.context, R.color.map_icon_text)
+            )
+            directionsPolyline = buildDirectionsPolyline(
+                it.context,
+                ContextCompat.getColor(it.context, R.color.map_route)
+            )
 
-                directionsPolyline = Polyline().apply {
-                    outlinePaint.apply {
-                        isAntiAlias = true
-                        color = ContextCompat.getColor(context, R.color.map_route)
-                        strokeWidth = convertDpToPx(resources, 4f)
-                        style = Paint.Style.STROKE
-                    }
-                    isGeodesic = true
-                }
-                overlays.add(directionsPolyline)
-            }
+            initMapView(
+                it.mapView,
+                buildMapListener(),
+                arrayListOf(markerOverlay, directionsPolyline)
+            )
+
             it.buttonEdit.setOnClickListener {
                 if (it.tag is UserPoint) {
                     presenter.onClickEditUserPoint(it.tag as UserPoint)
@@ -204,10 +179,13 @@ class UserPointsMapViewImpl(
     }
 
     override fun moveTo(latitude: Double, longitude: Double, zoomLevel: Double, animated: Boolean) {
-        fragment.mapView?.controller?.animateTo(
-            GeoPoint(latitude, longitude),
-            zoomLevel, if (animated) DEFAULT_MOVE_SPEED else NONE_MOVE_SPEED
-        )
+        fragment.mapView?.let {
+            ku.olga.ui_core.view.moveTo(it, latitude, longitude, zoomLevel, animated)
+        }
+    }
+
+    override fun moveTo(geoPoints: List<GeoPoint>, animated: Boolean) {
+        fragment.mapView?.let { ku.olga.ui_core.view.moveTo(it, geoPoints, animated) }
     }
 
     private fun buildMarker(point: UserPoint, poiIcon: Drawable?): Marker =
@@ -219,30 +197,7 @@ class UserPointsMapViewImpl(
             setOnMarkerClickListener { _, _ -> presenter.onClickMarker(point) }
         }
 
-    override fun moveTo(userPoints: List<UserPoint>, animated: Boolean) {
-        val boundingBox = buildBoundingBox(userPoints)
-        fragment.mapView?.apply {
-            post {
-                zoomToBoundingBox(
-                    boundingBox, animated, convertDpToPx(
-                        resources,
-                        BORDER_SIZE
-                    ).toInt()
-                )
-            }
-        }
-    }
-
-    private fun buildBoundingBox(userPoints: List<UserPoint>) =
-        BoundingBox.fromGeoPointsSafe(userPoints.map { GeoPoint(it.lat, it.lon) })
-
     override fun showError(error: CharSequence) {
         fragment.showSnackbar(error)
-    }
-
-    companion object {
-        private const val NONE_MOVE_SPEED = 0L
-        private const val DEFAULT_MOVE_SPEED = 500L
-        private const val BORDER_SIZE = 40f
     }
 }

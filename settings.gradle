@@ -1,3 +1,5 @@
+include ':osrm'
+include ':nominatim'
 include ':source:splash'
 rootProject.name = 'map-route-builder'
 include ':app'

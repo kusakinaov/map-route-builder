@@ -45,7 +45,7 @@ class UserPointsViewImpl(
             }
             buttonAdd.apply {
                 setOnClickListener {
-                    searchMediator.openSearch(fragment, REQ_CODE_SEARCH_POINT)
+                    searchMediator.openSearchMap(fragment, REQ_CODE_SEARCH_POINT)
                 }
                 show()
             }

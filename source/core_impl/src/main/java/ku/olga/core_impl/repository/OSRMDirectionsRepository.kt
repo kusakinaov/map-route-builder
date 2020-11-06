@@ -1,51 +1,17 @@
 package ku.olga.core_impl.repository
 
-import com.google.gson.GsonBuilder
 import ku.olga.core_api.dto.Coordinates
-import ku.olga.route_builder.data.repository.osrm.TripResponse
-import ku.olga.core_impl.repository.osrm.gson.LocationTypeAdapter
 import ku.olga.core_api.repository.DirectionsRepository
-import java.net.URL
+import ku.olga.osrm.OSRMHelper
 import javax.inject.Inject
 
+import ku.olga.osrm.model.Coordinates as OSRMCoordinates
+
 class OSRMDirectionsRepository @Inject constructor() : DirectionsRepository {
-    private val gson = GsonBuilder()
-        .registerTypeAdapter(Coordinates::class.java, LocationTypeAdapter()).create()
+    override suspend fun getDirections(points: List<Coordinates>): List<Coordinates> =
+        OSRMHelper.getFootDirections(points.map { it.toOSRMCoordinates() })
+            .map { it.toDTOCoordinates() }
 
-    override suspend fun getDirections(points: List<Coordinates>): List<Coordinates> {
-        val url = buildServerUrl(SERVER, Service.trip, Profile.foot, VERSION, points)
-        val text = URL(url).readText()
-        val coordinates = mutableListOf<Coordinates>()
-        gson.fromJson(text, TripResponse::class.java).trips.let {
-            if (it.isNotEmpty()) {
-                for (leg in it[0].legs) {
-                    for (step in leg.steps) {
-                        for (intersection in step.intersections) {
-                            coordinates.add(intersection.location)
-                        }
-                    }
-                }
-            }
-        }
-        return coordinates
-    }
-
-    private fun buildServerUrl(
-        server: String,
-        service: Service,
-        profile: Profile,
-        version: String,
-        coordinates: List<Coordinates>
-    ) =
-        "$server/${service.name}/$version/${profile.name}/${coordinates.joinToString(
-            separator = ";",
-            transform = { "${it.longitude},${it.latitude}" })}?steps=true"//&geometries=geojson"
-
-    companion object {
-        private const val SERVER = "http://router.project-osrm.org"
-        private const val VERSION = "v1"
-    }
-
-    enum class Profile { car, bike, foot }
-    enum class Service { route, nearest, table, match, trip, tile }
+    fun Coordinates.toOSRMCoordinates() = OSRMCoordinates(latitude, longitude)
+    fun OSRMCoordinates.toDTOCoordinates() = Coordinates(latitude, longitude)
 }
