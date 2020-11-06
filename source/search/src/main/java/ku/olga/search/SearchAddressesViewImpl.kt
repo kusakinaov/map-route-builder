@@ -2,17 +2,15 @@ package ku.olga.search
 
 import android.view.View
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_search.view.*
 import kotlinx.android.synthetic.main.layout_error.view.*
-import ku.olga.ui_core.REQ_CODE_LOCATION_PERMISSION
 import ku.olga.core_api.dto.Category
 import ku.olga.core_api.dto.SearchAddress
 
-class SearchAddressesViewImpl(
-    private val fragment: Fragment,
+abstract class SearchAddressesViewImpl(
+    private val view: View,
     private val presenter: SearchAddressesPresenter,
     private val addressesAdapter: AddressesAdapter,
     private val categoriesAdapter: CategoriesAdapter
@@ -38,7 +36,7 @@ class SearchAddressesViewImpl(
     }
 
     init {
-        fragment.view?.apply {
+        view.apply {
             recyclerView.apply {
                 layoutManager = LinearLayoutManager(context)
                 adapter = addressesAdapter
@@ -53,7 +51,7 @@ class SearchAddressesViewImpl(
     }
 
     override fun showEmpty() {
-        fragment.view?.apply {
+        view.apply {
             groupError.visibility = View.GONE
             recyclerView.visibility = View.GONE
             textViewEmpty.visibility = View.VISIBLE
@@ -62,18 +60,14 @@ class SearchAddressesViewImpl(
     }
 
     override fun hasLocationPermission(): Boolean =
-        ku.olga.ui_core.utils.hasLocationPermission(fragment.context)
-
-    override fun requestLocationPermission() {
-        ku.olga.ui_core.utils.requestLocationPermission(fragment, REQ_CODE_LOCATION_PERMISSION)
-    }
+        ku.olga.ui_core.utils.hasLocationPermission(view.context)
 
     override fun bindQuery(query: String?) {
         searchView?.setQuery(query, false)
     }
 
     override fun showAddresses() {
-        fragment.view?.apply {
+        view.apply {
             groupError.visibility = View.GONE
             recyclerView.apply {
                 visibility = View.VISIBLE
@@ -89,7 +83,7 @@ class SearchAddressesViewImpl(
     }
 
     override fun showCategories() {
-        fragment.view?.apply {
+        view.apply {
             groupError.visibility = View.GONE
             recyclerView.apply {
                 visibility = View.VISIBLE
@@ -101,7 +95,7 @@ class SearchAddressesViewImpl(
     }
 
     override fun showNoSearch() {
-        fragment.view?.apply {
+        view.apply {
             groupError.visibility = View.GONE
             recyclerView.visibility = View.GONE
             textViewEmpty.visibility = View.GONE
@@ -118,7 +112,7 @@ class SearchAddressesViewImpl(
     }
 
     override fun showProgress() {
-        fragment.view?.apply {
+        view.apply {
             groupError.visibility = View.GONE
             recyclerView.visibility = View.GONE
             textViewEmpty.visibility = View.GONE
@@ -127,7 +121,7 @@ class SearchAddressesViewImpl(
     }
 
     override fun hideProgress() {
-        fragment.view?.progressBar?.visibility = View.GONE
+        view.progressBar?.visibility = View.GONE
     }
 
     override fun showError(error: CharSequence) {
@@ -135,7 +129,7 @@ class SearchAddressesViewImpl(
     }
 
     override fun showDefaultError() {
-        fragment.view?.apply {
+        view.apply {
             recyclerView.visibility = View.GONE
             textViewEmpty.visibility = View.GONE
             progressBar.visibility = View.GONE

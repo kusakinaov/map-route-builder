@@ -18,6 +18,7 @@ import ku.olga.core_api.dto.UserPoint
 import ku.olga.core_api.dto.UserPointType
 import ku.olga.core_api.mediator.CategoryMediator
 import ku.olga.core_api.mediator.EditPointMediator
+import ku.olga.ui_core.REQ_CODE_LOCATION_PERMISSION
 import ku.olga.ui_core.base.BaseFragment
 import ku.olga.ui_core.utils.hideKeyboard
 import javax.inject.Inject
@@ -60,14 +61,18 @@ class SearchAddressesFragment : BaseFragment(R.layout.fragment_search) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        searchAddressesView = SearchAddressesViewImpl(
-            this,
-            searchPresenter,
-            searchAdapter,
-            categoriesAdapter
-        )
-        searchAddressesView?.onAttach()
+        searchAddressesView = buildSearchAddressView(view).apply { onAttach() }
     }
+
+    private fun buildSearchAddressView(view: View) =
+        object : SearchAddressesViewImpl(view, searchPresenter, searchAdapter, categoriesAdapter) {
+            override fun requestLocationPermission() {
+                ku.olga.ui_core.utils.requestLocationPermission(
+                    this@SearchAddressesFragment,
+                    REQ_CODE_LOCATION_PERMISSION
+                )
+            }
+        }
 
     private fun openSearchAddress(searchAddress: SearchAddress) {
         hideKeyboard()
