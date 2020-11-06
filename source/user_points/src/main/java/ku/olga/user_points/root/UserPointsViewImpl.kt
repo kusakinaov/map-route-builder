@@ -4,21 +4,17 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.fragment_user_points.*
 import kotlinx.android.synthetic.main.fragment_user_points.view.*
 import kotlinx.android.synthetic.main.fragment_user_points.view.viewPager
-import ku.olga.ui_core.REQ_CODE_SEARCH_POINT
 import ku.olga.core_api.dto.UserPoint
-import ku.olga.core_api.mediator.SearchMediator
-import ku.olga.ui_core.base.BaseFragment
 import ku.olga.user_points.OnUserPointsChangeListener
 import ku.olga.user_points.R
 
-class UserPointsViewImpl(
-    private val fragment: BaseFragment,
+abstract class UserPointsViewImpl(
+    private val view: View,
+    private val tabLayout: TabLayout?,
     private val presenter: UserPointsPresenter,
-    private val userPointsAdapter: UserPointsAdapter,
-    private val searchMediator: SearchMediator
+    private val userPointsAdapter: UserPointsAdapter
 ) : UserPointsView {
     private val pageChangeListener = object : ViewPager.OnPageChangeListener {
         override fun onPageScrollStateChanged(state: Int) {
@@ -37,48 +33,45 @@ class UserPointsViewImpl(
     }
 
     init {
-        fragment.view?.apply {
+        view.apply {
             viewPager.apply {
                 adapter = userPointsAdapter
                 addOnPageChangeListener(pageChangeListener)
                 setOnTouchListener { _, _ -> false }
             }
             buttonAdd.apply {
-                setOnClickListener {
-                    searchMediator.openSearchMap(fragment, REQ_CODE_SEARCH_POINT)
-                }
+                setOnClickListener { openSearchMap() }
                 show()
             }
         }
     }
 
     override fun bindUserPoints(userPoints: List<UserPoint>) {
-        getChildFragment().let {
+        getChildFragment(currentItem).let {
             if (it is OnUserPointsChangeListener) {
                 it.onUserPointsChanged(userPoints)
             }
         }
     }
 
-    private fun getChildFragment(): Fragment? {
-        val fragments = fragment.childFragmentManager.fragments
-        val currentPosition = fragment.viewPager?.currentItem ?: 0
-        return if (fragments.size > currentPosition) fragments[currentPosition] else null
-    }
+    abstract fun getChildFragment(position: Int): Fragment?
+
+    private val currentItem: Int
+        get() = view.viewPager.currentItem
 
     override fun onAttach() {
-        fragment.activity?.findViewById<TabLayout>(R.id.tabLayout)?.apply {
+        tabLayout?.apply {
             addTab(newTab().setText(R.string.tab_user_points_list), UserPointsAdapter.LIST)
             addTab(newTab().setText(R.string.tab_user_points_map), UserPointsAdapter.MAP)
             visibility = View.VISIBLE
-            fragment.view?.viewPager?.let { setupWithViewPager(it) }
+            view.viewPager?.let { setupWithViewPager(it) }
         }
         presenter.attachView(this)
     }
 
     override fun onDetach() {
         presenter.detachView()
-        fragment.activity?.findViewById<TabLayout>(R.id.tabLayout)?.apply {
+        tabLayout?.apply {
             visibility = View.GONE
             removeAllTabs()
             setupWithViewPager(null)
@@ -86,10 +79,12 @@ class UserPointsViewImpl(
     }
 
     override fun onShown() {
-        fragment.buttonAdd?.hide()
+        view.buttonAdd?.hide()
     }
 
     override fun onHide() {
-        fragment.buttonAdd?.show()
+        view.buttonAdd?.show()
     }
+
+    abstract fun openSearchMap()
 }
