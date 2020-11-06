@@ -58,16 +58,17 @@ class CategoryFragment : BaseFragment(R.layout.fragment_category) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        categoryView = object : CategoryViewImpl(view, categoryPresenter) {
-            override fun openEditPOI(userPoint: UserPoint) {
-                editPoint(userPoint)
-            }
+        categoryView = buildCategoryView(view).apply { onAttach() }
+    }
 
-            override fun requestLocationPermission() {
-                this@CategoryFragment.requestLocationPermission()
-            }
+    private fun buildCategoryView(view: View) = object : CategoryViewImpl(view, categoryPresenter) {
+        override fun openEditPOI(userPoint: UserPoint) {
+            editPoint(userPoint)
         }
-        categoryView?.onAttach()
+
+        override fun requestLocationPermission() {
+            this@CategoryFragment.requestLocationPermission()
+        }
     }
 
     override fun onResume() {

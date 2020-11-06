@@ -32,9 +32,7 @@ class UserPointsListFragment : BaseFragment(R.layout.fragment_user_points_list),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        userPointsView = buildUserPointsListView(view).apply {
-            onAttach()
-        }
+        userPointsView = buildUserPointsListView(view).apply { onAttach() }
     }
 
     private fun buildUserPointsListView(view: View) =

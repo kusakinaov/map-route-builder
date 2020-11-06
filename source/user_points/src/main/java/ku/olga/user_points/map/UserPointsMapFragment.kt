@@ -53,8 +53,7 @@ class UserPointsMapFragment : BaseFragment(R.layout.fragment_user_points_map),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mapView = buildUserPointsMapView(view)
-        mapView.onAttach()
+        mapView = buildUserPointsMapView(view).apply { onAttach() }
     }
 
     private fun buildUserPointsMapView(view: View) =

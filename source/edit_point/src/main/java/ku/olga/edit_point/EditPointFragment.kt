@@ -38,8 +38,7 @@ class EditPointFragment : BaseFragment(R.layout.fragment_edit_point) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        editPointView = buildEditPointView(view)
-        editPointView?.onAttach()
+        editPointView = buildEditPointView(view).apply { onAttach() }
     }
 
     private fun buildEditPointView(view: View) = object : EditPointViewImpl(view, presenter) {
