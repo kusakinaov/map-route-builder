@@ -45,8 +45,36 @@ class EditPointFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        editPointView = EditPointViewImpl(this, presenter, confirmationMediator)
+        editPointView = buildEditPointView(view)
         editPointView?.onAttach()
+    }
+
+    private fun buildEditPointView(view: View) = object : EditPointViewImpl(view, presenter) {
+        override fun openConfirmation(title: String) {
+            confirmationMediator.showConfirmation(
+                this@EditPointFragment,
+                REQ_CODE_CONFIRM_DELETE_POINT,
+                getString(R.string.question_confirm_delete_point, title),
+                Bundle()
+            )
+        }
+
+        override fun notifyCreateSuccessful() {
+            popBackStack()
+        }
+
+        override fun notifyEditSuccessful() {
+            popBackStack()
+        }
+
+        override fun invalidateOptionsMenu() {
+            this@EditPointFragment.invalidateOptionsMenu()
+        }
+
+        override fun notifyDeleteSuccessful() {
+            popBackStack()
+            targetFragment?.onActivityResult(targetRequestCode, Activity.RESULT_OK, Intent())
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
