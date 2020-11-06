@@ -8,10 +8,13 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.location.LocationServices
-import kotlinx.android.synthetic.main.fragment_search_map.view.*
 import ku.olga.core_api.AppWithFacade
+import ku.olga.core_api.dto.UserPoint
 import ku.olga.core_api.mediator.EditPointMediator
+import ku.olga.ui_core.REQ_CODE_EDIT_POINT
+import ku.olga.ui_core.REQ_CODE_LOCATION_PERMISSION
 import ku.olga.ui_core.base.BaseFragment
+import ku.olga.ui_core.utils.hideKeyboard
 import javax.inject.Inject
 
 class SearchMapFragment : BaseFragment(R.layout.fragment_search_map) {
@@ -42,10 +45,25 @@ class SearchMapFragment : BaseFragment(R.layout.fragment_search_map) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        searchMapView = SearchMapViewImpl(this, editPointMediator, presenter).apply {
-            mapView = view.mapView
-            onAttach()
+        searchMapView = buildSearchMapView(view).apply { onAttach() }
+    }
+
+    private fun buildSearchMapView(view: View) = object : SearchMapViewImpl(view, presenter) {
+        override fun hideKeyboard() {
+            this@SearchMapFragment.hideKeyboard()
         }
+
+        override fun showEditDialog(userPoint: UserPoint) {
+            editPointMediator.editPoint(this@SearchMapFragment, REQ_CODE_EDIT_POINT, userPoint)
+        }
+
+        override fun requestLocationPermission() {
+            ku.olga.ui_core.utils.requestLocationPermission(
+                this@SearchMapFragment,
+                REQ_CODE_LOCATION_PERMISSION
+            )
+        }
+
     }
 
     override fun onResume() {

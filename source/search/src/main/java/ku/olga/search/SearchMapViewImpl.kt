@@ -5,20 +5,13 @@ import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.fragment_search_map.view.*
 import ku.olga.core_api.dto.Category
 import ku.olga.core_api.dto.POI
 import ku.olga.core_api.dto.SearchAddress
-import ku.olga.core_api.dto.UserPoint
-import ku.olga.core_api.mediator.EditPointMediator
-import ku.olga.ui_core.REQ_CODE_EDIT_POINT
-import ku.olga.ui_core.REQ_CODE_LOCATION_PERMISSION
 import ku.olga.ui_core.utils.hasLocationPermission
-import ku.olga.ui_core.utils.hideKeyboard
-import ku.olga.ui_core.utils.requestLocationPermission
 import ku.olga.ui_core.view.MIN_ZOOM_LEVEL
 import ku.olga.ui_core.view.buildRadiusMarkerClusterer
 import ku.olga.ui_core.view.initMapView
@@ -33,9 +26,8 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import ku.olga.core_api.dto.BoundingBox as AppBoundingBox
 
-class SearchMapViewImpl(
-    private val fragment: Fragment,
-    private val editPointMediator: EditPointMediator,
+abstract class SearchMapViewImpl(
+    private val view: View,
     private val presenter: SearchMapPresenter
 ) : SearchMapView {
     override var searchView: SearchView? = null
@@ -44,7 +36,6 @@ class SearchMapViewImpl(
             value?.setOnQueryTextListener(buildQueryTextListener())
             presenter.bindQuery()
         }
-    override var mapView: MapView? = null
 
     private lateinit var markerOverlay: RadiusMarkerClusterer
 
@@ -62,7 +53,7 @@ class SearchMapViewImpl(
 
     override fun onAttach() {
         setupMap()
-        fragment.view?.apply {
+        view.apply {
             setupBottomSheet(layoutBottomSheet)
 
             imageViewClear.setOnClickListener { presenter.onClickClear() }
@@ -80,7 +71,7 @@ class SearchMapViewImpl(
     }
 
     private fun setupMap() {
-        mapView?.let {
+        view.mapView?.let {
             markerOverlay = buildRadiusMarkerClusterer(
                 it.context,
                 ContextCompat.getDrawable(it.context, R.drawable.cluster)!!,
@@ -98,7 +89,7 @@ class SearchMapViewImpl(
                 addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
                     override fun onSlide(bottomSheet: View, slideOffset: Float) {
                         if (slideOffset == 0f || slideOffset == 1f) {
-                            fragment.hideKeyboard()
+                            hideKeyboard()
                         }
                     }
 
@@ -107,6 +98,8 @@ class SearchMapViewImpl(
                 })
             }
     }
+
+    abstract fun hideKeyboard()
 
     override fun onDetach() {
         presenter.detachView()
@@ -117,7 +110,7 @@ class SearchMapViewImpl(
     }
 
     override fun bindBoundingBox(boundingBox: AppBoundingBox) {
-        mapView?.let {
+        view.mapView?.let {
             ku.olga.ui_core.view.moveTo(
                 it, listOf(
                     GeoPoint(boundingBox.latSouth, boundingBox.lonEast),
@@ -129,7 +122,7 @@ class SearchMapViewImpl(
 
     override fun bindCategories(categories: List<Category>) {
         categoriesAdapter.setItems(categories)
-        mapView?.let {
+        view.mapView?.let {
             markerOverlay.items.clear()
             markerOverlay.invalidate()
             it.invalidate()
@@ -138,7 +131,7 @@ class SearchMapViewImpl(
 
     override fun bindAddresses(addresses: List<SearchAddress>) {
         addressesAdapter.setItems(addresses)
-        mapView?.let {
+        view.mapView?.let {
             val icon = ContextCompat.getDrawable(it.context, R.drawable.ic_place)
             markerOverlay.items.clear()
             for (address in addresses) {
@@ -161,7 +154,7 @@ class SearchMapViewImpl(
 
     override fun bindPOIs(pois: List<POI>) {
         poisAdapter.setItems(pois)
-        mapView?.let {
+        view.mapView?.let {
             val icon = ContextCompat.getDrawable(it.context, R.drawable.ic_place)
             markerOverlay.items.clear()
             for (poi in pois) {
@@ -189,7 +182,7 @@ class SearchMapViewImpl(
         poiIcon: Drawable?,
         markerClickListener: Marker.OnMarkerClickListener? = null
     ): Marker =
-        Marker(mapView).apply {
+        Marker(view.mapView).apply {
             this.title = title
             position = GeoPoint(latitude, longitude)
             icon = poiIcon
@@ -199,56 +192,52 @@ class SearchMapViewImpl(
     override fun hideAll() {
         markerOverlay.items.clear()
         markerOverlay.invalidate()
-        mapView?.invalidate()
+        view.mapView?.invalidate()
     }
 
     override fun showPOIs(category: Category?) {
-        fragment.view?.apply {
+        view.apply {
             textViewTitle.text = category?.title ?: ""
             recyclerItems.adapter = poisAdapter
         }
     }
 
     override fun showAddresses() {
-        fragment.view?.apply {
+        view.apply {
             textViewTitle.setText(R.string.ttl_search_results)
             recyclerItems.adapter = addressesAdapter
         }
     }
 
     override fun showCategories() {
-        fragment.view?.apply {
+        view.apply {
             textViewTitle.setText(R.string.ttl_categories)
             recyclerItems.adapter = categoriesAdapter
         }
     }
 
     override fun bindClearButton(visible: Boolean) {
-        fragment.view?.imageViewClear?.visibility = if (visible) View.VISIBLE else View.GONE
+        view.imageViewClear?.visibility = if (visible) View.VISIBLE else View.GONE
     }
 
-    override fun hasLocationPermission(): Boolean = hasLocationPermission(fragment.context)
-
-    override fun requestLocationPermission() {
-        requestLocationPermission(fragment, REQ_CODE_LOCATION_PERMISSION)
-    }
+    override fun hasLocationPermission(): Boolean = hasLocationPermission(view.context)
 
     override fun onResume() {
-        mapView?.onResume()
+        view.mapView?.onResume()
     }
 
     override fun onPause() {
-        mapView?.onPause()
+        view.mapView?.onPause()
     }
 
     override fun moveTo(latitude: Double, longitude: Double, zoomLevel: Double, animated: Boolean) {
-        mapView?.let {
+        view.mapView?.let {
             ku.olga.ui_core.view.moveTo(it, latitude, longitude, zoomLevel, animated)
         }
     }
 
     override fun moveTo(geoPoints: List<GeoPoint>, animated: Boolean) {
-        mapView?.let {
+        view.mapView?.let {
             ku.olga.ui_core.view.moveTo(it, geoPoints, animated)
         }
     }
@@ -296,13 +285,9 @@ class SearchMapViewImpl(
 
     override fun closeBottomSheet(): Boolean {
         val expanded = isBottomSheetExpanded
-        fragment.hideKeyboard()
+        hideKeyboard()
         if (expanded) bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         return expanded
-    }
-
-    override fun showEditDialog(userPoint: UserPoint) {
-        editPointMediator.editPoint(fragment, REQ_CODE_EDIT_POINT, userPoint)
     }
 
     private val isBottomSheetExpanded: Boolean
