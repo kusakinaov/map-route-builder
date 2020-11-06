@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.FragmentActivity
 import ku.olga.core_api.AppWithFacade
 import ku.olga.core_api.dto.UserPoint
@@ -30,6 +31,15 @@ class UserPointsMapFragment : BaseFragment(R.layout.fragment_user_points_map),
     override fun onAttach(context: Context) {
         super.onAttach(context)
         Configuration.getInstance().load(context, preferences)
+
+        activity?.onBackPressedDispatcher?.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (!mapView.hideUserPoint()) {
+                    isEnabled = false
+                    requireActivity().onBackPressed()
+                }
+            }
+        })
     }
 
     override fun inject(activity: FragmentActivity) {
@@ -60,8 +70,6 @@ class UserPointsMapFragment : BaseFragment(R.layout.fragment_user_points_map),
         super.onDestroyView()
         mapView.onDetach()
     }
-
-    override fun isPressBackConsumed() = mapView.hideUserPoint()
 
     override fun setTitle() {}
 

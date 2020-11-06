@@ -62,8 +62,6 @@ abstract class BaseFragment(@LayoutRes layoutId: Int) : Fragment(layoutId) {
 
     open fun getBackButtonRes() = R.drawable.ic_back
 
-    open fun isPressBackConsumed() = false
-
     fun popBackStack() {
         fragmentManager?.apply {
             if (!isStateSaved)

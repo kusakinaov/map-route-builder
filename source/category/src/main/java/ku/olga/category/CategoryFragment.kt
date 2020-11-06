@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.*
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -39,6 +40,14 @@ class CategoryFragment : BaseFragment(R.layout.fragment_category) {
             category = arguments?.getSerializable(CATEGORY) as Category?
             locationClient = LocationServices.getFusedLocationProviderClient(context)
         }
+        activity?.onBackPressedDispatcher?.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (categoryView?.hidePOIDetails() != true) {
+                    isEnabled = false
+                    popBackStack()
+                }
+            }
+        })
     }
 
     override fun inject(activity: FragmentActivity) {
@@ -89,8 +98,6 @@ class CategoryFragment : BaseFragment(R.layout.fragment_category) {
         super.onDestroyView()
         categoryView?.onDetach()
     }
-
-    override fun isPressBackConsumed(): Boolean = categoryView?.hidePOIDetails() ?: false
 
     override fun onRequestPermissionsResult(
         requestCode: Int,

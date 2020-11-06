@@ -3,6 +3,7 @@ package ku.olga.search
 import android.content.Context
 import android.os.Bundle
 import android.view.*
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -29,6 +30,14 @@ class SearchMapFragment : BaseFragment(R.layout.fragment_search_map) {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         presenter.locationClient = LocationServices.getFusedLocationProviderClient(context)
+        activity?.onBackPressedDispatcher?.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (searchMapView?.closeBottomSheet() != true) {
+                    isEnabled = false
+                    popBackStack()
+                }
+            }
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -64,8 +73,6 @@ class SearchMapFragment : BaseFragment(R.layout.fragment_search_map) {
         super.onDestroyView()
         searchMapView?.onDetach()
     }
-
-    override fun isPressBackConsumed(): Boolean = searchMapView?.isPressBackConsumed() ?: false
 
     companion object {
         fun newInstance(target: Fragment, requestCode: Int) = SearchMapFragment().apply {

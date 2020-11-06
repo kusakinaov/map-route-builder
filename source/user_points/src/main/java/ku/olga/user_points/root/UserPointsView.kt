@@ -5,6 +5,5 @@ import ku.olga.ui_core.base.BaseView
 import ku.olga.user_points.map.UserPointsMapFragment
 
 interface UserPointsView : BaseView, UserPointsMapFragment.BottomSheetCallback {
-    fun isPressBackConsumed(): Boolean
     fun bindUserPoints(userPoints: List<UserPoint>)
 }

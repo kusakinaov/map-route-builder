@@ -227,12 +227,6 @@ class SearchMapViewImpl(
         fragment.view?.imageViewClear?.visibility = if (visible) View.VISIBLE else View.GONE
     }
 
-    override fun isPressBackConsumed(): Boolean {
-        val expanded = isBottomSheetExpanded
-        if (expanded) closeBottomSheet()
-        return expanded
-    }
-
     override fun hasLocationPermission(): Boolean = hasLocationPermission(fragment.context)
 
     override fun requestLocationPermission() {
@@ -300,9 +294,11 @@ class SearchMapViewImpl(
         }
     }
 
-    override fun closeBottomSheet() {
+    override fun closeBottomSheet(): Boolean {
+        val expanded = isBottomSheetExpanded
         fragment.hideKeyboard()
-        bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+        if (expanded) bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+        return expanded
     }
 
     override fun showEditDialog(userPoint: UserPoint) {

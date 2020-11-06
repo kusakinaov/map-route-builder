@@ -55,13 +55,5 @@ class MainActivity : AppCompatActivity(), FragmentContainer {
         else -> super.onOptionsItemSelected(item)
     }
 
-    override fun onBackPressed() {
-        getFragment().let {
-            if (!(it is BaseFragment && it.isPressBackConsumed())) {
-                super.onBackPressed()
-            }
-        }
-    }
-
     override fun getFragmentContainerId(): Int = R.id.layoutFragment
 }

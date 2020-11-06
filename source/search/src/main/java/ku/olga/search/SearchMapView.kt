@@ -24,7 +24,7 @@ interface SearchMapView : BaseMapView, BaseLocationView {
     fun showCategories()
     fun bindClearButton(visible: Boolean)
 
-    fun isPressBackConsumed(): Boolean
-    fun closeBottomSheet()
+    fun closeBottomSheet(): Boolean
+
     fun showEditDialog(userPoint: UserPoint)
 }

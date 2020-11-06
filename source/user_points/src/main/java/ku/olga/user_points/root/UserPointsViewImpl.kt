@@ -52,11 +52,6 @@ class UserPointsViewImpl(
         }
     }
 
-    override fun isPressBackConsumed() = when (val childFragment = getChildFragment()) {
-        is BaseFragment -> childFragment.isPressBackConsumed()
-        else -> false
-    }
-
     override fun bindUserPoints(userPoints: List<UserPoint>) {
         getChildFragment().let {
             if (it is OnUserPointsChangeListener) {
