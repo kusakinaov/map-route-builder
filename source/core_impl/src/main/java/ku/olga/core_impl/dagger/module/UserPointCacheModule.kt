@@ -8,7 +8,6 @@ import dagger.Provides
 import dagger.Reusable
 import ku.olga.core_impl.repository.PointsDbCacheRepository
 import ku.olga.core_api.repository.PointsCacheRepository
-import ku.olga.core_api.annotation.ApplicationContext
 import ku.olga.core_api.database.AppDatabaseContract
 import ku.olga.core_impl.room.AppDatabase
 import javax.inject.Singleton
@@ -17,7 +16,7 @@ import javax.inject.Singleton
 class UserPointCacheModule {
     @Provides
     @Reusable
-    fun providesAppDatabase(@ApplicationContext context: Context): AppDatabaseContract =
+    fun providesAppDatabase(context: Context): AppDatabaseContract =
         Room
             .databaseBuilder(context, AppDatabase::class.java, "route-builder-database")
             .fallbackToDestructiveMigration()
