@@ -44,4 +44,5 @@ dependencies {
     implementation project(':source:ui_core')
     implementation project(':source:main')
     implementation project(':source:user_points_list')
+    implementation project(':source:user_points_map')
 }

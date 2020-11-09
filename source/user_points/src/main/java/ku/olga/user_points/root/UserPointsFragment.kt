@@ -13,11 +13,10 @@ import ku.olga.ui_core.REQ_CODE_SEARCH_POINT
 import ku.olga.ui_core.base.BaseFragment
 import ku.olga.user_points.R
 import ku.olga.user_points_list.UserPointsListFragment
-import ku.olga.user_points.map.UserPointsMapFragment
+import ku.olga.user_points_map.UserPointsMapFragment
 import javax.inject.Inject
 
-class UserPointsFragment : BaseFragment(R.layout.fragment_user_points),
-    UserPointsMapFragment.BottomSheetCallback, UserPointsListFragment.OnOrderChangeCallback {
+class UserPointsFragment : BaseFragment(R.layout.fragment_user_points), UserPointsMapFragment.BottomSheetCallback, UserPointsListFragment.OnOrderChangeCallback {
     @Inject
     lateinit var presenter: UserPointsPresenter
 

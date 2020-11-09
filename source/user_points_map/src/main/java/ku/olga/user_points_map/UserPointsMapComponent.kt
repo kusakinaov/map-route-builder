@@ -1,4 +1,4 @@
-package ku.olga.user_points.map
+package ku.olga.user_points_map
 
 import dagger.Component
 import ku.olga.core_api.ProvidersFacade

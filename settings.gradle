@@ -1,3 +1,4 @@
+include ':source:user_points_map'
 include ':source:user_points_list'
 include ':osrm'
 include ':nominatim'

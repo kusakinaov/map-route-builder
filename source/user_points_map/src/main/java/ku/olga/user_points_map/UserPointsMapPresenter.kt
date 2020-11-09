@@ -1,4 +1,4 @@
-package ku.olga.user_points.map
+package ku.olga.user_points_map
 
 import android.content.SharedPreferences
 import ku.olga.core_api.dto.Coordinates
@@ -18,13 +18,13 @@ class UserPointsMapPresenter @Inject constructor(
     private val directionsRepository: DirectionsRepository,
     private val preferences: SharedPreferences
 ) :
-    BasePresenter<UserPointsMapView>() {
+    BasePresenter<ku.olga.user_points_map.UserPointsMapView>() {
     private val userPoints = mutableListOf<UserPoint>()
     private var center: Coordinates? = null
     private var zoomLevel: Double =
         DEFAULT_ZOOM_LEVEL
 
-    override fun attachView(view: UserPointsMapView) {
+    override fun attachView(view: ku.olga.user_points_map.UserPointsMapView) {
         super.attachView(view)
         when {
             center != null -> moveToCenter()

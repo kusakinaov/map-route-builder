@@ -1,4 +1,4 @@
-package ku.olga.user_points.map
+package ku.olga.user_points_map
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -11,13 +11,11 @@ import ku.olga.core_api.dto.UserPoint
 import ku.olga.core_api.mediator.EditPointMediator
 import ku.olga.ui_core.REQ_CODE_EDIT_POINT
 import ku.olga.ui_core.base.BaseFragment
-import ku.olga.user_points_list.OnUserPointsChangeListener
-import ku.olga.user_points.R
 import org.osmdroid.config.Configuration
 import javax.inject.Inject
 
 class UserPointsMapFragment : BaseFragment(R.layout.fragment_user_points_map),
-    ku.olga.user_points_list.OnUserPointsChangeListener {
+    OnUserPointsChangeListener {
     @Inject
     lateinit var presenter: UserPointsMapPresenter
 
@@ -57,7 +55,7 @@ class UserPointsMapFragment : BaseFragment(R.layout.fragment_user_points_map),
     }
 
     private fun buildUserPointsMapView(view: View) =
-        object : UserPointsMapViewImpl(view, presenter, bottomSheetCallback) {
+        object : ku.olga.user_points_map.UserPointsMapViewImpl(view, presenter, bottomSheetCallback) {
             override fun editUserPoint(userPoint: UserPoint) {
                 this@UserPointsMapFragment.editUserPoint(userPoint)
             }

@@ -6,5 +6,4 @@
     <string name="desc_add_point">Добавить точку</string>
     <string name="hint_no_title">Нет заголовка</string>
     <string name="hint_no_description">Нет описания</string>
-    <string name="error_build_directions">Не удалось построить маршрут.</string>
 </resources>

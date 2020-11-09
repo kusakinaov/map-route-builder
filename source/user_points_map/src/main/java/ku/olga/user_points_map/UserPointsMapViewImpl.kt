@@ -1,4 +1,4 @@
-package ku.olga.user_points.map
+package ku.olga.user_points_map
 
 import android.graphics.drawable.Drawable
 import android.view.View
@@ -12,7 +12,6 @@ import ku.olga.core_api.dto.UserPoint
 import ku.olga.ui_core.view.buildDirectionsPolyline
 import ku.olga.ui_core.view.buildRadiusMarkerClusterer
 import ku.olga.ui_core.view.initMapView
-import ku.olga.user_points.R
 import org.osmdroid.bonuspack.clustering.RadiusMarkerClusterer
 import org.osmdroid.events.MapListener
 import org.osmdroid.events.ScrollEvent
@@ -26,7 +25,7 @@ abstract class UserPointsMapViewImpl(
     private val view: View,
     private val presenter: UserPointsMapPresenter,
     private val bottomSheetCallback: UserPointsMapFragment.BottomSheetCallback?
-) : UserPointsMapView {
+) : ku.olga.user_points_map.UserPointsMapView {
     private var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>? = null
     private var markerOverlay: RadiusMarkerClusterer
     private var directionsPolyline: Polyline
