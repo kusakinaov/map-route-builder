@@ -1,4 +1,4 @@
-package ku.olga.user_points.root
+package ku.olga.user_points
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

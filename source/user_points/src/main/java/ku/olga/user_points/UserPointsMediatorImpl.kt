@@ -1,4 +1,4 @@
-package ku.olga.user_points.root
+package ku.olga.user_points
 
 import androidx.fragment.app.FragmentManager
 import ku.olga.core_api.mediator.UserPointsMediator

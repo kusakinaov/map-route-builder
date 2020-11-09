@@ -1,4 +1,4 @@
-package ku.olga.user_points.root
+package ku.olga.user_points
 
 import android.content.Context
 import android.content.res.Resources
@@ -11,7 +11,6 @@ import ku.olga.core_api.AppWithFacade
 import ku.olga.core_api.mediator.SearchMediator
 import ku.olga.ui_core.REQ_CODE_SEARCH_POINT
 import ku.olga.ui_core.base.BaseFragment
-import ku.olga.user_points.R
 import ku.olga.user_points_list.UserPointsListFragment
 import ku.olga.user_points_map.UserPointsMapFragment
 import javax.inject.Inject

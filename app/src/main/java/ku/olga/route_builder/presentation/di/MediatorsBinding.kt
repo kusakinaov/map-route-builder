@@ -8,7 +8,7 @@ import ku.olga.core_api.mediator.*
 import ku.olga.edit_point.EditPointMediatorImpl
 import ku.olga.main.MainMediatorImpl
 import ku.olga.search.SearchMediatorImpl
-import ku.olga.user_points.root.UserPointsMediatorImpl
+import ku.olga.user_points.UserPointsMediatorImpl
 
 @Module
 interface MediatorsBinding {

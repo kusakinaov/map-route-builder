@@ -1,4 +1,4 @@
-package ku.olga.user_points.root
+package ku.olga.user_points
 
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -9,7 +9,6 @@ import kotlinx.android.synthetic.main.fragment_user_points.view.viewPager
 import ku.olga.core_api.dto.UserPoint
 import ku.olga.user_points_list.OnUserPointsChangeListener as ListOnUserPointsChangeListener
 import ku.olga.user_points_map.OnUserPointsChangeListener as MapOnUserPointsChangeListener
-import ku.olga.user_points.R
 
 abstract class UserPointsViewImpl(
     private val view: View,

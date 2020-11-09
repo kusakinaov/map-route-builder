@@ -1,11 +1,9 @@
-package ku.olga.user_points.root
+package ku.olga.user_points
 
 import android.content.res.Resources
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import ku.olga.user_points.R
-import ku.olga.user_points_map.UserPointsMapFragment
 import ku.olga.user_points_list.UserPointsListFragment
 import java.lang.IllegalArgumentException
 
