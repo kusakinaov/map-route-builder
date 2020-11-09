@@ -1,4 +1,4 @@
-package ku.olga.user_points.list
+package ku.olga.user_points_list
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,8 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_user_point.view.*
 import ku.olga.core_api.dto.UserPoint
 import ku.olga.ui_core.base.BaseAdapter
-import ku.olga.user_points.MoveItemHelperAdapter
-import ku.olga.user_points.R
 import javax.inject.Inject
 
 class UserPointsAdapter @Inject constructor() :

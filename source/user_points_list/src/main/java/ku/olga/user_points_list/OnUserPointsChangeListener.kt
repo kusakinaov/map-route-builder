@@ -1,4 +1,4 @@
-package ku.olga.user_points
+package ku.olga.user_points_list
 
 import ku.olga.core_api.dto.UserPoint
 

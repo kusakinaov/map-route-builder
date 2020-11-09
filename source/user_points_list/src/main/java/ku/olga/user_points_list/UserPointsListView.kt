@@ -1,4 +1,4 @@
-package ku.olga.user_points.list
+package ku.olga.user_points_list
 
 import ku.olga.core_api.dto.UserPoint
 import ku.olga.ui_core.base.BaseView

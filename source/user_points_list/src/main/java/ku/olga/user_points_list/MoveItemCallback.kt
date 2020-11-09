@@ -1,10 +1,10 @@
-package ku.olga.user_points
+package ku.olga.user_points_list
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import ku.olga.user_points.MoveItemHelperAdapter
+import ku.olga.user_points_list.MoveItemHelperAdapter
 
-class MoveItemCallback(private val adapter: MoveItemHelperAdapter) :
+class MoveItemCallback(private val adapter: ku.olga.user_points_list.MoveItemHelperAdapter) :
     ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0) {
     private var startDrag = false
 

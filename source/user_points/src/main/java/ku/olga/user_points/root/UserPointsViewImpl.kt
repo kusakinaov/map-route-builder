@@ -7,7 +7,7 @@ import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_user_points.view.*
 import kotlinx.android.synthetic.main.fragment_user_points.view.viewPager
 import ku.olga.core_api.dto.UserPoint
-import ku.olga.user_points.OnUserPointsChangeListener
+import ku.olga.user_points_list.OnUserPointsChangeListener
 import ku.olga.user_points.R
 
 abstract class UserPointsViewImpl(
@@ -48,7 +48,7 @@ abstract class UserPointsViewImpl(
 
     override fun bindUserPoints(userPoints: List<UserPoint>) {
         getChildFragment(currentItem).let {
-            if (it is OnUserPointsChangeListener) {
+            if (it is ku.olga.user_points_list.OnUserPointsChangeListener) {
                 it.onUserPointsChanged(userPoints)
             }
         }

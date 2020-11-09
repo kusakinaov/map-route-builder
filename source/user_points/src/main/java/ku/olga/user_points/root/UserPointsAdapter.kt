@@ -5,8 +5,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import ku.olga.user_points.R
-import ku.olga.user_points.list.UserPointsListFragment
 import ku.olga.user_points.map.UserPointsMapFragment
+import ku.olga.user_points_list.UserPointsListFragment
 import java.lang.IllegalArgumentException
 
 class UserPointsAdapter(fm: FragmentManager, private val resources: Resources) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {

@@ -11,13 +11,13 @@ import ku.olga.core_api.dto.UserPoint
 import ku.olga.core_api.mediator.EditPointMediator
 import ku.olga.ui_core.REQ_CODE_EDIT_POINT
 import ku.olga.ui_core.base.BaseFragment
-import ku.olga.user_points.OnUserPointsChangeListener
+import ku.olga.user_points_list.OnUserPointsChangeListener
 import ku.olga.user_points.R
 import org.osmdroid.config.Configuration
 import javax.inject.Inject
 
 class UserPointsMapFragment : BaseFragment(R.layout.fragment_user_points_map),
-    OnUserPointsChangeListener {
+    ku.olga.user_points_list.OnUserPointsChangeListener {
     @Inject
     lateinit var presenter: UserPointsMapPresenter
 

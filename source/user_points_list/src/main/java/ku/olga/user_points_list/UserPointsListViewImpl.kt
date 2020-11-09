@@ -1,4 +1,4 @@
-package ku.olga.user_points.list
+package ku.olga.user_points_list
 
 import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_user_points_list.view.*
 import ku.olga.core_api.dto.UserPoint
-import ku.olga.user_points.MoveItemCallback
 
 abstract class UserPointsListViewImpl(
     private val view: View,

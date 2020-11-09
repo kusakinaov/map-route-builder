@@ -1,4 +1,4 @@
-package ku.olga.user_points.list
+package ku.olga.user_points_list
 
 import android.os.Bundle
 import android.view.*
@@ -8,8 +8,6 @@ import ku.olga.core_api.dto.UserPoint
 import ku.olga.core_api.mediator.EditPointMediator
 import ku.olga.ui_core.REQ_CODE_EDIT_POINT
 import ku.olga.ui_core.base.BaseFragment
-import ku.olga.user_points.OnUserPointsChangeListener
-import ku.olga.user_points.R
 import javax.inject.Inject
 
 class UserPointsListFragment : BaseFragment(R.layout.fragment_user_points_list),
@@ -20,12 +18,12 @@ class UserPointsListFragment : BaseFragment(R.layout.fragment_user_points_list),
     @Inject
     lateinit var editPointMediator: EditPointMediator
 
-    private var userPointsView: UserPointsListView? = null
+    private var userPointsView: ku.olga.user_points_list.UserPointsListView? = null
 
     override fun inject(activity: FragmentActivity) {
         activity.application?.let {
             if (it is AppWithFacade) {
-                UserPointsListComponent.build(it.getFacade()).inject(this)
+                ku.olga.user_points_list.UserPointsListComponent.build(it.getFacade()).inject(this)
             }
         }
     }
@@ -36,7 +34,7 @@ class UserPointsListFragment : BaseFragment(R.layout.fragment_user_points_list),
     }
 
     private fun buildUserPointsListView(view: View) =
-        object : UserPointsListViewImpl(view, userPointsPresenter) {
+        object : ku.olga.user_points_list.UserPointsListViewImpl(view, userPointsPresenter) {
             override fun editPoint(userPoint: UserPoint) {
                 this@UserPointsListFragment.editPoint(userPoint)
             }
