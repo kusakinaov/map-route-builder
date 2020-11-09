@@ -32,6 +32,6 @@ dependencies {
     implementation ktx
     implementation 'javax.inject:javax.inject:1'
 
-    implementation project(':source:core_api')
+    implementation project(':source:core')
     implementation project(':source:ui_core')
 }

@@ -40,7 +40,7 @@ dependencies {
     implementation recyclerView
     implementation material
 
-    implementation project(':source:core_api')
+    implementation project(':source:core')
     implementation project(':source:ui_core')
     implementation project(':source:main')
     implementation project(':source:user_points_list')
