@@ -33,16 +33,27 @@ abstract class SearchMapViewImpl(
     override var searchView: SearchView? = null
         set(value) {
             field = value
-            value?.setOnQueryTextListener(buildQueryTextListener())
+            value?.apply {
+                setOnQueryTextFocusChangeListener { _, hasFocus ->
+                    if (hasFocus && isBottomSheetHalfExpanded) {
+                        closeBottomSheet()
+                    } else if (!hasFocus && !isBottomSheetExpanded) {
+                        halfExpandedBottomSheet()
+                    }
+                }
+                setOnQueryTextListener(buildQueryTextListener())
+            }
             presenter.bindQuery()
         }
 
     private lateinit var markerOverlay: RadiusMarkerClusterer
 
     private val categoriesAdapter = CategoriesAdapter().apply {
+        highlightColor = ContextCompat.getColor(view.context, R.color.secondaryColor)
         categoryClickListener = { presenter.onPickCategory(it) }
     }
     private val addressesAdapter = AddressesAdapter().apply {
+        highlightColor = ContextCompat.getColor(view.context, R.color.secondaryColor)
         onClickAddressListener = { presenter.onClickAddress(it) }
     }
     private val poisAdapter = POIAdapter().apply {
@@ -136,15 +147,10 @@ abstract class SearchMapViewImpl(
             markerOverlay.items.clear()
             for (address in addresses) {
                 markerOverlay.add(
-                    buildMarker(
-                        address.postalAddress,
-                        address.lat,
-                        address.lon,
-                        icon,
-                        Marker.OnMarkerClickListener { _, _ ->
-                            presenter.onClickAddress(address)
-                            true
-                        })
+                    buildMarker(address.postalAddress, address.lat, address.lon, icon) { _, _ ->
+                        presenter.onClickAddress(address)
+                        true
+                    }
                 )
             }
             markerOverlay.invalidate()
@@ -159,15 +165,10 @@ abstract class SearchMapViewImpl(
             markerOverlay.items.clear()
             for (poi in pois) {
                 markerOverlay.add(
-                    buildMarker(
-                        poi.title,
-                        poi.latitude,
-                        poi.longitude,
-                        icon,
-                        Marker.OnMarkerClickListener { _, _ ->
-                            presenter.onClickPOI(poi)
-                            true
-                        })
+                    buildMarker(poi.title, poi.latitude, poi.longitude, icon) { _, _ ->
+                        presenter.onClickPOI(poi)
+                        true
+                    }
                 )
             }
             markerOverlay.invalidate()
@@ -200,6 +201,7 @@ abstract class SearchMapViewImpl(
             textViewTitle.text = category?.title ?: ""
             recyclerItems.adapter = poisAdapter
         }
+        halfExpandedBottomSheet()
     }
 
     override fun showAddresses() {
@@ -207,6 +209,7 @@ abstract class SearchMapViewImpl(
             textViewTitle.setText(R.string.ttl_search_results)
             recyclerItems.adapter = addressesAdapter
         }
+        halfExpandedBottomSheet()
     }
 
     override fun showCategories() {
@@ -214,6 +217,7 @@ abstract class SearchMapViewImpl(
             textViewTitle.setText(R.string.ttl_categories)
             recyclerItems.adapter = categoriesAdapter
         }
+        halfExpandedBottomSheet()
     }
 
     override fun bindClearButton(visible: Boolean) {
@@ -268,6 +272,10 @@ abstract class SearchMapViewImpl(
 
         override fun onQueryTextChange(newText: String?): Boolean {
             presenter.onQueryChanged(newText)
+
+            categoriesAdapter.setQuery(newText)
+            addressesAdapter.setQuery(newText)
+            poisAdapter.setQuery(newText)
             return true
         }
     }
@@ -276,15 +284,23 @@ abstract class SearchMapViewImpl(
         AppBoundingBox(latNorth, lonEast, latSouth, lonWest)
 
     private fun toggleBottomSheetState() {
-        if (isBottomSheetExpanded) {
+        if (isBottomSheetExpanded || isBottomSheetHalfExpanded) {
             closeBottomSheet()
         } else {
             bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
         }
     }
 
+    private fun halfExpandedBottomSheet() {
+        if (!isBottomSheetExpanded
+            && bottomSheetBehavior?.state != BottomSheetBehavior.STATE_SETTLING
+        ) {
+            bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+        }
+    }
+
     override fun closeBottomSheet(): Boolean {
-        val expanded = isBottomSheetExpanded
+        val expanded = isBottomSheetExpanded || isBottomSheetHalfExpanded
         hideKeyboard()
         if (expanded) bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         return expanded
@@ -292,6 +308,9 @@ abstract class SearchMapViewImpl(
 
     private val isBottomSheetExpanded: Boolean
         get() = bottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED
+
+    private val isBottomSheetHalfExpanded: Boolean
+        get() = bottomSheetBehavior?.state == BottomSheetBehavior.STATE_HALF_EXPANDED
 
     companion object {
         private const val DELAY_LOAD_POI = 1000L

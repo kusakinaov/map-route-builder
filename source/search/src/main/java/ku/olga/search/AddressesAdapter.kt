@@ -1,8 +1,5 @@
 package ku.olga.search
 
-import android.text.SpannableStringBuilder
-import android.text.Spanned
-import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_address.view.*
 import ku.olga.core_api.dto.SearchAddress
 import ku.olga.ui_core.base.BaseAdapter
+import ku.olga.ui_core.utils.highlight
 import javax.inject.Inject
 
 class AddressesAdapter @Inject constructor() :
@@ -19,10 +17,10 @@ class AddressesAdapter @Inject constructor() :
     var highlightColor: Int = 0
 
     fun setQuery(query: String?) {
-        if (this.query == query) return
-
-        this.query = query
-        notifyDataSetChanged()
+        if (this.query != query) {
+            this.query = query ?: ""
+            notifyDataSetChanged()
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -43,19 +41,7 @@ class AddressesAdapter @Inject constructor() :
 
         fun bind(address: SearchAddress?) {
             this.address = address
-            itemView.textViewTitle.text = SpannableStringBuilder(address?.postalAddress).apply {
-                query?.split("\\s+".toRegex())?.forEach {
-                    val index = indexOf(it)
-                    if (index >= 0) {
-                        setSpan(
-                            ForegroundColorSpan(highlightColor),
-                            index,
-                            index + it.length,
-                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                        )
-                    }
-                }
-            }
+            itemView.textViewTitle.text = highlight(address?.postalAddress, query, highlightColor)
         }
     }
 }
