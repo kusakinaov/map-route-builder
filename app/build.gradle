@@ -27,12 +27,19 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
             firebaseAppDistribution {
                 serviceCredentialsFile = "../firebase_app_distribution_config.json"
                 testers = "kusakinaov@gmail.com"
             }
+        }
+        debug {
+//            minifyEnabled true
+//            shrinkResources true
+//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {
@@ -49,7 +56,7 @@ dependencies {
     implementation "androidx.preference:preference-ktx:1.1.1"
 
     implementation 'com.google.firebase:firebase-analytics:18.0.0'
-    implementation 'com.google.firebase:firebase-crashlytics:17.2.2'
+    implementation 'com.google.firebase:firebase-crashlytics:17.3.0'
 
     implementation dagger
     kapt daggerCompiler
