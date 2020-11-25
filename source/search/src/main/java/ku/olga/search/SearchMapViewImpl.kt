@@ -2,6 +2,7 @@ package ku.olga.search
 
 import android.graphics.drawable.Drawable
 import android.view.View
+import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.SearchView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.fragment_search_map.view.*
 import ku.olga.core_api.dto.Category
+import ku.olga.core_api.dto.Coordinates
 import ku.olga.core_api.dto.POI
 import ku.olga.core_api.dto.SearchAddress
 import ku.olga.ui_core.utils.OnKeyboardVisibilityListener
@@ -25,6 +27,7 @@ import org.osmdroid.util.BoundingBox
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import ku.olga.core_api.dto.BoundingBox as AppBoundingBox
 
 abstract class SearchMapViewImpl(
@@ -39,6 +42,7 @@ abstract class SearchMapViewImpl(
         }
 
     private lateinit var markerOverlay: RadiusMarkerClusterer
+    private lateinit var myLocationMarker: Marker
 
     private val categoriesAdapter = CategoriesAdapter().apply {
         highlightColor = ContextCompat.getColor(view.context, R.color.secondaryColor)
@@ -78,9 +82,13 @@ abstract class SearchMapViewImpl(
         view.mapView?.let {
             markerOverlay = buildRadiusMarkerClusterer(
                 it.context,
-                ContextCompat.getDrawable(it.context, R.drawable.cluster)!!,
+                getDrawable(R.drawable.cluster)!!,
                 ContextCompat.getColor(it.context, R.color.map_icon_text)
             )
+            myLocationMarker = Marker(it).apply {
+                icon = getDrawable(R.drawable.my_location)
+                setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
+            }
             initMapView(it, buildMapListener(), listOf(markerOverlay))
             it.controller.setZoom(MIN_ZOOM_LEVEL)
         }
@@ -135,7 +143,7 @@ abstract class SearchMapViewImpl(
     override fun bindAddresses(addresses: List<SearchAddress>) {
         addressesAdapter.setItems(addresses)
         view.mapView?.let {
-            val icon = ContextCompat.getDrawable(it.context, R.drawable.ic_place)
+            val icon = getDrawable(R.drawable.ic_place)
             markerOverlay.items.clear()
             for (address in addresses) {
                 markerOverlay.add(
@@ -153,7 +161,7 @@ abstract class SearchMapViewImpl(
     override fun bindPOIs(pois: List<POI>) {
         poisAdapter.setItems(pois)
         view.mapView?.let {
-            val icon = ContextCompat.getDrawable(it.context, R.drawable.ic_place)
+            val icon = getDrawable(R.drawable.ic_place)
             markerOverlay.items.clear()
             for (poi in pois) {
                 markerOverlay.add(
@@ -313,6 +321,19 @@ abstract class SearchMapViewImpl(
             halfExpandBottomSheet()
         }
     }
+
+    override fun onCoordinatesChanged(coordinates: Coordinates) {
+        view.mapView?.apply {
+            overlays.apply {
+                if (!contains(myLocationMarker)) add(myLocationMarker)
+            }
+            myLocationMarker.position = GeoPoint(coordinates.latitude, coordinates.longitude)
+            invalidate()
+        }
+    }
+
+    private fun getDrawable(@DrawableRes drawableRes: Int) =
+        ContextCompat.getDrawable(view.context, drawableRes)
 
     companion object {
         private const val DELAY_LOAD_POI = 1000L

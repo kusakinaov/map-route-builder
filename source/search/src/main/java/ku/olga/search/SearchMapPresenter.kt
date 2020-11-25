@@ -9,7 +9,6 @@ import ku.olga.core_api.dto.*
 import ku.olga.core_api.repository.AddressRepository
 import ku.olga.core_api.repository.POIRepository
 import ku.olga.ui_core.base.BaseLocationPresenter
-import ku.olga.ui_core.view.MAX_ZOOM_LEVEL
 import org.osmdroid.util.GeoPoint
 import javax.inject.Inject
 
@@ -40,6 +39,7 @@ class SearchMapPresenter @Inject constructor(
     private val pois = mutableListOf<POI>()
 
     private var addressesJob: Job? = null
+    private var moveToCurrentLocation: Boolean = true
 
     override fun attachView(view: SearchMapView) {
         super.attachView(view)
@@ -49,6 +49,8 @@ class SearchMapPresenter @Inject constructor(
 
         boundingBox?.let { view.bindBoundingBox(it) }
         bindState()
+
+        checkLocationPermission()
     }
 
     fun onQueryChanged(query: String?) {
@@ -85,7 +87,11 @@ class SearchMapPresenter @Inject constructor(
 
     override fun onCoordinatesChanged(coordinates: Coordinates) {
         super.onCoordinatesChanged(coordinates)
-        view?.moveTo(coordinates.latitude, coordinates.longitude, MAX_ZOOM_LEVEL, true)
+        if (moveToCurrentLocation) {
+            moveToCurrentLocation = false
+            view?.moveTo(coordinates.latitude, coordinates.longitude, CITY_ZOOM_LEVEL, true)
+        }
+        view?.onCoordinatesChanged(coordinates)
     }
 
     fun onClickClear() {
@@ -248,5 +254,6 @@ class SearchMapPresenter @Inject constructor(
         private const val WHAT_QUERY = 1001
         private const val DELAY_QUERY = 1000L
         private const val PLACE_ZOOM_LEVEL = 18.0
+        private const val CITY_ZOOM_LEVEL = 11.0
     }
 }
