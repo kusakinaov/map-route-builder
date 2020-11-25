@@ -3,27 +3,38 @@ package ku.olga.main
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.activity_main.*
 import ku.olga.core_api.AppWithFacade
 import ku.olga.core_api.mediator.UserPointsMediator
 import ku.olga.ui_core.base.BaseFragment
 import ku.olga.ui_core.FragmentContainer
+import ku.olga.ui_core.utils.OnKeyboardVisibilityListener
+import ku.olga.ui_core.utils.setupKeyboardListener
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), FragmentContainer {
+class MainActivity : AppCompatActivity(), FragmentContainer, OnKeyboardVisibilityListener {
     @Inject
     lateinit var userPointsMediator: UserPointsMediator
+
+    override val fragmentContainerId: Int
+        get() = R.id.layoutFragment
+
+    private val fragment: Fragment?
+        get() = supportFragmentManager.findFragmentById(fragmentContainerId)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+        setupKeyboardListener(this, coordinatorLayout, this)
+
         ActivityComponent.build((application as AppWithFacade).getFacade()).inject(this)
 
         supportFragmentManager.addOnBackStackChangedListener { bindBackStack() }
         if (savedInstanceState == null) {
-            userPointsMediator.openUserPoints(supportFragmentManager, getFragmentContainerId())
+            userPointsMediator.openUserPoints(supportFragmentManager, fragmentContainerId)
         }
     }
 
@@ -32,11 +43,12 @@ class MainActivity : AppCompatActivity(), FragmentContainer {
             val entryCount = supportFragmentManager.backStackEntryCount
             setDisplayHomeAsUpEnabled(entryCount > 0)
 
-            val fragment = getFragment()
-            if (fragment is BaseFragment) {
-                setBackButton(fragment.getBackButtonRes())
-            } else {
-                setBackButton(R.drawable.ic_back)
+            fragment?.let {
+                if (it is BaseFragment) {
+                    setBackButton(it.getBackButtonRes())
+                } else {
+                    setBackButton(R.drawable.ic_back)
+                }
             }
         }
     }
@@ -44,8 +56,6 @@ class MainActivity : AppCompatActivity(), FragmentContainer {
     private fun setBackButton(drawableRes: Int) {
         supportActionBar?.setHomeAsUpIndicator(drawableRes)
     }
-
-    private fun getFragment() = supportFragmentManager.findFragmentById(getFragmentContainerId())
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         android.R.id.home -> {
@@ -55,5 +65,11 @@ class MainActivity : AppCompatActivity(), FragmentContainer {
         else -> super.onOptionsItemSelected(item)
     }
 
-    override fun getFragmentContainerId(): Int = R.id.layoutFragment
+    override fun onKeyboardVisibilityChanged(isVisible: Boolean) {
+        fragment.let {
+            if (it is OnKeyboardVisibilityListener) {
+                it.onKeyboardVisibilityChanged(isVisible)
+            }
+        }
+    }
 }
