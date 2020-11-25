@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.fragment_search_map.view.*
 import ku.olga.core_api.dto.Category
 import ku.olga.core_api.dto.POI
 import ku.olga.core_api.dto.SearchAddress
+import ku.olga.ui_core.utils.OnKeyboardVisibilityListener
 import ku.olga.ui_core.utils.hasLocationPermission
 import ku.olga.ui_core.view.MIN_ZOOM_LEVEL
 import ku.olga.ui_core.view.buildRadiusMarkerClusterer
@@ -29,20 +30,11 @@ import ku.olga.core_api.dto.BoundingBox as AppBoundingBox
 abstract class SearchMapViewImpl(
     private val view: View,
     private val presenter: SearchMapPresenter
-) : SearchMapView {
+) : SearchMapView, OnKeyboardVisibilityListener {
     override var searchView: SearchView? = null
         set(value) {
             field = value
-            value?.apply {
-                setOnQueryTextFocusChangeListener { _, hasFocus ->
-                    if (hasFocus && isBottomSheetHalfExpanded) {
-                        closeBottomSheet()
-                    } else if (!hasFocus && !isBottomSheetExpanded) {
-                        halfExpandedBottomSheet()
-                    }
-                }
-                setOnQueryTextListener(buildQueryTextListener())
-            }
+            value?.setOnQueryTextListener(buildQueryTextListener())
             presenter.bindQuery()
         }
 
@@ -61,6 +53,7 @@ abstract class SearchMapViewImpl(
     }
 
     private var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>? = null
+    private var isSoftKeyboardVisible: Boolean = false
 
     override fun onAttach() {
         setupMap()
@@ -100,7 +93,6 @@ abstract class SearchMapViewImpl(
                 addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
                     override fun onSlide(bottomSheet: View, slideOffset: Float) {
                         if (slideOffset == 0f || slideOffset == 1f) {
-                            hideKeyboard()
                         }
                     }
 
@@ -201,7 +193,7 @@ abstract class SearchMapViewImpl(
             textViewTitle.text = category?.title ?: ""
             recyclerItems.adapter = poisAdapter
         }
-        halfExpandedBottomSheet()
+        bindBottomSheetState()
     }
 
     override fun showAddresses() {
@@ -209,7 +201,7 @@ abstract class SearchMapViewImpl(
             textViewTitle.setText(R.string.ttl_search_results)
             recyclerItems.adapter = addressesAdapter
         }
-        halfExpandedBottomSheet()
+        bindBottomSheetState()
     }
 
     override fun showCategories() {
@@ -217,7 +209,7 @@ abstract class SearchMapViewImpl(
             textViewTitle.setText(R.string.ttl_categories)
             recyclerItems.adapter = categoriesAdapter
         }
-        halfExpandedBottomSheet()
+        bindBottomSheetState()
     }
 
     override fun bindClearButton(visible: Boolean) {
@@ -291,17 +283,14 @@ abstract class SearchMapViewImpl(
         }
     }
 
-    private fun halfExpandedBottomSheet() {
-        if (!isBottomSheetExpanded
-            && bottomSheetBehavior?.state != BottomSheetBehavior.STATE_SETTLING
-        ) {
+    private fun halfExpandBottomSheet() {
+        if (!isBottomSheetExpanded) {
             bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HALF_EXPANDED
         }
     }
 
     override fun closeBottomSheet(): Boolean {
         val expanded = isBottomSheetExpanded || isBottomSheetHalfExpanded
-        hideKeyboard()
         if (expanded) bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         return expanded
     }
@@ -311,6 +300,19 @@ abstract class SearchMapViewImpl(
 
     private val isBottomSheetHalfExpanded: Boolean
         get() = bottomSheetBehavior?.state == BottomSheetBehavior.STATE_HALF_EXPANDED
+
+    override fun onKeyboardVisibilityChanged(isVisible: Boolean) {
+        isSoftKeyboardVisible = isVisible
+        bindBottomSheetState()
+    }
+
+    private fun bindBottomSheetState() {
+        if (isSoftKeyboardVisible && isBottomSheetHalfExpanded) {
+            closeBottomSheet()
+        } else if (!isSoftKeyboardVisible && !isBottomSheetExpanded) {
+            halfExpandBottomSheet()
+        }
+    }
 
     companion object {
         private const val DELAY_LOAD_POI = 1000L

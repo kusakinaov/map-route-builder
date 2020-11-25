@@ -10,7 +10,7 @@ import ku.olga.core_api.mediator.UserPointsMediator
 import ku.olga.ui_core.base.BaseFragment
 import ku.olga.ui_core.FragmentContainer
 import ku.olga.ui_core.utils.OnKeyboardVisibilityListener
-import ku.olga.ui_core.utils.setupKeyboardListener
+import ku.olga.ui_core.utils.setKeyboardListener
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), FragmentContainer, OnKeyboardVisibilityListener {
@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity(), FragmentContainer, OnKeyboardVisibilit
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        setupKeyboardListener(this, coordinatorLayout, this)
+        setKeyboardListener(this, coordinatorLayout, this)
 
         ActivityComponent.build((application as AppWithFacade).getFacade()).inject(this)
 

@@ -18,7 +18,7 @@ fun Fragment.hideKeyboard() {
     }
 }
 
-fun setupKeyboardListener(
+fun setKeyboardListener(
     activity: Activity,
     rootLayout: ViewGroup,
     listener: OnKeyboardVisibilityListener?

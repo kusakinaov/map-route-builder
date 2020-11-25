@@ -14,10 +14,11 @@ import ku.olga.core_api.mediator.EditPointMediator
 import ku.olga.ui_core.REQ_CODE_EDIT_POINT
 import ku.olga.ui_core.REQ_CODE_LOCATION_PERMISSION
 import ku.olga.ui_core.base.BaseFragment
+import ku.olga.ui_core.utils.OnKeyboardVisibilityListener
 import ku.olga.ui_core.utils.hideKeyboard
 import javax.inject.Inject
 
-class SearchMapFragment : BaseFragment(R.layout.fragment_search_map) {
+class SearchMapFragment : BaseFragment(R.layout.fragment_search_map), OnKeyboardVisibilityListener {
     @Inject
     lateinit var presenter: SearchMapPresenter
 
@@ -96,5 +97,9 @@ class SearchMapFragment : BaseFragment(R.layout.fragment_search_map) {
         fun newInstance(target: Fragment, requestCode: Int) = SearchMapFragment().apply {
             setTargetFragment(target, requestCode)
         }
+    }
+
+    override fun onKeyboardVisibilityChanged(isVisible: Boolean) {
+        searchMapView?.onKeyboardVisibilityChanged(isVisible)
     }
 }

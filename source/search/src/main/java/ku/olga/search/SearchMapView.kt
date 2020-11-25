@@ -4,8 +4,9 @@ import androidx.appcompat.widget.SearchView
 import ku.olga.core_api.dto.*
 import ku.olga.ui_core.base.BaseLocationView
 import ku.olga.ui_core.base.BaseMapView
+import ku.olga.ui_core.utils.OnKeyboardVisibilityListener
 
-interface SearchMapView : BaseMapView, BaseLocationView {
+interface SearchMapView : BaseMapView, BaseLocationView, OnKeyboardVisibilityListener {
     var searchView: SearchView?
 
     fun bindQuery(query: String?)
