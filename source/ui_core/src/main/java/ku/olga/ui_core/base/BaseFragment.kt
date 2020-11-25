@@ -50,7 +50,7 @@ abstract class BaseFragment(@LayoutRes layoutId: Int) : Fragment(layoutId) {
         activity?.let {
             if (it is FragmentContainer) {
                 it.supportFragmentManager.beginTransaction()
-                    .replace(it.getFragmentContainerId(), fragment)
+                    .replace(it.fragmentContainerId, fragment)
                     .apply {
                         if (addToBackStack) {
                             addToBackStack(fragment::class.simpleName)
